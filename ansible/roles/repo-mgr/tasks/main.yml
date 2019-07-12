@@ -1,0 +1,38 @@
+---
+# Check params to be correct
+- import_tasks: params_validation.yml
+
+# Check Tomcat and systemd params to be correct
+- include_tasks: ../../common/tasks/params_validation_tomcat.yml
+  when: repomgr_install_into_tac == 'no'
+
+- include_tasks: ../../common/tasks/params_validation_extra.yml
+  when: repomgr_install_into_tac == 'no'
+
+# Check tomcat-related things (when we use talend-tomcat rpm)
+- include_tasks: ../../common/tasks/check_tomcat.yml
+  when: repomgr_install_into_tac == 'no'
+
+# Check situation with current status (e.g. installed but into different path - that would be an error)
+- include_tasks: ../../common/tasks/check_status.yml
+
+# Stopping service
+- include_tasks: ../../common/tasks/stop_service.yml
+  when: repomgr_install_into_tac == 'no'
+
+# We will include installation with yum or with rpm depending of prefix used
+- include_tasks: ../../common/tasks/install_yum.yml
+  when: install_prefix == '/opt/talend'
+
+- include_tasks: ../../common/tasks/install_rpm.yml
+  when: install_prefix != '/opt/talend'
+
+# Prepare application to be configured (unpack war files if needed)
+- import_tasks: prepare_app.yml
+
+# Update configuration
+- import_tasks: update_config.yml
+
+# Starting systemd service
+- include_tasks: ../../common/tasks/start_service.yml
+  when: repomgr_install_into_tac == 'no'

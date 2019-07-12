@@ -1,0 +1,42 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, tomcat deployment, systemd status)
+# All other parameters must be reconfigured here
+
+- name: Update DB URL
+  replace:
+    path: "{{ repomgr_config_location }}/configuration.properties"
+    regexp:  'database\.url=.*'
+    replace: 'database.url={{ repomgr_database_url }}'
+
+- name: Update DB driver
+  replace:
+    path: "{{ repomgr_config_location }}/configuration.properties"
+    regexp:  'database\.driver=.*'
+    replace: 'database.driver={{ repomgr_database_driver }}'
+
+- name: Update DB user
+  replace:
+    path: "{{ repomgr_config_location }}/configuration.properties"
+    regexp:  'database\.username=.*'
+    replace: 'database.username={{ repomgr_database_username }}'
+
+- name: Update DB password
+  replace:
+    path: "{{ repomgr_config_location }}/configuration.properties"
+    regexp:  'database\.password=.*'
+    replace: 'database.password={{ repomgr_database_password }}'
+
+- name: Update password for DB config page
+  replace:
+    path: "{{ repomgr_config_location }}/configuration.properties"
+    regexp:  'database\.config\.password=.*'
+    replace: 'database.config.password={{ repomgr_database_config_password }}'
+
+- name: Update local path
+  replace:
+    path: "{{ repomgr_config_location }}/configuration.properties"
+    regexp:  'localExtractPath=.*'
+    replace: 'localExtractPath={{ repomgr_localExtractPath }}'

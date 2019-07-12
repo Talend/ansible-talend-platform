@@ -1,0 +1,10 @@
+---
+# This script performs different parameters validation
+
+######################################
+# Filebeat-specific parameters validation
+######################################
+- name: Check logstash host param
+  when: not filebeat_logstash_hosts | regex_search( '[a-zA-Z0-9.-]+:[0-9]+' )
+  fail:
+    msg: Parameter filebeat_logstash_hosts seems to be invalid. Use pattern host:port

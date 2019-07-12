@@ -1,0 +1,20 @@
+---
+# This file handles installation with yum (to default folder /opt/talend)
+#
+- name: "Install {{ app_name }} with yum"
+  yum:
+    name: "{{ rpm_name }}"
+    state: present
+  environment:
+    TALEND_INSTALL_USER:    "{{ install_user }}"
+    TALEND_INSTALL_GROUP:   "{{ install_group }}"
+    TALEND_INSTALL_SYSTEMD: "{{ '1' if app_install_systemd == 'yes' else '0' }}"
+    TALEND_MONGODB_PORT:    "{{ mongodb_port }}"
+    TALEND_MONGODB_ENH_SECURITY: "{{ '1' if mongodb_enhancedsecurity == 'yes' else '0' }}"
+    TALEND_MONGODB_TDS_USER: "{{ mongodb_tds_user }}"
+    TALEND_MONGODB_TDS_PASS: "{{ mongodb_tds_password }}"
+    TALEND_MONGODB_TDP_USER: "{{ mongodb_tdp_user }}"
+    TALEND_MONGODB_TDP_PASS: "{{ mongodb_tdp_password }}"
+    TALEND_MONGODB_TDQ_USER: "{{ mongodb_tsd_user }}"
+    TALEND_MONGODB_TDQ_PASS: "{{ mongodb_tsd_password }}"
+    JAVA_HOME:              "{{ java_dir.stdout }}"

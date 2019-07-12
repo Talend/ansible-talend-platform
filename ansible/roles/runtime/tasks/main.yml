@@ -1,0 +1,31 @@
+---
+
+# Check params to be correct
+- import_tasks: params_validation.yml
+
+# Stopping services (if they exist) before making any changes in the configuration
+- include_tasks: ../../common/tasks/stop_service.yml
+  with_items:
+    - "talend-runtime"
+  loop_control:
+    loop_var: app_service
+
+
+# We will include installation with yum or with rpm depending of prefix used
+- include_tasks: install_yum.yml
+  when: install_prefix == '/opt/talend'
+
+- include_tasks: install_rpm.yml
+  when: install_prefix != '/opt/talend'
+
+
+# Updating configuration for Runtime
+- import_tasks: update_config.yml
+
+
+# Starting services (if they are exist)
+- include_tasks: ../../common/tasks/start_service.yml
+  with_items:
+    - "talend-runtime"
+  loop_control:
+    loop_var: app_service

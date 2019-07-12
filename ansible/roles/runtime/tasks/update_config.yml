@@ -1,0 +1,98 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config folder: {{install_prefix}}/runtime/etc
+#
+# All other parameters are from roles/runtime/defaults/main.yml
+#
+
+
+# Update OSGi HTTP/HTTPS Service configuration (PID: org.ops4j.pax.web.cfg, org.talend.esb.locator.cfg)
+- name: Update http port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.ops4j.pax.web.cfg"
+    regexp:  'org\.osgi\.service\.http\.port=.*'
+    replace: 'org.osgi.service.http.port={{ rt_http_port }}'
+
+- name: Update https port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.ops4j.pax.web.cfg"
+    regexp:  'org\.osgi\.service\.http\.port\.secure=.*'
+    replace: 'org.osgi.service.http.port.secure={{ rt_https_port }}'
+
+- name: Update http port in locator config
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.talend.esb.locator.cfg"
+    regexp:  'endpoint\.http\.prefix=.*'
+    replace: 'endpoint.http.prefix=http://localhost:{{ rt_http_port }}/services'
+
+- name: Update https port in locator config
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.talend.esb.locator.cfg"
+    regexp:  'endpoint\.https\.prefix=.*'
+    replace: 'endpoint.https.prefix=https://localhost:{{ rt_https_port }}/services'
+
+
+# Karaf SSH shell configuration (Pid: org.apache.karaf.shell.cfg)
+- name: Update ssh port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.apache.karaf.shell.cfg"
+    regexp:  'sshPort = .*'
+    replace: 'sshPort = {{ rt_ssh_port }}'
+
+# JMX Management configuration (PID: org.apache.karaf.management.cfg)
+- name: Update RMI registry port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.apache.karaf.management.cfg"
+    regexp:  'rmiRegistryPort = .*'
+    replace: 'rmiRegistryPort = {{ rt_rmi_registry_port }}'
+
+- name: Update RMI server port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.apache.karaf.management.cfg"
+    regexp:  'rmiServerPort = .*'
+    replace: 'rmiServerPort = {{ rt_rmi_server_port }}'
+
+
+#Update Jobserver ports
+- name: Update command_server_port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.talend.remote.jobserver.server.cfg"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.COMMAND_SERVER_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.COMMAND_SERVER_PORT={{ rt_js_command_server_port }}'
+
+- name: Update port for the file transfers
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.talend.remote.jobserver.server.cfg"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.FILE_SERVER_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.FILE_SERVER_PORT={{ rt_js_file_server_port }}'
+
+- name: Update port used for monitoring the servers state
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.talend.remote.jobserver.server.cfg"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.MONITORING_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.MONITORING_PORT={{ rt_js_monitoring_port }}'
+
+- name: Update port used for the execution of process messages publisher
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/org.talend.remote.jobserver.server.cfg"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.PROCESS_MESSAGE_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.PROCESS_MESSAGE_PORT={{ rt_js_process_message_port }}'
+
+
+# Update master password
+- name: Update command_server_port
+  replace:
+    path: "{{ install_prefix }}/runtime/etc/users.properties"
+    regexp:  '^({{ item }}\s*=\s*)[^,]*(,.*)$'
+    replace: '\1{{ rt_master_password }}\2'
+  with_items:
+     - tadmin
+     - tesb
+     - karaf
+  when: rt_master_password != ''

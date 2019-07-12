@@ -1,0 +1,21 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Components"
+rpm_name: "talend-tcomp"
+rpm_folder: "tcomp"
+app_service: "talend-tcomp"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#########################################
+#
+# Parameters below can be used for configuration updates (re-configuration) "on the fly"
+#
+#########################################
+
+tcomp_server_port: "8989"

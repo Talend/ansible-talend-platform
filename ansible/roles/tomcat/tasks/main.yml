@@ -1,0 +1,8 @@
+---
+# We will include installation with yum or with rpm depending of prefix used
+
+- include_tasks: install_yum.yml
+  when: install_prefix == '/opt/talend'
+
+- include_tasks: install_rpm.yml
+  when: install_prefix != '/opt/talend'

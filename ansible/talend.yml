@@ -1,0 +1,24 @@
+---
+- hosts: tac-group
+  become: yes
+  roles:
+      - java
+      - talend-repo
+      - tomcat
+      - kafka
+      - mongodb
+      - jobserver
+      - tac
+      - amc
+      - filebeat
+      - iam
+      - nexus
+      - repo-mgr
+      - mdm
+      - mwfl
+      - runtime
+      - sap-rfc-server
+      - tcomp
+      - sjs
+      - streamsrunner
+      - tdp

@@ -1,0 +1,39 @@
+---
+- hosts: tac-group
+  become: yes
+  become_user: root
+  become_method: sudo
+  remote_user: user1
+  roles:
+    - java
+    - talend-repo
+    - tomcat
+    - tac
+    - amc
+    - iam
+  vars:
+    # TAC variables
+    - tac_setup_jobserver: "no"
+    - tac_use_logserver: "no"
+    # IAM variables
+    - iam_hostname: "tac-host.localnet"
+    - iam_mdm_postlogout_url: "http://mdm-host.localnet:8180/"
+
+- hosts: mdm-group
+  become: yes
+  become_user: root
+  become_method: sudo
+  remote_user: user1
+  roles:
+    - java
+    - talend-repo
+    - tomcat
+    - mdm
+    - mwfl
+  vars:
+    # MDM variables
+    - mdm_use_audit: "no"
+    - mdm_iam_url: "http://tac-host.localnet:9080"
+    - mdm_oidc_url: "http://tac-host.localnet:9080/oidc"
+    - mdm_oidc_userauth_url: "http://tac-host.localnet:9080/oidc"
+    - mdm_scim_url: "http://tac-host.localnet:9080/scim"

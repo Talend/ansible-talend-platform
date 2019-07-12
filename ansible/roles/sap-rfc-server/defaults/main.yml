@@ -1,0 +1,179 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend SAP RFC Server"
+rpm_name: "talend-sap-rfc-serv"
+rpm_folder: "sap-rfc-serv"
+app_service: "talend-sap-rfc-serv"
+
+#####
+# Installation as systemd service, allowed values "yes" and "no"
+#####
+app_install_systemd: "yes"
+
+##########################################################################
+# SAP RFC Server -specific configuration variables
+# We will use "sap_" prefix in var names
+#
+# Attention: empty values are used to reset to the "default" value
+#            (in most cases it will comment out the entry in config file)
+##########################################################################
+
+# Important: SAP RFC Server will not be usable without sapjco3.jar
+# It is not delivered together with SAP RFC Server RPM package because of
+#    license restrictions.
+# Customer may download it separately and then it can be deployed automatically
+#    during installation with the following parameters:
+#
+# sap_install_sapjco3_jar:  (yes/no)
+# sap_sapjco3_jar_path:     the path to sapjco3.jar on a local (Ansible master) host
+
+sap_install_sapjco3_jar: "no"
+sap_sapjco3_jar_path: "/mnt/share/path-to-sapjco3-jar-file"
+
+# -------------------------------------------------------------------------
+# SAP JCO Server Section
+# -------------------------------------------------------------------------
+# SAP gateway host on which the RFC server should be registered, this parameter is mandatory
+sap_jco_server_gwhost: "127.0.0.1"
+
+# SAP gateway service, i.e. the port used for the registration, this parameter is mandatory
+sap_jco_server_gwserv: "sapgw00"
+
+# The program ID with which the registration is done. Serves as identifier for IDOC
+# on the gateway and as the destination in the SAP system
+sap_jco_server_progid: "TALEND"
+
+# also you can use this one for IDOC service
+sap_jco_server_progid_idoc: "TALEND"
+
+# you can use this one for BW service
+sap_jco_server_progid_bw: "TALENDBW1"
+
+# Number of connections that should be registered at the gateway
+sap_jco_server_connection_count: "2"
+
+#
+# The number of threads that can be used by the JCoServer instance
+# By default, same as connection count
+#
+sap_jco_server_worker_thread_count: ""
+
+#
+# The number of threads, always kept running by JCoServer instance
+# By default, same as connection count
+#
+sap_jco_server_worker_thread_min_count: ""
+
+# Enable/disable RFC trace (1=on or 0=off), default is "off"
+sap_jco_server_trace: ""
+
+# -------------------------------------------------------------------------
+# SAP JCO Client Section
+# -------------------------------------------------------------------------
+# Host of the SAP ABAP application server
+sap_jco_client_ashost: "127.0.0.1"
+
+# SAP client e.g. "000"
+sap_jco_client_client: "800"
+
+# Logon language, if not defined the default user language will be used
+sap_jco_client_lang: "en"
+
+# Logon user - Authenticates this server to SAP
+sap_jco_client_user: ""
+
+# Logon password - Authenticates this server to SAP
+sap_jco_client_passwd: ""
+
+# System number of the SAP ABAP application server
+sap_jco_client_sysnr: "00"
+
+# -------------------------------------------------------------------------
+# Server management Section
+# -------------------------------------------------------------------------
+# The number of threads in the fixed size pool servicing SAP Idocs, default is 5
+sap_rfc_server_thread_pool_size: "5"
+
+# The folder containing user libraries, particularly sapjco3_jar (default is "user/lib")
+sap_rfc_server_user_lib_folder: "user/lib"
+
+# The IP address on which to listen for shutdown commands (default is localhost)
+sap_rfc_server_shutdown_address: "localhost"
+
+# The port number on which to listen for shutdown commands (default is 16161)
+sap_rfc_server_shutdown_port: "16161"
+
+# The shutdown command expected (default is "SHUTDOWN")
+sap_rfc_server_shutdown_command: "SHUTDOWN"
+
+# How long to wait for shutdown to complete (milliseconds), default is 60000
+sap_rfc_server_shutdown_timout: "60000"
+
+# -------------------------------------------------------------------------
+# IDocs Receiver Section
+# -------------------------------------------------------------------------
+#
+# The class name of a substitute receiver factory. Used for testing primarily
+sap_receiver_server_factory_class_name: ""
+
+# Whether the receiver should be transactional (true/false), default is 'false'
+sap_receiver_transactional: ""
+
+#
+# In transactional mode:
+# Timeout in milliseconds, used on waiting for the IDOC package to get
+# processed (commit or rollback is called). If it is not processed within
+# this time, the IDOC transaction is automatically aborted
+# Default is 60000 ms
+#
+sap_api_idoc_transaction_wait_timout: ""
+
+# -------------------------------------------------------------------------
+# JMS Broker Section
+# -------------------------------------------------------------------------
+#
+# File system directory containing jaas authentication configuration
+sap_rfc_server_jms_login_config: ""
+
+# A jaas username used to authenticate a publisher or sender
+sap_rfc_server_jms_login_username: ""
+
+# A jaas password used to authenticate a publisher or sender
+sap_rfc_server_jms_login_password: ""
+
+# The path to a key store for SSL
+sap_rfc_server_jms_ssl_keystore_path: ""
+
+# A password for a key store for SSL
+sap_rfc_server_jms_ssl_keystore_password: ""
+
+# Whether JMS messages should be replicated in durable queues
+sap_rfc_server_jms_replicate_in_durable_queues: ""
+
+# ISO8601 retention period for JMS messages in durable queues
+sap_rfc_server_jms_durable_queues_retention_period: ""
+
+# -------------------------------------------------------------------------
+# Embedded Broker Section
+# -------------------------------------------------------------------------
+# The host address and port (ex tcp://localhost:61616) for the JMS broker
+# to listen for incoming connections
+#
+sap_rfc_server_jms_bind_address: "tcp://localhost:61616"
+
+# Whether JMS messages are persisted or not (true/false)
+sap_rfc_server_jms_persistence: ""
+
+# File system location used by JMS broker to persist data
+sap_rfc_server_jms_data_directory: ""
+
+# Sets whether or not the Broker's services should be exposed into JMX or not
+sap_rfc_server_jms_jmx: "false"
+
+# -------------------------------------------------------------------------
+# Remote Broker Section
+# -------------------------------------------------------------------------
+# when active, connects to a remote broker instead of an embedded one
+sap_rfc_server_remote_broker_url: "tcp://localhost:61616"

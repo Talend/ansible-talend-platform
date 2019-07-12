@@ -1,0 +1,172 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config folder: {{ install_prefix }}/kafka/config
+#
+# All other parameters are from roles/kafka/defaults/main.yml
+#
+
+# Updating zookeeper parameters
+- name: Update zookeeper data dir
+  replace:
+    path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
+    regexp:  'dataDir=.*'
+    replace: 'dataDir={{ zook_datadir }}'
+
+- name: Update zookeeper client port
+  replace:
+    path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
+    regexp:  'clientPort=.*'
+    replace: 'clientPort={{ zook_clientPort }}'
+
+- name: Update zookeeper max client connections limitation
+  replace:
+    path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
+    regexp:  'maxClientCnxns=.*'
+    replace: 'maxClientCnxns={{ zook_macClientCnxns }}'
+
+# Updating kafka parameters
+- name: Update kafka broker Id
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'broker\.id=.*'
+    replace: 'broker.id={{ kafka_broker_id }}'
+
+- name: Update kafka listeners
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  '^(#)?listeners=.*'
+    replace: 'listeners={{ kafka_listeners }}'
+
+- name: Update kafka advertised listeners
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  '^(#)?advertised\.listeners=.*'
+    replace: 'advertised.listeners={{ kafka_advertised_listeners }}'
+  when: kafka_advertised_listeners != ""
+
+- name: Update kafka listener security protocol map
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  '^(#)?listener\.security\.protocol.map=.*'
+    replace: 'listener.security.protocol.map={{ kafka_listener_security_protocol_map }}'
+  when: kafka_listener_security_protocol_map != ""
+
+- name: Update the number of network threads
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'num\.network\.threads=.*'
+    replace: 'num.network.threads={{ kafka_num_network_threads }}'
+
+- name: Update the number of processing threads
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'num\.io\.threads=.*'
+    replace: 'num.io.threads={{ kafka_num_io_threads }}'
+
+- name: Update the send buffer size
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'socket\.send\.buffer\.bytes=.*'
+    replace: 'socket.send.buffer.bytes={{ kafka_socket_send_buffer_bytes }}'
+
+- name: Update the receive buffer size
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'socket\.receive\.buffer\.bytes=.*'
+    replace: 'socket.receive.buffer.bytes={{ kafka_socket_receive_buffer_bytes }}'
+
+- name: Update the maximum size of a request that the socket server will accept
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'socket\.request\.max\.bytes=.*'
+    replace: 'socket.request.max.bytes={{ kafka_socket_request_max_bytes }}'
+
+- name: Update the log folders list
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'log\.dirs=.*'
+    replace: 'log.dirs={{ kafka_log_dirs }}'
+
+- name: Update the number of log partitions per topic
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'num\.partitions=.*'
+    replace: 'num.partitions={{ kafka_num_partitions }}'
+
+- name: Update the number of recovery threads per data directory
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'num\.recovery\.threads\.per\.data\.dir=.*'
+    replace: 'num.recovery.threads.per.data.dir={{ kafka_num_recovery_threads_per_data_dir }}'
+
+- name: Update the replication factor (1)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'offsets\.topic\.replication\.factor=.*'
+    replace: 'offsets.topic.replication.factor={{ kafka_offsets_topic_replication_factor }}'
+
+- name: Update the replication factor (2)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'transaction\.state\.log\.replication\.factor=.*'
+    replace: 'transaction.state.log.replication.factor={{ kafka_transaction_state_log_replication_factor }}'
+
+- name: Update the replication factor (3)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'transaction\.state\.log\.min\.isr=.*'
+    replace: 'transaction.state.log.min.isr={{ kafka_transaction_state_log_min_isr }}'
+
+- name: Update the log flush policy (1)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  '^(#)?log\.flush\.interval\.messages=.*'
+    replace: 'log.flush.interval.messages={{ kafka_log_flush_interval_messages }}'
+
+- name: Update the log flush policy (2)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  '^(#)?log\.flush\.interval\.ms=.*'
+    replace: 'log.flush.interval.ms={{ kafka_log_flush_interval_ms }}'
+
+- name: Update the log retension policy (1)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'log\.retention\.hours=.*'
+    replace: 'log.retention.hours={{ kafka_log_retention_hours }}'
+
+- name: Update the log retension policy (2)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  '^(#)?log\.retention\.bytes=.*'
+    replace: 'log.retention.bytes={{ kafka_log_retention_bytes }}'
+
+- name: Update the log retension policy (3)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'log\.segment\.bytes=.*'
+    replace: 'log.segment.bytes={{ kafka_log_segment_bytes }}'
+
+- name: Update the log retension policy (4)
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'log\.retention\.check\.interval\.ms=.*'
+    replace: 'log.retention.check.interval.ms={{ kafka_log_retention_check_interval_ms }}'
+
+- name: Update zookeeper connection string
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'zookeeper\.connect=.*'
+    replace: 'zookeeper.connect={{ kafka_zookeeper_connect }}'
+
+- name: Update Group Coordinator Settings
+  replace:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    regexp:  'group\.initial\.rebalance\.delay\.ms=.*'
+    replace: 'group.initial.rebalance.delay.ms={{ kafka_group_initial_rebalance_delay_ms }}'

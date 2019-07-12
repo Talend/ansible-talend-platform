@@ -1,0 +1,17 @@
+---
+# This file handles installation with yum (to default folder /opt/talend)
+#
+- name: "Install {{ app_name }} with yum"
+  when: rpm_is_installed.stdout == ''
+  yum:
+    name: "{{ rpm_name }}"
+    state: present
+  environment:
+    TALEND_INSTALL_USER: "{{ install_user }}"
+    TALEND_INSTALL_GROUP: "{{ install_group }}"
+    TALEND_INSTALL_SYSTEMD: "{{ '1' if app_install_systemd == 'yes' else '0' }}"
+    TALEND_TOMCAT_HOME: "{{ '' if app_use_talend_tomcat == 'yes' else app_tomcat_home }}"
+    TALEND_TOMCAT_MODE: "{{ '' if app_use_talend_tomcat == 'yes' else app_tomcat_mode }}"
+    TALEND_TOMCAT_SETUP: "{{ '' if app_use_talend_tomcat == 'yes' else '1' if app_tomcat_setup == 'yes' else '0' }}"
+    TALEND_TOMCAT_PORT: "{{ app_tomcat_port }}"
+    JAVA_HOME: "{{ java_dir.stdout }}"

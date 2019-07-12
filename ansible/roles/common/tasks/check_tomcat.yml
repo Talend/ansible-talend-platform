@@ -1,0 +1,42 @@
+---
+# This common script checks the status of embedded tomcat (if it was
+#      specified for installation), or status of external tomcat
+#      (if required)
+
+- name: Check talend-tomcat status in case of using embedded talend-tomcat
+  command: "rpm -qa talend-tomcat"
+  args:
+    warn: no
+  when: app_use_talend_tomcat == "yes"
+  changed_when: false
+  register: tomcat_rpm_status
+
+- name: Check that talend-tomcat is installed
+  fail:
+    msg: "{{ app_name }} RPM requires talend-tomcat RPM, but it is not installed, please check that 'tomcat' role is in the list"
+  when: app_use_talend_tomcat == "yes" and tomcat_rpm_status.stdout == ""
+
+# Next we check that talend-tomcat is installed with correct prefix, otherwise it will not work
+- name: Check actual installed path for talend-tomcat
+  shell: "set -o pipefail | rpm -ql talend-tomcat | grep -v '/etc/talend/' | head -n 1"
+  args:
+    warn: no
+  when: app_use_talend_tomcat == "yes"
+  changed_when: false
+  register: talend_tomcat_install_path
+
+- name: Check that talend-tomcat is installed in correct location
+  fail:
+    msg: "For {{ app_name }} - Talend-tomcat RPM is installed, but in other location: {{ talend_tomcat_install_path.stdout }}"
+  when: app_use_talend_tomcat == "yes" and talend_tomcat_install_path.stdout != install_prefix
+
+- name: Check status of customer tomcat location
+  when: app_use_talend_tomcat == "no"
+  stat:
+    path: "{{ app_tomcat_home }}/conf/server.xml"
+  register: app_custom_tomcat_flag
+
+- name: Fail if customer tomcat is not provided or path is wrong
+  fail:
+    msg: "For {{ app_name }} - customer tomcat is not available at {{ app_tomcat_home }}"
+  when: app_use_talend_tomcat == "no" and not app_custom_tomcat_flag.stat.exists

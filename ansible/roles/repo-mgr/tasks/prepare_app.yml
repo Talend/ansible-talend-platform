@@ -1,0 +1,22 @@
+---
+
+# This file will handle "prepare application" action.
+# This action needs to be run only once after RPM installation.
+# It will unpack war-files, we need it in order to update configuration files
+
+- name: Create repo-manager webapp folder
+  file:
+    path: '{{ repomgr_webapps_location }}/org.talend.repositorymanager'
+    state: directory
+    mode: 0755
+    owner: '{{ install_user }}'
+    group: '{{ install_group }}'
+
+- name: Unpack repo-manager webapp
+  unarchive:
+    src:  '{{ repomgr_webapps_location }}/org.talend.repositorymanager.war'
+    dest: '{{ repomgr_webapps_location }}/org.talend.repositorymanager'
+    remote_src: yes
+    creates: '{{ repomgr_webapps_location }}/org.talend.repositorymanager/WEB-INF/web.xml'
+    owner: '{{ install_user }}'
+    group: '{{ install_group }}'

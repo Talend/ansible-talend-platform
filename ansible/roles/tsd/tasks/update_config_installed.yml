@@ -1,0 +1,106 @@
+---
+# This script used for updating current application parameters (first install & upgrade)
+# It can be run just after the installation or after some time (re-configuration)
+
+#####
+# Set the path to the tomcat config location of TSD
+#####
+- name: Set tsd_config_location when talend tomcat is used or customer tomcat in shared mode
+  when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
+  set_fact:
+    tsd_config_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-quality.properties"
+
+- name: Set tsd_config_location when customer tomcat is used in direct mode
+  when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
+  set_fact:
+    tsd_config_location: "{{ app_tomcat_home }}/conf/data-quality.properties"
+
+
+#####
+# Update TSD configuration
+#####
+# Kafka
+- name: Update kafka brokers
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^spring\.cloud\.stream\.kafka\.binder\.brokers=.*'
+    replace: 'spring.cloud.stream.kafka.binder.brokers={{ tsd_kafka_host }}'
+
+- name: Update kafka port
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^spring\.cloud\.stream\.kafka\.binder\.defaultBrokerPort=.*'
+    replace: 'spring.cloud.stream.kafka.binder.defaultBrokerPort={{ tsd_kafka_port }}'
+
+
+# Zookeeper
+- name: Update zookeeper nodes
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^spring\.cloud\.stream\.kafka\.binder\.zkNodes=.*'
+    replace: 'spring.cloud.stream.kafka.binder.zkNodes={{ tsd_zookeeper_host }}'
+
+- name: Update zookeeper port
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^spring\.cloud\.stream\.kafka\.binder\.defaultZkPort=.*'
+    replace: 'spring.cloud.stream.kafka.binder.defaultZkPort={{ tsd_zookeeper_port }}'
+
+
+# MongoDB
+- name: Update MongoDB hosts
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^dq\.mongo\.host=.*'
+    replace: 'dq.mongo.host={{ tsd_mongo_host }}'
+
+- name: Update MongoDB port
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^dq\.mongo\.port=.*'
+    replace: 'dq.mongo.port={{ tsd_mongo_port }}'
+
+- name: Update MongoDB dbname
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^dq\.mongo\.database\.name=.*'
+    replace: 'dq.mongo.database.name={{ tsd_mongo_database }}'
+
+- name: Update MongoDB user
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^dq\.mongo\.username=.*'
+    replace: 'dq.mongo.username={{ tsd_mongo_username }}'
+
+- name: Update MongoDB password
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^dq\.mongo\.password=.*'
+    replace: 'dq.mongo.password={{ tsd_mongo_password }}'
+
+
+# Security / authent
+- name: Update scim url (IAM)
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^scim\.url=.*'
+    replace: 'scim.url={{ tsd_security_scim_url }}'
+    
+- name: Update oidc url
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^oidc\.url=.*'
+    replace: 'oidc.url={{ tsd_security_oidc_url }}'
+    
+- name: Update oidc gateway ID
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^oidc\.semanticservice\.id=.*'
+    replace: 'oidc.semanticservice.id={{ tsd_oidc_id }}'
+    
+- name: Update oidc gateway secret
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^oidc\.semanticservice\.secret=.*'
+    replace: 'oidc.semanticservice.secret={{ tsd_oidc_secret }}'
+    

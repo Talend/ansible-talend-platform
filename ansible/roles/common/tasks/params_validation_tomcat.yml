@@ -1,0 +1,35 @@
+---
+# This script performs different parameters validation for Tomcat-based applications
+
+#
+# Validation for talend-tomcat installation parameters
+#
+- name: Show error about wrong value for parameter app_use_talend_tomcat
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter 'app_use_talend_tomcat', must be 'yes' or 'no'"
+  when: app_use_talend_tomcat != "yes" and app_use_talend_tomcat != "no"
+
+- name: Show error that no value is specified for app_tomcat_home
+  fail:
+    msg: "{{ app_name }} - no values is specified for 'app_tomcat_home'"
+  when: app_use_talend_tomcat == "no" and app_tomcat_home == ""
+
+- name: Show error about wrong value for parameter app_tomcat_mode
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter 'app_tomcat_mode', must be 'direct' or 'shared'"
+  when: app_use_talend_tomcat == "no" and app_tomcat_mode != "direct" and app_tomcat_mode != "shared"
+
+- name: Show error about wrong value for parameter app_tomcat_setup
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter 'app_tomcat_setup', must be 'yes' or 'no'"
+  when: app_use_talend_tomcat == "no" and app_tomcat_setup != "yes" and app_tomcat_setup != "no"
+
+- name: Show error about wrong value for parameter app_tomcat_port, not a number
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter 'app_tomcat_port', must be a valid number"
+  when: (app_use_talend_tomcat == "yes" or (app_use_talend_tomcat == "no" and app_tomcat_setup == "yes")) and app_tomcat_port|int == 0
+
+- name: Show error about wrong value for parameter app_tomcat_port, must be a valid number
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter 'app_tomcat_port', must be a valid TCP/IP port number"
+  when: (app_use_talend_tomcat == "yes" or (app_use_talend_tomcat == "no" and app_tomcat_setup == "yes")) and ( app_tomcat_port|int  > 65535 or app_tomcat_port|int < 0 )

@@ -1,0 +1,312 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config file: {{install_prefix}}/jobserver/conf/TalendJobServer.properties
+#
+# All other parameters are from roles/jobserver/defaults/main.yml
+#
+
+- name: Update checkFileCountBeforeFire
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.fileevent\.FileChangedSensor\.FileEvent\.checkFileCountBeforeFire=.*'
+    replace: 'org.talend.remote.jobserver.server.fileevent.FileChangedSensor.FileEvent.checkFileCountBeforeFire={{ js_checkFileCountBeforeFire }}'
+
+- name: Update checkFileCountBeforeFire
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.fileevent\.FileChangedSensor\.FileEvent\.checkFileCountBeforeFire=.*'
+    replace: 'org.talend.remote.jobserver.server.fileevent.FileChangedSensor.FileEvent.checkFileCountBeforeFire={{ js_checkFileCountBeforeFire }}'
+
+- name: Update command_server_port
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.COMMAND_SERVER_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.COMMAND_SERVER_PORT={{ js_command_server_port }}'
+
+- name: Update port for the file transfers
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.FILE_SERVER_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.FILE_SERVER_PORT={{ js_file_server_port }}'
+
+- name: Update port used for monitoring the servers state
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.MONITORING_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.MONITORING_PORT={{ js_monitoring_port }}'
+
+- name: Update port used for the execution of process messages publisher
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.PROCESS_MESSAGE_PORT=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.PROCESS_MESSAGE_PORT={{ js_process_message_port }}'
+
+- name: Update the process message publisher status
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org.talend.remote.jobserver.server.TalendJobServer.ENABLED_PROCESS_MESSAGE=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.ENABLED_PROCESS_MESSAGE={{ js_enabled_process_message |lower }}'
+
+- name: Update the local hostname of this server
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.LOCAL_HOST=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.LOCAL_HOST={{ js_local_host }}'
+
+- name: Update SSL param for establishing an encrypted link between the JobServer and its clients
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.USE_SSL=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.USE_SSL={{ js_use_ssl |lower }}'
+
+- name: Update Disabled SSL cipher suites
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.DISABLED_CIPHER_SUITES=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.DISABLED_CIPHER_SUITES={{ js_disabled_cipher_suites }}'
+
+- name: Update the list of OS users allowed to run the jobs
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.RUN_AS_WHITELIST=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.RUN_AS_WHITELIST={{ js_run_as_whitelist }}'
+
+- name: Update RUN_AS_USER_VALIDATION_REGEXP
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.RUN_AS_USER_VALIDATION_REGEXP=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.RUN_AS_USER_VALIDATION_REGEXP={{ js_run_as_user_validation_regexp }}'
+
+- name: Update the token that allow job server execute unsigned job
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.server\.TalendJobServer\.EXECUTE_UNSIGNED_JOB_TOKEN=.*'
+    replace: 'org.talend.remote.jobserver.server.TalendJobServer.EXECUTE_UNSIGNED_JOB_TOKEN={{ js_execute_unsigned_job_token }}'
+
+- name: Update the directory path to the Talend jobserver files
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '^org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.ROOT_PATH=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.ROOT_PATH={{ js_root_path }}'
+
+- name: Update the setting for loading of the native library
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.monitoring\.jmx.server\.OsInfoRetriever\.FORCE_LOAD=.*'
+    replace: 'org.talend.monitoring.jmx.server.OsInfoRetriever.FORCE_LOAD={{ js_force_load |lower }}'
+
+- name: Update the shell which launches the jobs
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.LAUNCH_SHELL_SCRIPT=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.LAUNCH_SHELL_SCRIPT={{ js_launch_shell_script |lower }}'
+
+- name: Update the shell which launches the jobs (2)
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.SHELL_LINUX=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.SHELL_LINUX={{ js_shell_linux }}'
+  when: js_launch_shell_script
+
+- name: Update the maximum of concurrent connections to the JobServer
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.server\.MultiSocketServer\.MAX_CONCURRENT_CONNECTIONS=.*'
+    replace: 'org.talend.remote.server.MultiSocketServer.MAX_CONCURRENT_CONNECTIONS={{ js_max_concurrent_connections }}'
+
+- name: Update the executable path of the binary which will run the job
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.JOB_LAUNCHER_PATH=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.JOB_LAUNCHER_PATH={{ job_launcher_path }}'
+
+- name: Update time between each cleaning action
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.FREQUENCY_CLEAN_ACTION=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.FREQUENCY_CLEAN_ACTION={{ js_frequency_clean_action }}'
+
+- name: Update time number of executions before the job execution release process happens
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MIN_NUMBER_JOB_EXECUTIONS_BEFORE_RELEASE=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MIN_NUMBER_JOB_EXECUTIONS_BEFORE_RELEASE={{ js_min_number_job_executions_before_release }}'
+
+- name: Update minimum elapsed time for a normal execution before it's ready to be released
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MAX_DURATION_BEFORE_JOB_EXECUTION_RELEASE_NORMAL_CASE=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MAX_DURATION_BEFORE_JOB_EXECUTION_RELEASE_NORMAL_CASE={{ js_max_duration_before_job_execution_release_normal_case }}'
+
+- name: Update minimum elapsed time for a abnormal execution before it's ready to be released
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MAX_DURATION_BEFORE_JOB_EXECUTION_RELEASE_ABNORMAL_CASE=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MAX_DURATION_BEFORE_JOB_EXECUTION_RELEASE_ABNORMAL_CASE={{ js_max_duration_before_job_execution_release_abnormal_case }}'
+
+- name: Update time in seconds before cleaning executions logs from the current date
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MAX_DURATION_BEFORE_CLEANING_OLD_EXECUTIONS_LOGS=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MAX_DURATION_BEFORE_CLEANING_OLD_EXECUTIONS_LOGS={{ js_max_duration_before_cleaning_old_executions_logs }}'
+
+- name: Update max executions logs to keep
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MAX_OLD_EXECUTIONS_LOGS=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MAX_OLD_EXECUTIONS_LOGS={{ js_max_old_executions_logs }}'
+
+- name: Update time in seconds before cleaning archives and deployed jobs from the current date
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MAX_DURATION_BEFORE_CLEANING_OLD_JOBS=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MAX_DURATION_BEFORE_CLEANING_OLD_JOBS={{ js_max_duration_before_cleaning_old_jobs }}'
+
+- name: Update max archive and deployed jobs to keep
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.MAX_OLD_JOBS=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.MAX_OLD_JOBS={{ js_max_old_jobs }}'
+
+- name: Update setting for enforcing authorization for all jobserver commands
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.SECURITY_MODE=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.SECURITY_MODE={{ js_security_mode |lower }}'
+
+- name: Update TAC url list
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.TAC_URLS=.*'
+    replace: 'org.talend.remote.jobserver.commons.config.JobServerConfiguration.TAC_URLS={{ js_tac_urls }}'
+  when: js_tac_urls != ""
+
+- name: Update TAC url list (empty)
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)*(\s)*org\.talend\.remote\.jobserver\.commons\.config\.JobServerConfiguration\.TAC_URLS=.*'
+    replace: '#org.talend.remote.jobserver.commons.config.JobServerConfiguration.TAC_URLS=http://host1:8080/org.talend.administrator,http://host2:8080/org.talend.administrator'
+  when: js_tac_urls == ""
+
+- name: Update SSL setting for JMX monitoring server
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.jmxmp\.useSSL=.*'
+    replace: 'org.talend.jmxmp.useSSL={{ js_jmxmp_useSSL |lower }}'
+
+- name: Update certificate based client authorization setting for JMX monitoring server
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  'org\.talend\.jmxmp\.ssl\.authenticate=.*'
+    replace: 'org.talend.jmxmp.ssl.authenticate={{ js_jmxmp_ssl_authenticate |lower }}'
+
+- name: Update path_to_monitoring_server_keystore
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.jmxmp\.ssl\.keyStore=.*'
+    replace: 'org.talend.jmxmp.ssl.keyStore={{ js_jmxmp_ssl_keyStore }}'
+  when: js_jmxmp_ssl_keyStore != ""
+
+- name: Update keystore password
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org.talend.jmxmp.ssl.keyStorePassword=.*'
+    replace: 'org.talend.jmxmp.ssl.keyStorePassword={{ js_jmxmp_ssl_keyStorePassword }}'
+  when: js_jmxmp_ssl_keyStorePassword != ""
+
+- name: Update keystore type
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.jmxmp\.ssl\.keyStoreType=.*'
+    replace: 'org.talend.jmxmp.ssl.keyStoreType={{ js_jmxmp_ssl_keyStoreType }}'
+  when: js_jmxmp_ssl_keyStoreType != ""
+
+- name: Update thruststore path
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org.talend.jmxmp.ssl.trustStore=.*'
+    replace: 'org.talend.jmxmp.ssl.trustStore={{ js_jmxmp_ssl_trustStore }}'
+  when: js_jmxmp_ssl_trustStore != ""
+
+- name: Update thruststore password
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.jmxmp\.ssl\.trustStorePassword=.*'
+    replace: 'org.talend.jmxmp.ssl.trustStorePassword={{ js_jmxmp_ssl_trustStorePassword }}'
+  when: js_jmxmp_ssl_trustStorePassword != ""
+
+- name: Update thruststore type
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.jmxmp\.ssl\.trustStoreType=.*'
+    replace: 'org.talend.jmxmp.ssl.trustStoreType={{ js_jmxmp_ssl_trustStoreType }}'
+  when: js_jmxmp_ssl_trustStoreType != ""
+
+- name: Update enabled protocols
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.jmxmp\.ssl\.enabled\.protocols=.*'
+    replace: 'org.talend.jmxmp.ssl.enabled.protocols={{ js_jmxmp_ssl_enabled_protocols }}'
+  when: js_jmxmp_ssl_enabled_protocols != ""
+
+- name: Update cipher suites
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.jmxmp\.ssl\.enabled\.cipher\.suites=.*'
+    replace: 'org.talend.jmxmp.ssl.enabled.cipher.suites={{ js_jmxmp_ssl_enabled_cipher_suites }}'
+  when: js_jmxmp_ssl_enabled_cipher_suites != ""
+
+- name: Update remote server keystore
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.server\.ssl\.keyStore=.*'
+    replace: 'org.talend.remote.server.ssl.keyStore={{ js_remote_server_ssl_keyStore }}'
+  when: js_remote_server_ssl_keyStore != ""
+
+- name: Update remote server keystore password
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.server\.ssl\.keyStorePassword=.*'
+    replace: 'org.talend.remote.server.ssl.keyStorePassword={{ js_remote_server_ssl_keyStorePassword }}'
+  when: js_remote_server_ssl_keyStorePassword != ""
+
+- name: Update remote server truststore
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org.talend.remote.server.ssl.trustStore=.*'
+    replace: 'org.talend.remote.server.ssl.trustStore={{ js_remote_server_ssl_trustStore }}'
+  when: js_remote_server_ssl_trustStore != ""
+
+- name: Update remote server truststore password
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.server\.ssl\.trustStorePassword=.*'
+    replace: 'org.talend.remote.server.ssl.trustStorePassword={{ js_remote_server_ssl_trustStorePassword }}'
+  when: js_remote_server_ssl_trustStorePassword != ""
+
+- name: Update remote cipher suites
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.server\.ssl\.enabled\.cipher\.suites=.*'
+    replace: 'org.talend.remote.server.ssl.enabled.cipher.suites={{ js_remote_server_ssl_enabled_cipher_suites }}'
+  when: js_remote_server_ssl_enabled_cipher_suites != ""
+
+- name: Update remote SSL authentication setting (non-empty)
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.server\.ssl\.authenticate=.*'
+    replace: 'org.talend.remote.server.ssl.authenticate={{ js_remote_server_ssl_authenticate }}'
+  when: js_remote_server_ssl_authenticate != ""
+
+- name: Update remote SSL authentication setting (empty)
+  replace:
+    path: "{{ install_prefix }}/jobserver/conf/TalendJobServer.properties"
+    regexp:  '(#)?org\.talend\.remote\.server\.ssl\.authenticate=.*'
+    replace: '#org.talend.remote.server.ssl.authenticate=false'
+  when: js_remote_server_ssl_authenticate == ""

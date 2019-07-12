@@ -1,0 +1,6 @@
+[talend-7.1-base]
+name=Talend 7.1
+baseurl='{{ rpm_repo_url }}'
+enabled=1
+gpgcheck=1
+gpgkey=http://www.opensourceetl.net/rpms/GPG-KEY-talend

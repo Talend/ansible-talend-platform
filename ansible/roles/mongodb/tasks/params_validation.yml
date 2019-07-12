@@ -1,0 +1,24 @@
+---
+# This script performs different parameters validation
+
+######################################
+# MongoDB-specific parameters validation
+######################################
+
+- name: Show error about wrong value for parameter mongodb_enhancedsecurity
+  fail:
+    msg: Wrong value for parameter "mongodb_enhancedsecurity", must be 'yes' or 'no'
+  when: mongodb_enhancedsecurity != "no" and mongodb_enhancedsecurity != "yes"
+
+- name: Show error about wrong value for parameter mongodb_localhost_only
+  fail:
+    msg: Wrong value for parameter "mongodb_localhost_only", must be 'yes' or 'no'
+  when: rpm_base_version == 7.2 and (mongodb_localhost_only != "no" and mongodb_localhost_only != "yes")
+
+# Check port-type parameter: mongodb_port
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid TCP/IP port number !"
+  when: not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "mongodb_port", value: "{{ mongodb_port }}" }

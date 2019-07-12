@@ -1,0 +1,93 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# # it allows re-usage of tasks
+
+app_name: "Talend-IAM"
+rpm_name: "talend-iam"
+rpm_folder: "iam"
+app_service: "talend-iam"
+
+#####
+# Tomcat-selection variables
+#####
+
+# This var shows whether we should use talend-tomcat in 'shared' mode (default settings)
+app_use_talend_tomcat: "yes" # allowed values are "yes" or "no"
+app_tomcat_port: "9080" # tomcat_port is used only if tomcat_setup == "yes" (or when app_use_talend_tomcat == "yes")
+
+# The following variables will be taken in account only if app_use_talend_tomcat == "no"
+app_tomcat_home: "/opt/tomcat" # home folder for customer's tomcat
+app_tomcat_mode: "direct" # can be one of "direct" or "shared"
+app_tomcat_setup: "no" # whether to update customer's tomcat configuration (ports)
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+##########################
+# Internal configuration variables, do not touch this block
+##
+iam_base_location: "{{ install_prefix + '/iam' }}"
+iam_tomcat_location: "{{ install_prefix + '/iam/tomcat' if app_use_talend_tomcat == 'yes' or app_tomcat_mode == 'shared' else app_tomcat_home }}"
+iam_config_location: "{{ iam_tomcat_location + '/conf' }}"
+iam_clients_location: "{{ iam_tomcat_location + '/clients' }}"
+iam_webapps_location: "{{ iam_tomcat_location + '/webapps' }}"
+##
+# End of internal configuration variables block
+##########################
+
+##########################################################################
+## Talend-IAM -specific configuration variables
+## We will use "iam_" prefix in var names
+##########################################################################
+
+#####
+# Talend-IAM Configuration
+#####
+
+# Tomcat Configuration
+iam_tomcat_port: "{{app_tomcat_port}}"
+
+# TAC authentication
+# TAC url
+iam_tac_url: "http://localhost:8080/org.talend.administrator"
+
+# TAC user and password
+iam_tac_user: "security@company.com"
+iam_tac_password: "admin"
+
+# IAM configuration
+
+# IAM - hostname to be used in IAM configuration files
+iam_hostname: "localhost"
+
+# Language. Supported languages: en (English) | fr (French) | ja (Japanese) | zh (Chinese)
+iam_language: "en"
+
+# IAM - TDS post-logout URL
+iam_tds_postlogout_url: "http://localhost:19999/"
+
+# IAM - TDP post-logout URL
+iam_tdp_postlogout_url: "http://localhost:9999/"
+
+# IAM - MDM post-logout URL
+iam_mdm_postlogout_url: "http://localhost:8180/"
+
+########################
+# Internal configuration section, do not delete !!!
+########################
+iam_tds_postlogout_url_lc: "{{ iam_tds_postlogout_url | lower }}"
+iam_tdp_postlogout_url_lc: "{{ iam_tdp_postlogout_url | lower | regex_replace( '/$' ) }}"
+iam_mdm_postlogout_url_lc: "{{ iam_mdm_postlogout_url | lower }}"
+
+iam_tds_postlogon_port: "{{ iam_tds_postlogout_url_lc | urlsplit('port') }}"
+iam_tdp_postlogon_port: "{{ iam_tdp_postlogout_url_lc | urlsplit('port') }}"
+iam_mdm_postlogon_port: "{{ iam_mdm_postlogout_url_lc | urlsplit('port') }}"
+iam_tds_postlogon_host: "{{ iam_tds_postlogout_url_lc | urlsplit('hostname') }}"
+iam_tdp_postlogon_host: "{{ iam_tdp_postlogout_url_lc | urlsplit('hostname') }}"
+iam_mdm_postlogon_host: "{{ iam_mdm_postlogout_url_lc | urlsplit('hostname') }}"
+
+iam_tds_postlogon_shorthost: "{{ iam_tds_postlogout_url_lc | urlsplit('hostname') | regex_replace('(.*?)(\\..*)', '\\1' ) }}"
+iam_tdp_postlogon_shorthost: "{{ iam_tdp_postlogout_url_lc | urlsplit('hostname') | regex_replace('(.*?)(\\..*)', '\\1' ) }}"
+iam_mdm_postlogon_shorthost: "{{ iam_mdm_postlogout_url_lc | urlsplit('hostname') | regex_replace('(.*?)(\\..*)', '\\1' ) }}"

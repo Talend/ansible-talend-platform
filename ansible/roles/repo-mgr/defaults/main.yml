@@ -1,0 +1,80 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Repository Manager"
+rpm_name: "talend-repo-mgr"
+rpm_folder: "repo-mgr"
+app_service: "talend-repo-mgr"
+
+##########################################################################
+# Repository-Manager-specific configuration variables
+# We will use "repomgr_" prefix in var names
+##########################################################################
+
+# Whether to install Repository Manager into TAC (yes|no).
+# When "yes":
+#   - 'tac' role must be used in the playbook
+#   - no separate systemd service talend-repo-mgr (as talend-tac service will be used instead)
+#
+# When "no":
+#   - it does not depend on 'tac' role (but it still can be present in playbook)
+#   - it will be installed as separate systemd service (talend-repo-mgr)
+#   - in this case, tomcat selection variables (app_*) must be set properly below
+#
+# The recommended setting is to install Repository Manager into TAC
+#
+
+repomgr_install_into_tac: "yes"
+
+#####
+# Tomcat-selection variables (actual only when repomgr_install_into_tac == "no", otherwise ignored)
+#####
+
+# This var shows whether we should use talend-tomcat in 'shared' mode (default settings)
+app_use_talend_tomcat: "yes" # allowed values are "yes" or "no"
+app_tomcat_port: "8080" # tomcat_port is used only if tomcat_setup == "yes" (or when app_use_talend_tomcat == "yes")
+
+# The following variables will be taken in account only if app_use_talend_tomcat == "no"
+app_tomcat_home: "/opt/tomcat" # home folder for customer's tomcat
+app_tomcat_mode: "direct" # can be one of "direct" or "shared"
+app_tomcat_setup: "no" # whether to update customer's tomcat configuration (ports)
+
+#####
+# Installation as systemd service (actual only when repomgr_install_into_tac == "no", otherwise ignored)
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#####
+# Database configuration updates (re-configuration) "on the fly"
+#####
+
+# Database URL should be specified in JDBC format (default is MySQL on localhost)
+repomgr_database_url: "jdbc:mysql://localhost:3306/repository_manager?useSSL=false"
+
+# Database driver (default is MySQL driver)
+repomgr_database_driver: "com.mysql.cj.jdbc.Driver"
+
+# Database user name and password
+repomgr_database_username: "root"
+repomgr_database_password: "root"
+
+#####
+# Misc parameters
+#####
+
+# Password to access to db config page in the web app:
+repomgr_database_config_password: "admin"
+
+# Local extraction path
+repomgr_localExtractPath: "/tmp/Talend/repomanager"
+
+#####
+# Internal configuration variables, do not touch this block
+#####
+repomgr_internal_tomcat_location: "{{ install_prefix + '/repo-mgr/tomcat' if app_use_talend_tomcat == 'yes' or app_tomcat_mode == 'shared' else app_tomcat_home }}"
+repomgr_webapps_location: "{{ tac_webapps_location if repomgr_install_into_tac == 'yes' else repomgr_internal_tomcat_location + '/webapps' }}"
+repomgr_config_location: "{{ repomgr_webapps_location + '/org.talend.repositorymanager/WEB-INF/classes' }}"
+#####
+# End of internal configuration variables block
+#####

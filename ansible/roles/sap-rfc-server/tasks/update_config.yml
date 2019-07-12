@@ -1,0 +1,447 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config folder: {{ install_prefix }}/sap-rfc-serv/conf
+#
+# All other parameters are from roles/sap-rfc-server/defaults/main.yml
+#
+
+- name: Install sapjco3.jar
+  when: sap_install_sapjco3_jar == 'yes'
+  copy:
+    src:  "{{ sap_sapjco3_jar_path }}/sapjco3.jar"
+    dest: "{{ install_prefix }}/sap-rfc-serv/{{ sap_rfc_server_user_lib_folder }}/sapjco3.jar"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+- name: Update SAP gateway host
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.server.gwhost=.*'
+    replace: 'jco.server.gwhost={{ sap_jco_server_gwhost }}'
+
+- name: Update SAP gateway service
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.server.gwserv=.*'
+    replace: 'jco.server.gwserv={{ sap_jco_server_gwserv }}'
+
+- name: Update the program ID (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.progid=.*'
+    replace: 'jco.server.progid={{ sap_jco_server_progid }}'
+  when: sap_jco_server_progid != 'TALEND'
+
+- name: Update the program ID (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.progid=.*'
+    replace: '#jco.server.progid={{ sap_jco_server_progid }}'
+  when: sap_jco_server_progid == 'TALEND'
+
+- name: Update the program ID for IDOC service
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.server.progid.idoc=.*'
+    replace: 'jco.server.progid.idoc={{ sap_jco_server_progid_idoc }}'
+
+- name: Update the program ID for BW service
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.server.progid.bw=.*'
+    replace: 'jco.server.progid.bw={{ sap_jco_server_progid_bw }}'
+
+- name: Update the number of connections that should be registered at the gateway
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.server.connection_count=.*'
+    replace: 'jco.server.connection_count={{ sap_jco_server_connection_count }}'
+
+- name: Update the number of threads (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.worker_thread_count=.*'
+    replace: 'jco.server.worker_thread_count={{ sap_jco_server_worker_thread_count }}'
+  when: sap_jco_server_worker_thread_count != ''
+
+- name: Update the number of threads (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.worker_thread_count=.*'
+    replace: '#jco.server.worker_thread_count='
+  when: sap_jco_server_worker_thread_count == ''
+
+- name: Update the minimal number of threads (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.worker_thread_min_count=.*'
+    replace: 'jco.server.worker_thread_min_count={{ sap_jco_server_worker_thread_min_count }}'
+  when: sap_jco_server_worker_thread_min_count != ''
+
+- name: Update the minimal number of threads (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.worker_thread_min_count=.*'
+    replace: '#jco.server.worker_thread_min_count='
+  when: sap_jco_server_worker_thread_min_count == ''
+
+- name: Update RFC trace level (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.trace=.*'
+    replace: 'jco.server.trace={{ sap_jco_server_trace }}'
+  when: sap_jco_server_trace != ''
+
+- name: Update RFC trace level (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*jco.server.trace=.*'
+    replace: '#jco.server.trace=0'
+  when: sap_jco_server_trace == ''
+
+#
+# SAP JCO Client Section
+#
+- name: Update host name of the SAP ABAP application server
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.client.ashost=.*'
+    replace: 'jco.client.ashost={{ sap_jco_client_ashost }}'
+
+- name: Update SAP client
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.client.client=.*'
+    replace: 'jco.client.client={{ sap_jco_client_client }}'
+
+- name: Update logon language
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.client.lang=.*'
+    replace: 'jco.client.lang={{ sap_jco_client_lang }}'
+
+- name: Update logon user
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.client.user=.*'
+    replace: 'jco.client.user={{ sap_jco_client_user }}'
+
+- name: Update logon password
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.client.passwd=.*'
+    replace: 'jco.client.passwd={{ sap_jco_client_passwd }}'
+
+- name: Update system number of the SAP ABAP application server
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'jco.client.sysnr=.*'
+    replace: 'jco.client.sysnr={{ sap_jco_client_sysnr }}'
+
+#
+# Server management Section
+#
+- name: Update the number of threads in the fixed size pool servicing SAP Idocs (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.thread.pool.size=.*'
+    replace: 'rfc.server.thread.pool.size={{ sap_rfc_server_thread_pool_size }}'
+  when: sap_rfc_server_thread_pool_size != ''
+
+- name: Update the number of threads in the fixed size pool servicing SAP Idocs (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.thread.pool.size=.*'
+    replace: '#rfc.server.thread.pool.size=5'
+  when: sap_rfc_server_thread_pool_size == ''
+
+- name: Update the folder containing user libraries (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.user.lib.folder=.*'
+    replace: 'rfc.server.user.lib.folder={{ sap_rfc_server_user_lib_folder }}'
+  when: sap_rfc_server_user_lib_folder != 'user/lib'
+
+- name: Update the folder containing user libraries (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.user.lib.folder=.*'
+    replace: '#rfc.server.user.lib.folder={{ sap_rfc_server_user_lib_folder }}'
+  when: sap_rfc_server_user_lib_folder == 'user/lib'
+
+- name: Update the IP address on which to listen for shutdown commands (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.address=.*'
+    replace: 'rfc.server.shutdown.address={{ sap_rfc_server_shutdown_address }}'
+  when: sap_rfc_server_shutdown_address != 'localhost'
+
+- name: Update the IP address on which to listen for shutdown commands (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.address=.*'
+    replace: '#rfc.server.shutdown.address={{ sap_rfc_server_shutdown_address }}'
+  when: sap_rfc_server_shutdown_address == 'localhost'
+
+- name: Update the port number on which to listen for shutdown commands (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.port=.*'
+    replace: 'rfc.server.shutdown.port={{ sap_rfc_server_shutdown_port }}'
+  when: sap_rfc_server_shutdown_port != '16161'
+
+- name: Update the port number on which to listen for shutdown commands (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.port=.*'
+    replace: '#rfc.server.shutdown.port={{ sap_rfc_server_shutdown_port }}'
+  when: sap_rfc_server_shutdown_port == '16161'
+
+- name: Update the shutdown command expected (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.command=.*'
+    replace: 'rfc.server.shutdown.command={{ sap_rfc_server_shutdown_command }}'
+  when: sap_rfc_server_shutdown_command != 'SHUTDOWN'
+
+- name: Update the shutdown command expected (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.command=.*'
+    replace: '#rfc.server.shutdown.command={{ sap_rfc_server_shutdown_command }}'
+  when: sap_rfc_server_shutdown_command == 'SHUTDOWN'
+
+- name: Update the shutdown command time-out (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.timout=.*'
+    replace: 'rfc.server.shutdown.timout={{ sap_rfc_server_shutdown_timout }}'
+  when: sap_rfc_server_shutdown_timout != '60000'
+
+- name: Update the shutdown command time-out (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.shutdown.timout=.*'
+    replace: '#rfc.server.shutdown.timout={{ sap_rfc_server_shutdown_timout }}'
+  when: sap_rfc_server_shutdown_timout == '60000'
+
+#
+# IDocs Receiver Section
+#
+- name: Update the class name of a substitute receiver factory (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*receiver.server.factory.class.name=.*'
+    replace: 'receiver.server.factory.class.name={{ sap_receiver_server_factory_class_name }}'
+  when: sap_receiver_server_factory_class_name != ''
+
+- name: Update the class name of a substitute receiver factory (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*receiver.server.factory.class.name=.*'
+    replace: '#receiver.server.factory.class.name=org.talend.sap.idocs.mock.SAPServerFactoryMock'
+  when: sap_receiver_server_factory_class_name == ''
+
+- name: Update whether the receiver should be transactional (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*receiver.transactional=.*'
+    replace: 'receiver.transactional={{ sap_receiver_transactional }}'
+  when: sap_receiver_transactional != ''
+
+- name: Update whether the receiver should be transactional (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*receiver.transactional=.*'
+    replace: '#receiver.transactional=false'
+  when: sap_receiver_transactional == ''
+
+- name: Update time-out used on waiting for the IDOC package to get processed (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*api.idoc_transaction_wait_timout=.*'
+    replace: 'api.idoc_transaction_wait_timout={{ sap_api_idoc_transaction_wait_timout }}'
+  when: sap_api_idoc_transaction_wait_timout != ''
+
+- name: Update time-out used on waiting for the IDOC package to get processed (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*api.idoc_transaction_wait_timout=.*'
+    replace: '#api.idoc_transaction_wait_timout=60000'
+  when: sap_api_idoc_transaction_wait_timout == ''
+
+#
+# JMS Broker Section
+#
+- name: Update file system directory containing jaas authentication configuration (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.login.config=.*'
+    replace: 'rfc.server.jms.login.config={{ sap_rfc_server_jms_login_config }}'
+  when: sap_rfc_server_jms_login_config != ''
+
+- name: Update file system directory containing jaas authentication configuration (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.login.config=.*'
+    replace: '#rfc.server.jms.login.config={{ sap_rfc_server_jms_login_config }}'
+  when: sap_rfc_server_jms_login_config == ''
+
+- name: Update a jaas username used to authenticate a publisher or sender (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.login.username=.*'
+    replace: 'rfc.server.jms.login.username={{ sap_rfc_server_jms_login_username }}'
+  when: sap_rfc_server_jms_login_username != ''
+
+- name: Update a jaas username used to authenticate a publisher or sender (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.login.username=.*'
+    replace: '#rfc.server.jms.login.username={{ sap_rfc_server_jms_login_username }}'
+  when: sap_rfc_server_jms_login_username == ''
+
+- name: Update a jaas password used to authenticate a publisher or sender (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.login.password=.*'
+    replace: 'rfc.server.jms.login.password={{ sap_rfc_server_jms_login_password }}'
+  when: sap_rfc_server_jms_login_password != ''
+
+- name: Update a jaas password used to authenticate a publisher or sender (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.login.password=.*'
+    replace: '#rfc.server.jms.login.password={{ sap_rfc_server_jms_login_password }}'
+  when: sap_rfc_server_jms_login_password == ''
+
+- name: Update the path to a key store for SSL (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.ssl.keystore.path=.*'
+    replace: 'rfc.server.jms.ssl.keystore.path={{ sap_rfc_server_jms_ssl_keystore_path }}'
+  when: sap_rfc_server_jms_ssl_keystore_path != ''
+
+- name: Update the path to a key store for SSL (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.ssl.keystore.path=.*'
+    replace: '#rfc.server.jms.ssl.keystore.path={{ sap_rfc_server_jms_ssl_keystore_path }}'
+  when: sap_rfc_server_jms_ssl_keystore_path == ''
+
+- name: Update a password to a key store for SSL (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.ssl.keystore.password=.*'
+    replace: 'rfc.server.jms.ssl.keystore.password={{ sap_rfc_server_jms_ssl_keystore_password }}'
+  when: sap_rfc_server_jms_ssl_keystore_password != ''
+
+- name: Update a password to a key store for SSL (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.ssl.keystore.password=.*'
+    replace: '#rfc.server.jms.ssl.keystore.password={{ sap_rfc_server_jms_ssl_keystore_password }}'
+  when: sap_rfc_server_jms_ssl_keystore_password == ''
+
+- name: Update whether JMS messages should be replicated in durable queues (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.replicate.in.durable.queues=.*'
+    replace: 'rfc.server.jms.replicate.in.durable.queues={{ sap_rfc_server_jms_replicate_in_durable_queues }}'
+  when: sap_rfc_server_jms_replicate_in_durable_queues != ''
+
+- name: Update whether JMS messages should be replicated in durable queues (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.replicate.in.durable.queues=.*'
+    replace: '#rfc.server.jms.replicate.in.durable.queues=false'
+  when: sap_rfc_server_jms_replicate_in_durable_queues == ''
+
+- name: Update ISO8601 retention period for JMS messages in durable queues (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.durable.queues.retention.period=.*'
+    replace: 'rfc.server.jms.durable.queues.retention.period={{ sap_rfc_server_jms_durable_queues_retention_period }}'
+  when: sap_rfc_server_jms_durable_queues_retention_period != ''
+
+- name: Update ISO8601 retention period for JMS messages in durable queues (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.durable.queues.retention.period=.*'
+    replace: '#rfc.server.jms.durable.queues.retention.period=P7D'
+  when: sap_rfc_server_jms_durable_queues_retention_period == ''
+
+#
+# Embedded Broker Section
+#
+- name: Update embedded JMS broker URL
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  'rfc.server.jms.bind.address=.*'
+    replace: 'rfc.server.jms.bind.address={{ sap_rfc_server_jms_bind_address }}'
+
+- name: Update whether JMS messages are persisted (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.persistence=.*'
+    replace: 'rfc.server.jms.persistence={{ sap_rfc_server_jms_persistence }}'
+  when: sap_rfc_server_jms_persistence != ''
+
+- name: Update whether JMS messages are persisted (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.persistence=.*'
+    replace: '#rfc.server.jms.persistence=false'
+  when: sap_rfc_server_jms_persistence == ''
+
+- name: Update file system location used by JMS broker to persist data (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.data.directory=.*'
+    replace: 'rfc.server.jms.data.directory={{ sap_rfc_server_jms_data_directory }}'
+  when: sap_rfc_server_jms_data_directory != ''
+
+- name: Update file system location used by JMS broker to persist data (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.data.directory=.*'
+    replace: '#rfc.server.jms.data.directory={{ sap_rfc_server_jms_data_directory }}'
+  when: sap_rfc_server_jms_data_directory == ''
+
+- name: Update whether the Broker's services should be exposed into JMX (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.jmx=.*'
+    replace: 'rfc.server.jms.jmx={{ sap_rfc_server_jms_jmx }}'
+  when: sap_rfc_server_jms_jmx != ''
+
+- name: Update whether the Broker's services should be exposed into JMX (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.jms.jmx=.*'
+    replace: '#rfc.server.jms.jmx=false'
+  when: sap_rfc_server_jms_jmx == ''
+
+#
+# Remote Broker Section
+#
+- name: Update remote JMS broker URL (non-default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.remote.broker.url=.*'
+    replace: 'rfc.server.remote.broker.url={{ sap_rfc_server_remote_broker_url }}'
+  when: sap_rfc_server_remote_broker_url != ''
+
+- name: Update remote JMS broker URL (default)
+  replace:
+    path: "{{ install_prefix }}/sap-rfc-serv/conf/tsap-rfc-server.properties"
+    regexp:  '(#)?\s*rfc.server.remote.broker.url=.*'
+    replace: '#rfc.server.remote.broker.url=tcp://localhost:61616'
+  when: sap_rfc_server_remote_broker_url == ''

@@ -1,0 +1,41 @@
+---
+# This script performs different parameters validation
+
+######################################
+# top-level -specific parameters validation
+######################################
+
+# Check port-type parameters for logstash-talend.conf
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{item.name}} has value {{item.value}}, which is not a valid TCP/IP port number !"
+  when: not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "logserv_input_beats_port", value: "{{logserv_input_beats_port}}" }
+    - { name: "logserv_input_http_port",  value: "{{logserv_input_http_port}}"  }
+
+
+######################################
+# validation for ElasticSearch
+######################################
+
+# Check port-type parameters for elasticsearch
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{item.name}} has value {{item.value}}, which is not a valid TCP/IP port number !"
+  when: item.value != '' and not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "logserv_es_http_port", value: "{{logserv_es_http_port}}" }
+
+
+######################################
+# validation for Kibana
+######################################
+
+# Check port-type parameters for kibana
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{item.name}} has value {{item.value}}, which is not a valid TCP/IP port number !"
+  when: item.value != '' and not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "logserv_kibana_server_port", value: "{{logserv_kibana_server_port}}" }

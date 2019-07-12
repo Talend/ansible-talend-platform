@@ -1,0 +1,9 @@
+---
+#
+# Validation for SystemD installation parameter
+#
+
+- name: Show error about wrong value for parameter app_install_systemd
+  fail:
+    msg: Wrong value for parameter "app_install_systemd", must be "yes" or "no"
+  when: app_install_systemd != "yes" and app_install_systemd != "no"

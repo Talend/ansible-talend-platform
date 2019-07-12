@@ -1,0 +1,31 @@
+---
+# This script validates that given folder does exist on the target system
+
+# Input variable:
+#  - app_dir  - folder to check. It must exist directly, or at least the parent folder must exist
+#  - app_name - application name. Used in text messages to get the idea which application requires this folder
+
+- name: "{{ app_name }}: check parent folder of {{ app_dir }} for existence"
+  stat:
+    path: "{{ app_dir | dirname }}"
+  register: var_app_dir_status2
+
+- name: Show message about non-existing parent folder
+  when: not var_app_dir_status2.stat.exists
+  fail:
+    msg: "{{ app_name }}: the parent folder of {{ app_dir }} does not exist !"
+
+- name: Show message when parent folder is not a folder
+  when: var_app_dir_status2.stat.exists and not var_app_dir_status2.stat.isdir
+  fail:
+    msg: "{{ app_name }}: the entry for parent folder of {{ app_dir }} does exist, but it is not a folder !"
+
+- name: "{{ app_name }}: check folder {{ app_dir }} for existence"
+  stat:
+    path: "{{ app_dir }}"
+  register: var_app_dir_status
+
+- name: Check that existing folder is not a file
+  fail:
+    msg: "For {{ app_name }}, catalog entry for folder {{ app_dir }} does exist, but it is not a directory !"
+  when: var_app_dir_status.stat.exists and not var_app_dir_status.stat.isdir

@@ -1,0 +1,43 @@
+---
+# This script used for import semantic dictionary in mongo (first install only)
+# It can be run just after the installation
+
+#####
+# Set the path and name for the import script
+#####
+- name: Set tsd_import_script
+  set_fact:
+    tsd_import_script: "semantic-dictionary-import.sh"
+
+- name: Set tsd_import_script_dir when talend tomcat is used
+  set_fact:
+    tsd_import_script_dir: "{{ install_prefix }}/{{ rpm_folder }}/dq_dict/database"
+
+#####
+# Update import script
+#####
+- name: Update import command
+  replace:
+    path: "{{ tsd_import_script_dir }}/{{ tsd_import_script }}"
+    regexp:  '^mongorestore.*'
+    replace: 'mongorestore -h {{ tsd_mongo_host }}:{{ tsd_mongo_port }}  -d {{ tsd_mongo_database }} -u {{ tsd_mongo_username }} -p {{ tsd_mongo_password }} --gzip dump/dqdict/'
+
+#####
+# Launch import script
+#####
+- name: "Import semantic dictionary to mongo (only first install)"
+  when: rpm_is_installed.stdout == ''
+  command: "chdir={{ tsd_import_script_dir }} ./{{ tsd_import_script }}"
+  args:
+    warn: no
+  environment:
+    PATH: '${PATH}:{{ install_prefix }}/mongodb/bin'
+
+#####
+# Update import script to clean password
+#####
+- name: Update import command
+  replace:
+    path: "{{ tsd_import_script_dir }}/{{ tsd_import_script }}"
+    regexp:  '^mongorestore.*'
+    replace: 'mongorestore -h {{ tsd_mongo_host }}:{{ tsd_mongo_port }}  -d {{ tsd_mongo_database }} -u {{ tsd_mongo_username }} -p <to_be_modfied> --gzip dump/dqdict/'

@@ -1,0 +1,27 @@
+---
+# This script performs different parameters validation
+
+######################################
+# AMC-specific parameters validation
+######################################
+
+- name: Check parameter amc_install_into_tac
+  fail:
+    msg: Wrong value for parameter amc_install_into_tac - must be 'yes' or 'no'
+  when: amc_install_into_tac != 'yes' and amc_install_into_tac != 'no'
+
+#
+# Extra check: if amc_install_into_tac == 'yes', then TAC must be installed at that moment
+#
+- name: Check talend-tac status in case of using AMC deployed to TAC
+  command: "rpm -qa talend-tac"
+  args:
+    warn: no
+  when: amc_install_into_tac == "yes"
+  changed_when: false
+  register: tac_rpm_status
+
+- name: Check that talend-tac is installed
+  fail:
+    msg: "{{ app_name }} RPM requires talend-tac RPM, but it is not installed, please check that 'tac' role is in the list"
+  when: amc_install_into_tac == "yes" and tac_rpm_status.stdout == ""

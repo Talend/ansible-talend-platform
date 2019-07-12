@@ -1,0 +1,49 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend MongoDB"
+rpm_name: "talend-mongodb"
+rpm_folder: "mongodb"
+app_service: "talend-mongodb"
+
+# Variable (RPM version) for MongoDB RPM
+mongodb_pkg_version: "{{ rpmversion }}-1"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+# MongoDB-specific properties
+
+# TCP/IP port used by MongoDB daemon
+
+mongodb_port: 27017
+
+# MongoDB 4.0 (supplied with Talend 7.2.1) listens only on localhost by default
+# The following parameter allows to change this behavior
+# It will be taken into account only for 7.2.1 RPMs (see "rpm_base_version" var in group_vars/all)
+mongodb_localhost_only: "no" # The allowed values are yes/no. If yes, MongoDB will listen only on localhost (increased security, but not available from other hosts)
+
+# Whether to install enhanced security (yes | no). Some applications (like TDS) *requires* enhanced security
+#         to be set.
+# This setting can be specified only for installation. Changing it later will have no effect
+
+mongodb_enhancedsecurity: "yes"
+
+# User and passwords for TDS, TDP and TSD
+# This information can be specified only for installation. Changing it later will have no effect
+# If you do not want to use a particular user, use "-" as both the user name and password.
+# For example:
+#        mongodb_tdp_user: "-"
+#        mongodb_tdp_password: "-"
+
+mongodb_tds_user: "tds-user"
+mongodb_tds_password: "duser"
+
+mongodb_tdp_user: "dataprep-user"
+mongodb_tdp_password: "duser"
+
+mongodb_tsd_user: "tsd-user"
+mongodb_tsd_password: "duser"

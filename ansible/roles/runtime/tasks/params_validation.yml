@@ -1,0 +1,22 @@
+---
+# This script performs different parameters validation
+
+######################################
+# Runtime-specific parameters validation
+######################################
+
+# Check port-type parameters
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid TCP/IP port number !"
+  when: not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "rt_http_port", value: "{{ rt_http_port }}" }
+    - { name: "rt_https_port", value: "{{ rt_https_port }}" }
+    - { name: "rt_ssh_port", value: "{{ rt_ssh_port }}" }
+    - { name: "rt_rmi_registry_port", value: "{{ rt_rmi_registry_port }}" }
+    - { name: "rt_rmi_server_port", value: "{{ rt_rmi_server_port }}" }
+    - { name: "rt_js_command_server_port", value: "{{ rt_js_command_server_port }}" }
+    - { name: "rt_js_file_server_port", value: "{{ rt_js_file_server_port }}" }
+    - { name: "rt_js_monitoring_port", value: "{{ rt_js_monitoring_port }}" }
+    - { name: "rt_js_process_message_port", value: "{{ rt_js_process_message_port }}" }

@@ -1,0 +1,30 @@
+---
+# This file handles installation with rpm (when non-default prefix is used)
+# This script expects that check_status.yml was run before
+# So the following two variables expected to be set:
+#   - rpm_is_installed
+#   - rpm_install_path
+
+- name: "{{ app_name }} RPM is already installed with correct path"
+  when: install_prefix != '/opt/talend' and rpm_is_installed.stdout != '' and rpm_install_path.stdout == install_prefix
+  debug:
+    msg: "{{ app_name }} RPM is already installed"
+
+- name: "Check if {{ app_name }} RPM is already installed into other path"
+  fail:
+    msg: "FATAL: {{ app_name }} package is already installed with a different prefix {{ rpm_install_path.stdout }} !"
+  when: install_prefix != '/opt/talend' and rpm_is_installed.stdout != '' and rpm_install_path.stdout != install_prefix
+
+
+- name: "Install {{ app_name }} with rpm (non-default folder)"
+  when: install_prefix != '/opt/talend' and (rpm_is_installed.stdout == '' or rpm_install_path.stdout != install_prefix)
+  command: "rpm -i --prefix={{ install_prefix }} {{ rpm_repo_url }}/{{ rpm_name }}-{{ rpm_pkg_version }}.x86_64.rpm"
+  args:
+    warn: no
+  environment:
+    TALEND_INSTALL_USER:    "{{ install_user }}"
+    TALEND_INSTALL_GROUP:   "{{ install_group }}"
+    TALEND_INSTALL_SYSTEMD: "{{ '1' if app_install_systemd == 'yes' else '0' }}"
+    NEXUS_HOST:             "{{ '' if nexus_host == '0.0.0.0' else nexus_host }}"
+    NEXUS_PORT:             "{{ '' if nexus_port == '8081'    else nexus_port }}"
+    JAVA_HOME:              "{{ java_dir.stdout }}"

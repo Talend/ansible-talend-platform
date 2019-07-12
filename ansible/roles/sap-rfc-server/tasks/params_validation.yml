@@ -1,0 +1,66 @@
+---
+# This script performs different parameters validation
+
+######################################
+# SAP RFC server - specific parameters validation
+######################################
+
+- name: Check sap_install_sapjco3_jar param
+  fail:
+    msg: "Wrong value for parameter sap_install_sapjco3_jar - allowed values are 'yes' and 'no'"
+  when: sap_install_sapjco3_jar != "yes" and sap_install_sapjco3_jar != "no"
+
+- name: Get sapjco3.jar file status
+  stat:
+    path: "{{ sap_sapjco3_jar_path }}/sapjco3.jar"
+  register: sap_jar_file
+  when: sap_install_sapjco3_jar == 'yes'
+
+- name: Check sap_sapjco3_jar_path param
+  fail:
+    msg: "Wrong value for for sap_sapjco3_jar_path param - file sapjco3.jar does not exist at that location"
+  when: sap_install_sapjco3_jar == 'yes' and not sap_jar_file.stat.exists
+
+# Check port-type parameter: sap_rfc_server_shutdown_port
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid TCP/IP port number !"
+  when: item.value != '' and ( not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 ) )
+  with_items:
+    - { name: "sap_rfc_server_shutdown_port", value: "{{ sap_rfc_server_shutdown_port }}" }
+
+- name: Check mandatory params (must not be empty)
+  fail:
+    msg: "Parameter {{ item.name }} must not be empty !"
+  when: item.value == ''
+  with_items:
+    - { name: "sap_jco_server_gwhost", value: "{{ sap_jco_server_gwhost }}" }
+    - { name: "sap_jco_server_gwserv", value: "{{ sap_jco_server_gwserv }}" }
+
+# Check for positive integers (>0):
+- name: Check positive integer parameter above zero
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid positive integer number !"
+  when: item.value != '' and ( item.value | int < 1 )
+  with_items:
+    - { name: "sap_jco_server_connection_count",        value: "{{ sap_jco_server_connection_count }}" }
+    - { name: "sap_jco_server_worker_thread_count",     value: "{{ sap_jco_server_worker_thread_count }}" }
+    - { name: "sap_jco_server_worker_thread_min_count", value: "{{ sap_jco_server_worker_thread_min_count }}" }
+    - { name: "sap_rfc_server_thread_pool_size",        value: "{{ sap_rfc_server_thread_pool_size }}" }
+    - { name: "sap_rfc_server_shutdown_timout",         value: "{{ sap_rfc_server_shutdown_timout }}" }
+    - { name: "sap_api_idoc_transaction_wait_timout",   value: "{{ sap_api_idoc_transaction_wait_timout }}" }
+
+- name: Check sap_jco_server_trace param
+  fail:
+    msg: "Parameter sap_jco_server_trace must be either 0 or 1 !"
+  when: sap_jco_server_trace != '' and sap_jco_server_trace != '0' and sap_jco_server_trace != '1'
+
+- name: Check boolean params
+  fail:
+    msg: "Parameter {{ item.name }} must be either true or false (if not empty) !"
+  when: item.value != '' and item.value != 'true' and item.value != 'false'
+  with_items:
+    - { name: "sap_receiver_transactional",      value: "{{ sap_receiver_transactional }}" }
+    - { name: "sap_rfc_server_jms_replicate_in_durable_queues", value: "{{ sap_rfc_server_jms_replicate_in_durable_queues }}" }
+    - { name: "sap_rfc_server_jms_persistence",  value: "{{ sap_rfc_server_jms_persistence }}" }
+    - { name: "sap_rfc_server_jms_jmx",          value: "{{ sap_rfc_server_jms_jmx }}" }

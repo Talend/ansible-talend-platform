@@ -1,0 +1,55 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Spark Job Server"
+rpm_name: "talend-sjs"
+rpm_folder: "sjs"
+app_service: "talend-sjs"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#########################################
+#
+# Parameters below can be used for configuration updates (re-configuration) "on the fly"
+#
+#########################################
+
+sjs_host: "localhost"
+sjs_server_port: "8090"
+sjs_log_dir: "$install_dir/logs"
+sjs_pidfile: "spark-jobserver.pid"
+sjs_jobserver_memory: "1G"
+sjs_context_per_jvm: "true"
+sjs_database_root_dir: "$install_dir/database"
+sjs_h2_tcp_host: "localhost"
+sjs_h2_tcp_port: "8099"
+sjs_deploy_templates: "$install_dir"
+sjs_datastreams_deps_jars: "$install_dir/datastreams-deps"
+sjs_datastreams_job_jar: "$install_dir/datastreams.jar"
+sjs_spark_home: "$install_dir/spark"
+sjs_spark_conf_dir: "$spark_home/conf"
+sjs_spark_master: "yarn-client"
+sjs_hadoop_conf_dir: "/path/to/hadoop/conf"
+sjs_yarn_conf_dir: "$hadoop_conf_dir"
+sjs_spark_driver_memory: "1G"
+sjs_krb5_config: "/etc/krb5.conf"
+
+# Google Dataflow configuration
+sjs_google_application_credentials: ""
+
+# Advanced configuration
+sjs_jmx_port: "9998"
+sjs_max_direct_memory: "512M"
+sjs_akka_jvm_exit_on_fatal_error: "true"
+sjs_short_timeout: "10"
+sjs_context_creation_timeout: "120"
+sjs_yarn_context_creation_timeout: "120"
+sjs_default_sync_timeout: "20"
+sjs_context_init_timeout: "120"
+sjs_spray_request_timeout: "200"
+sjs_spray_idle_timeout: "220"
+sjs_dao_ask_timeout: "10"

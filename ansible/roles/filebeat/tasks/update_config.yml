@@ -1,0 +1,16 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config file: {{install_prefix}}/filebeat/filebeat.yml
+#
+
+- name: Update logstash destination hosts
+  replace:
+    path: "{{ install_prefix }}/filebeat/filebeat.yml"
+    regexp:  '  hosts=.*'
+    replace: '  hosts=[{{ filebeat_logstash_hosts }}]'

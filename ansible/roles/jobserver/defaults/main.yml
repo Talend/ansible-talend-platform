@@ -1,0 +1,146 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Jobserver"
+rpm_name: "talend-jobserver"
+rpm_folder: "jobserver"
+app_service: "talend-jobserver"
+
+#######################################
+#  SystemD installation properties
+#######################################
+app_install_systemd: "yes" # Allowed values are "yes" and "no"
+
+##########################################################################
+# Jobserver-specific configuration variables
+# We will use "js_" prefix in var names
+##########################################################################
+
+# each second, files are checked. This value determines how many check are needed to ensure file is completely copied into directory
+js_checkFileCountBeforeFire: 10
+
+### Define ports
+# the port used to launch talend commands
+js_command_server_port: 8000
+
+# the port for the file transfers
+js_file_server_port: 8001
+
+# The port used for monitoring the servers state
+js_monitoring_port: 8888
+
+# The port used for the execution of process messages publisher, 8555 by default
+js_process_message_port: 8555
+
+# Enable the process message publisher or not. true by default
+js_enabled_process_message: true
+
+# The local hostname of this server (default value is "localhost")
+js_local_host: localhost
+
+# Use SSL (Secure Sockets Layer) for establishing an encrypted link between the JobServer and its clients
+js_use_ssl: false
+
+# Disabled SSL cipher suites(Java standard cipher suite names separated by a comma ',').If not set,all the supported ciphers will be enabled
+js_disabled_cipher_suites: ""
+
+# Allow specified OS users (separated by a comma ',') to start jobs. If commented or empty, all users are allowed. Wilcard is allowed. Example: RUN_AS_WHITELIST=myuser1,this.super-user, sub-user2,userprod*
+js_run_as_whitelist: ""
+
+# Ensure that undesired instructions are not inserted in the user name variable.
+js_run_as_user_validation_regexp: '^[a-z][-a-z0-9]*\$'
+
+# The token that allow job server execute unsigned job
+js_execute_unsigned_job_token: ""
+
+# The directory path to the Talend jobserver files
+js_root_path: "./TalendJobServersFiles"
+
+# Set to "true" in order to force the load of the native library. This should be used only for testing the native library.
+# The value for production use should be "false". Do not change it if you are not sure about the consequences.
+js_force_load: false
+
+# Set the shell which launches the jobs, WARNING: enable these properties prevent to kill a job properly
+js_launch_shell_script: false
+js_shell_linux: /bin/sh
+
+# Set the maximum of concurrent connections to the JobServer
+js_max_concurrent_connections: 1000
+
+# Set the executable path of the binary which will run the job, for example: /usr/bin/java/java or "c:\\Program Files\\Java\\bin\\java.exe"
+job_launcher_path: ""
+
+###############################################################
+# Temporary data cleaning parameters
+###############################################################
+
+# Time in seconds between each cleaning action, set to 0 to disable all cleanings
+js_frequency_clean_action: 600
+
+# Number of executions before the job execution release process happens
+js_min_number_job_executions_before_release: 50
+
+# Duration (in milliseconds) of a normal execution before it is ready to be released; for example, 5 min: 5 * 60 * 1000 = 300000
+js_max_duration_before_job_execution_release_normal_case: 300000
+# Duration (in milliseconds) of an abnormal execution before it is ready to be released; for example, 24 hours: 24 * 60 * 60 * 1000 = 86400000
+js_max_duration_before_job_execution_release_abnormal_case: 86400000
+
+# Set the two parameters below to 0 to disable delete action for job
+# Duration (in seconds from the creation date) before cleaning executions logs; for example, 3 months: 3*30*24*60*60 = 7776000
+# Set to 0 to disable cleanup action
+js_max_duration_before_cleaning_old_executions_logs: 7776000
+# Max number of executions logs to keep, set to 0 to disable delete action with this method.
+js_max_old_executions_logs: 1000
+
+# Set the two parameters below to 0 to disable delete action for job
+# Duration (in seconds from the creation date) before cleaning archived and deployed jobs; for example, 3 months: 3*30*24*60*60 = 7776000
+# Set to 0 to disable cleanup action
+js_max_duration_before_cleaning_old_jobs: 7776000
+# Max archive and deployed jobs to keep, set to 0 to disable cleanup action
+js_max_old_jobs: 200
+
+# Set to true to enforce authorization for all jobserver commands
+js_security_mode: false
+
+# TAC url list used to identify the tac instances used for authorization
+#js_tac_urls: "http://host1:8080/org.talend.administrator,http://host2:8080/org.talend.administrator"
+js_tac_urls: ""
+
+# SSL settings for JMX monitoring server
+# Set to true to enforce SSL for JMX monitoring server
+js_jmxmp_useSSL: false
+# Set to true to enforce certificate based client authorization for JMX monitoring server
+js_jmxmp_ssl_authenticate: false
+
+#js_jmxmp_ssl_keyStore: path_to_monitoring_server_keystore
+#js_jmxmp_ssl_keyStorePassword: monitoring_server_keystore_password
+#js_jmxmp_ssl_keyStoreType: JKS
+js_jmxmp_ssl_keyStore: ""
+js_jmxmp_ssl_keyStorePassword: ""
+js_jmxmp_ssl_keyStoreType: ""
+
+#js_jmxmp_ssl_trustStore: path_to_monitoring_server_truststore
+#js_jmxmp_ssl_trustStorePassword: monitoring_server_truststore_password
+#js_jmxmp_ssl_trustStoreType: JKS
+js_jmxmp_ssl_trustStore: ""
+js_jmxmp_ssl_trustStorePassword: ""
+js_jmxmp_ssl_trustStoreType: ""
+
+#js_jmxmp_ssl_enabled_protocols: TLSv1
+#js_jmxmp_ssl_enabled_cipher_suites: SSL_RSA_WITH_NULL_MD5
+js_jmxmp_ssl_enabled_protocols: ""
+js_jmxmp_ssl_enabled_cipher_suites: ""
+
+#
+# SSL settings for JobServer
+#
+js_remote_server_ssl_authenticate: false # true/false
+
+js_remote_server_ssl_keyStore: ""
+js_remote_server_ssl_keyStorePassword: ""
+
+js_remote_server_ssl_trustStore: ""
+js_remote_server_ssl_trustStorePassword: ""
+
+js_remote_server_ssl_enabled_cipher_suites: ""

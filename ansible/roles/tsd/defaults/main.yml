@@ -1,0 +1,66 @@
+---
+# Important : every variables need to have a value
+
+#############################################
+# Read only variables
+#############################################
+# Do not modify this part
+app_name: "Talend Semantic Dictionary"
+rpm_name: "talend-dictionary-service"
+rpm_folder: "dictionary-service"
+app_service: "talend-dictionary-service"
+
+#############################################
+# First install only variables
+#############################################
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#####
+# Tomcat-selection variables
+#####
+# This var shows whether we should use talend-tomcat in 'shared' mode (default settings)
+app_use_talend_tomcat: "yes" # allowed values are "yes" or "no"
+app_tomcat_port: 8187 # app_tomcat_port is used only if app_use_talend_tomcat == "yes" or when app_tomcat_setup == "yes"
+
+# The following variables will be taken in account only if app_use_talend_tomcat == "no"
+app_tomcat_home: "/opt/tomcat" # home folder for customer's tomcat
+app_tomcat_mode: "direct" # can be one of "direct" or "shared"
+app_tomcat_setup: "no" # whether to update customer's tomcat configuration (ports)
+
+#############################################
+# First install and upgradable variables
+#############################################
+#####
+# Kafka variables
+#####
+tsd_kafka_host: "localhost"
+tsd_kafka_port: 9092
+
+#####
+# Zookeeper variables
+#####
+tsd_zookeeper_host: "localhost"
+tsd_zookeeper_port: 2181
+
+#####
+# MongoDB variables
+#####
+tsd_mongo_host: "localhost"
+tsd_mongo_port: 27017
+tsd_mongo_database: "dqdict"
+tsd_mongo_username: "tsd-user"
+# Default password is 'duser'. For production environment, it must be changed for security reasons.
+#   Do not forget to change this password in 'mongo' role as well (if embedded MongoDB server will be used)
+tsd_mongo_password: "duser"
+
+#####
+# "Talend Identity and Access Management" variables
+#####
+tsd_security_scim_url: "http://localhost:9080/scim"
+tsd_security_oidc_url: "http://localhost:9080/oidc"
+tsd_oidc_id: "tl6K6ac7tSE-LQ"
+tsd_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"

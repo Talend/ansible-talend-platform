@@ -1,0 +1,38 @@
+---
+
+# Check params to be correct
+- import_tasks: params_validation.yml
+
+# Check situation with current status (e.g. installed but into different path - that would be an error)
+- include_tasks: ../../common/tasks/check_status.yml
+
+# Stopping services (if they exist) before making any changes in the configuration
+- include_tasks: ../../common/tasks/stop_service.yml
+  with_items:
+    - "talend-logstash"
+    - "talend-kibana"
+    - "talend-elastic"
+  loop_control:
+    loop_var: app_service
+
+
+# We will include installation with yum or with rpm depending of prefix used
+- include_tasks: install_yum.yml
+  when: install_prefix == '/opt/talend'
+
+- include_tasks: install_rpm.yml
+  when: install_prefix != '/opt/talend'
+
+
+# Updating configuration for ElasticSeach, Kibana, LogStash
+- import_tasks: update_config.yml
+
+
+# Starting services (if they are exist)
+- include_tasks: ../../common/tasks/start_service.yml
+  with_items:
+    - "talend-elastic"
+    - "talend-kibana"
+    - "talend-logstash"
+  loop_control:
+    loop_var: app_service

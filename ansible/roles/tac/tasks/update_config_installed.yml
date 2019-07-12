@@ -1,0 +1,464 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, tomcat deployment, systemd status)
+# All other parameters must be reconfigured here
+
+# Update admin user/password
+
+- name: Update TAC admin user
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  'install\.defaultaccount\.login=.*'
+    replace: 'install.defaultaccount.login={{ tac_admin_user }}'
+
+- name: Update TAC admin password
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  'install\.defaultaccount\.password=.*'
+    replace: 'install.defaultaccount.password={{ tac_admin_pass }}'
+
+- name: Update SSO status
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  'sso\.field\.useSSOLogin=.*'
+    replace: "sso.field.useSSOLogin={{ 'true' if tac_use_sso == 'yes' else 'false' }}"
+
+#
+# Work with LogServer (Filebeat)
+#
+- name: Create logs folder for Filebeat
+  when: tac_use_logserver == 'yes'
+  file:
+    path: "{{ install_prefix }}/tac/logs"
+    state: directory
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0755
+
+- name: Update Filebeat config for talendAppender
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    line: "log4j.path.talendAppender={{ install_prefix }}/tac/logs/technical.log"
+    create: yes
+
+- name: Update Filebeat config for businessLog
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    line: "businessLog.path={{ install_prefix }}/tac/logs/business.log"
+    create: yes
+
+#
+# Update database parameters
+#
+
+# For H2 database
+- name: Update DB URL for H2 database
+  when: tac_database == "h2"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.url=.*'
+    replace: "database.url=jdbc:h2:{0}/WEB-INF/database/talend_administrator;MV_STORE=FALSE;MVCC=TRUE;AUTO_SERVER=TRUE;lock_timeout=15000"
+
+- name: Update DB Driver for H2 database
+  when: tac_database == "h2"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.driver=.*'
+    replace: "database.driver=org.h2.Driver"
+
+- name: Update DB User name for H2 database
+  when: tac_database == "h2"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.username=.*'
+    replace: "database.username={{ tac_db_user }}"
+
+- name: Update DB User password for H2 database
+  when: tac_database == "h2"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.password=.*'
+    replace: "database.password={{ tac_db_password }}"
+
+# For MySQL database
+- name: Update DB URL for MySQL database
+  when: tac_database == "mysql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.url=.*'
+    replace: "database.url=jdbc:mysql://{{ tac_db_host }}:{{ tac_db_port }}/{{ tac_db_name }}"
+
+- name: Update DB Driver for MySQL database
+  when: tac_database == "mysql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.driver=.*'
+    replace: "database.driver=com.mysql.cj.jdbc.Driver"
+
+- name: Update DB User name for MySQL database
+  when: tac_database == "mysql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.username=.*'
+    replace: "database.username={{ tac_db_user }}"
+
+- name: Update DB User password for MySQL database
+  when: tac_database == "mysql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.password=.*'
+    replace: "database.password={{ tac_db_password }}"
+
+# For Oracle database
+- name: Update DB URL for Oracle database
+  when: tac_database == "oracle"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.url=.*'
+    replace: "database.url=jdbc:oracle:thin:@{{ tac_db_host }}:{{ tac_db_port }}:{{ tac_db_name }}"
+
+- name: Update DB Driver for Oracle database
+  when: tac_database == "oracle"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.driver=.*'
+    replace: "database.driver=oracle.jdbc.driver.OracleDriver"
+
+- name: Update DB User name for Oracle database
+  when: tac_database == "oracle"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.username=.*'
+    replace: "database.username={{ tac_db_user }}"
+
+- name: Update DB User password for Oracle database
+  when: tac_database == "oracle"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.password=.*'
+    replace: "database.password={{ tac_db_password }}"
+
+# For PostgreSQL
+- name: Update DB URL for PostgreSQL database
+  when: tac_database == "postgresql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.url=.*'
+    replace: "database.url=jdbc:postgresql://{{ tac_db_host }}:{{ tac_db_port }}/{{ tac_db_name }}"
+
+- name: Update DB Driver for PostgreSQL database
+  when: tac_database == "postgresql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.driver=.*'
+    replace: "database.driver=org.postgresql.Driver"
+
+- name: Update DB User name for PostgreSQL database
+  when: tac_database == "postgresql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.username=.*'
+    replace: "database.username={{ tac_db_user }}"
+
+- name: Update DB User password for PostgreSQL database
+  when: tac_database == "postgresql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.password=.*'
+    replace: "database.password={{ tac_db_password }}"
+
+# For Microsoft SQL
+- name: Update DB URL for Microsoft SQL database
+  when: tac_database == "mssql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.url=.*'
+    replace: "database.url=jdbc:jtds:sqlserver://{{ tac_db_host }}:{{ tac_db_port }}/{{ tac_db_name }}"
+
+- name: Update DB Driver for Microsoft SQL database
+  when: tac_database == "mssql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.driver=.*'
+    replace: "database.driver=net.sourceforge.jtds.jdbc.Driver"
+
+- name: Update DB User name for Microsoft SQL database
+  when: tac_database == "mssql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.username=.*'
+    replace: "database.username={{ tac_db_user }}"
+
+- name: Update DB User password for Microsoft SQL database
+  when: tac_database == "mssql"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.password=.*'
+    replace: "database.password={{ tac_db_password }}"
+
+# For MariaDB
+- name: Update DB URL for MariaDB
+  when: tac_database == "mariadb"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.url=.*'
+    replace: "database.url=jdbc:mariadb://{{ tac_db_host }}:{{ tac_db_port }}/{{ tac_db_name }}"
+
+- name: Update DB Driver for MariaDB
+  when: tac_database == "mariadb"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.driver=.*'
+    replace: "database.driver=org.mariadb.jdbc.Driver"
+
+- name: Update DB User name for MariaDB
+  when: tac_database == "mariadb"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.username=.*'
+    replace: "database.username={{ tac_db_user }}"
+
+- name: Update DB User password for MariaDB
+  when: tac_database == "mariadb"
+  replace:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp:  '^database\.password=.*'
+    replace: "database.password={{ tac_db_password }}"
+
+#
+# Setup JobServer
+#
+- name: Setup JobServer without username and password
+  when: tac_setup_jobserver == 'yes' and tac_jobserver_username == '' and tac_jobserver_password == ''
+  lineinfile:
+    path: "{{ tac_config_location }}/install.txt"
+    line: "add.remote.jobserver={{ tac_jobserver_name }},{{ tac_jobserver_host }},{{ tac_jobserver_command_port }},{{ tac_jobserver_file_transfer_port }},{{ tac_jobserver_monitoring_port }}"
+    create: yes
+
+- name: Setup JobServer with username and password
+  when: tac_setup_jobserver == 'yes' and tac_jobserver_username != '' and tac_jobserver_password != ''
+  lineinfile:
+    path: "{{ tac_config_location }}/install.txt"
+    line: "add.remote.jobserver={{ tac_jobserver_name }},{{ tac_jobserver_host }},{{ tac_jobserver_command_port }},{{ tac_jobserver_file_transfer_port }},{{ tac_jobserver_monitoring_port }},{{ tac_jobserver_username }},{{ tac_jobserver_password }}"
+    create: yes
+
+#
+# Setup socket appender
+#
+- name: Update socket appender host
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^appender\.socket\.host=.*'
+    replace: "appender.socket.host={{ tac_appender_socket_host }}"
+
+- name: Update socket appender port
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^appender\.socket\.port=.*'
+    replace: "appender.socket.port={{ tac_appender_socket_port }}"
+
+#
+# Setup http appender
+#
+- name: Update http appender url
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^appender\.http\.url=.*'
+    replace: "appender.http.url=http://{{ tac_appender_http_host }}:{{ tac_appender_http_port }}/"
+
+- name: Update http appender username
+  when: tac_appender_http_username != ''
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^(#)?(\s)*appender.http.username=.*'
+    replace: "appender.http.username={{ tac_appender_http_username }}"
+
+- name: Update http appender password
+  when: tac_appender_http_password != ''
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^(#)?(\s)*appender.http.password=.*'
+    replace: "appender.http.password={{ tac_appender_http_password }}"
+
+#
+# Setup Nexus/Archiva configuration
+#
+- name: Update Archiva url (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.archiva\.url=.*'
+    line: "scheduler.conf.archiva.url={{ tac_scheduler_conf_archiva_url }}"
+    state: present
+  when: tac_scheduler_conf_archiva_url != 'http://localhost:8082/archiva'
+
+- name: Update Archiva url (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^scheduler\.conf\.archiva\.url=.*'
+    state: absent
+  when: tac_scheduler_conf_archiva_url == 'http://localhost:8082/archiva'
+
+- name: Update Nexus url (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus\.url=.*'
+    line: "scheduler.conf.nexus.url={{ tac_scheduler_conf_nexus_url }}"
+    state: present
+  when: tac_scheduler_conf_nexus_url != 'http://localhost:8081/nexus'
+
+- name: Update Nexus url (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^scheduler\.conf\.nexus\.url=.*'
+    state: absent
+  when: tac_scheduler_conf_nexus_url == 'http://localhost:8081/nexus'
+
+- name: Update Archiva username (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.archiva\.username=.*'
+    line: "scheduler.conf.archiva.username={{ tac_scheduler_conf_archiva_username }}"
+    state: present
+  when: tac_scheduler_conf_archiva_username != 'tadmin'
+
+- name: Update Archiva username (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^scheduler\.conf\.archiva\.username=.*'
+    state: absent
+  when: tac_scheduler_conf_archiva_username == 'tadmin'
+
+- name: Update Nexus username (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus\.username=.*'
+    line: "scheduler.conf.nexus.username={{ tac_scheduler_conf_nexus_username }}"
+    state: present
+  when: tac_scheduler_conf_nexus_username != 'admin'
+
+- name: Update Nexus username (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^scheduler\.conf\.nexus\.username=.*'
+    state: absent
+  when: tac_scheduler_conf_nexus_username == 'admin'
+
+- name: Update Archiva password (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.archiva\.password=.*'
+    line: "scheduler.conf.archiva.password={{ tac_scheduler_conf_archiva_password }}"
+    state: present
+  when: tac_scheduler_conf_archiva_password != '3IqdoqEElsy8Dzz9iP3HVQ=='
+
+- name: Update Archiva password (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.archiva\.password=.*'
+    state: absent
+  when: tac_scheduler_conf_archiva_password == '3IqdoqEElsy8Dzz9iP3HVQ=='
+
+- name: Update Nexus password (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus\.password=.*'
+    line: "scheduler.conf.nexus.password={{ tac_scheduler_conf_nexus_password }}"
+    state: present
+  when: tac_scheduler_conf_nexus_password != '3H7PqFGozhMb6mR8C1Rc/A=='
+
+- name: Update Nexus password (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus\.password=.*'
+    state: absent
+  when: tac_scheduler_conf_nexus_password == '3H7PqFGozhMb6mR8C1Rc/A=='
+
+- name: Update Nexus3 url (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus3\.url=.*'
+    line: "scheduler.conf.nexus3.url={{ tac_scheduler_conf_nexus3_url }}"
+    state: present
+  when: tac_scheduler_conf_nexus3_url != 'http://localhost:8081/'
+
+- name: Update Nexus3 url (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus3\.url=.*'
+    state: absent
+  when: tac_scheduler_conf_nexus3_url == 'http://localhost:8081/'
+
+- name: Update Nexus3 username (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus3\.username=.*'
+    line: "scheduler.conf.nexus3.username={{ tac_scheduler_conf_nexus3_username }}"
+    state: present
+  when: tac_scheduler_conf_nexus3_username != 'admin'
+
+- name: Update Nexus3 username (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus3\.username=.*'
+    state: absent
+  when: tac_scheduler_conf_nexus3_username == 'admin'
+
+- name: Update Nexus3 password (set)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus3\.password=.*'
+    line: "scheduler.conf.nexus3.password={{ tac_scheduler_conf_nexus3_password }}"
+    state: present
+  when: tac_scheduler_conf_nexus3_password != '3H7PqFGozhMb6mR8C1Rc/A=='
+
+- name: Update Nexus3 password (unset)
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.nexus3\.password=.*'
+    state: absent
+  when: tac_scheduler_conf_nexus3_password == '3H7PqFGozhMb6mR8C1Rc/A=='
+
+#
+# Setup jobExecution root path
+#
+- name: Ensure jobExecution root path exists
+  file:
+    path: '{{ tac_scheduler_conf_jobExecutionLogs_rootPath }}'
+    state: directory
+    mode: 0755
+    owner: '{{ install_user }}'
+    group: '{{ install_group }}'
+
+- name: Ensure archivesJobs root path exists
+  file:
+    path: '{{ tac_scheduler_conf_archivesJobsRootPath }}'
+    state: directory
+    mode: 0755
+    owner: '{{ install_user }}'
+    group: '{{ install_group }}'
+
+- name: Update jobExecution root path
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.jobExecutionLogs\.rootPath=.*'
+    line: "scheduler.conf.jobExecutionLogs.rootPath={{ tac_scheduler_conf_jobExecutionLogs_rootPath }}"
+    state: present
+
+- name: Update archivesJobs root path
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.archivesJobsRootPath=.*'
+    line: "scheduler.conf.archivesJobsRootPath={{ tac_scheduler_conf_archivesJobsRootPath }}"
+    state: present
+
+#
+# Install license automatically during installation
+#
+- name: Install license to TAC
+  when: tac_install_license == 'yes' and rpm_is_installed.stdout == ''  # This will be executed only on new installation
+  lineinfile:
+    path: "{{ tac_config_location }}/install.txt"
+    line: "license.key={{ lookup( 'file', tac_license_file ) }}"
+    create: yes

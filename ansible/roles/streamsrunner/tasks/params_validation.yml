@@ -1,0 +1,20 @@
+---
+- name: Show error about wrong value for parameter streamsrunner_server_port
+  fail:
+    msg: Wrong value for parameter "streamsrunner_server_port", must be between 1 and 65535
+  when: streamsrunner_server_port|int <= 1 or streamsrunner_server_port|int >= 65535
+
+- name: Show error about wrong value for parameter sjs_port
+  fail:
+    msg: Wrong value for parameter "sjs_port", must be between 1 and 65535
+  when: sjs_port|int <= 1 or sjs_port|int >= 65535
+
+- name: Show error about wrong value for parameter sjs_protocol
+  fail:
+    msg: Wrong value for parameter "sjs_protocol", must be 'http' or 'https'
+  when: sjs_protocol != "http" and sjs_protocol != "https"
+
+- name: Show error about wrong value for parameter streamsrunner_request_compression
+  fail:
+    msg: Wrong value for parameter "streamsrunner_request_compression", must be 'true' or 'false'
+  when: streamsrunner_request_compression != "true" and streamsrunner_request_compression != "false"

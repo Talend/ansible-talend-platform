@@ -1,0 +1,5 @@
+---
+- name: Show error about wrong value for parameter tcomp_server_port
+  fail:
+    msg: Wrong value for parameter "tcomp_server_port", must be between 1 and 65535
+  when: tcomp_server_port|int <= 1 or tcomp_server_port|int >= 65535

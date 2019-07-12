@@ -1,0 +1,21 @@
+---
+# This script performs different parameters validation
+
+######################################
+# MDM-specific parameters validation
+######################################
+
+- name: Show error about wrong value for parameter mdm_use_audit
+  fail:
+    msg: Wrong value for parameter "mdm_use_audit", must be 'yes' or 'no'
+  when: mdm_use_audit != "no" and mdm_use_audit != "yes"
+
+- name: Show error about wrong value for parameter mdm_database
+  fail:
+    msg: Wrong value for parameter "mdm_database", must be one of 'h2', 'mysql8', 'mysql', 'oracle', 'mssql', 'postgresql', 'db2'
+  when: mdm_database != "h2" and mdm_database != "mysql8" and mdm_database != "mysql" and mdm_database != "oracle" and mdm_database != "mssql" and mdm_database != "postgresql" and mdm_database != "db2"
+
+- name: Show error about wrong value for parameter mdm_db_driver
+  fail:
+    msg: Wrong value for parameter "mdm_db_driver", must be valid JAR when "mdm_database" is not 'h2'
+  when: mdm_db_driver == "" and mdm_database != "h2"

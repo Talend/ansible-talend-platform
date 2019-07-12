@@ -1,0 +1,35 @@
+---
+
+# This file will handle "prepare application" action.
+# This action needs to be run only once after RPM installation.
+# It will unpack war-files, we need it in order to update configuration files
+
+- name: Create syncope console webapp folder
+  file:
+    path: '{{ iam_webapps_location }}/syncope-console'
+    state: directory
+    mode: 0755
+    owner: '{{ install_user }}'
+    group: '{{ install_group }}'
+
+- name: Unpack syncope console webapp
+  unarchive:
+    src:  '{{ iam_webapps_location }}/syncope-console.war'
+    dest: '{{ iam_webapps_location }}/syncope-console'
+    remote_src: yes
+    creates: '{{ iam_webapps_location }}/syncope-console/WEB-INF/web.xml'
+
+- name: Create syncope enduser webapp folder
+  file:
+    path: '{{ iam_webapps_location }}/syncope-enduser'
+    state: directory
+    mode: 0755
+    owner: '{{ install_user }}'
+    group: '{{ install_group }}'
+
+- name: Unpack syncope enduser webapp
+  unarchive:
+    src:  '{{ iam_webapps_location }}/syncope-enduser.war'
+    dest: '{{ iam_webapps_location }}/syncope-enduser'
+    remote_src: yes
+    creates: '{{ iam_webapps_location }}/syncope-enduser/WEB-INF/web.xml'

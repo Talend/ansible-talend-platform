@@ -1,0 +1,68 @@
+---
+# This script performs different parameters validation
+
+######################################
+# TSD-specific parameters validation
+######################################
+
+# verify that string parameters have a non empty value
+- name: Show error that no value is specified for parameter {{ item.name }}
+  when: item.value == ""
+  fail:
+    msg: "{{ app_name }} - no values is specified for parameter '{{ item.name }}'"
+  with_items:
+    - { name: 'tsd_kafka_host', value: "{{ tsd_kafka_host }}"}
+    - { name: 'tsd_zookeeper_host', value: "{{ tsd_zookeeper_host }}"}
+    - { name: 'tsd_mongo_host', value: "{{ tsd_mongo_host }}"}
+    - { name: 'tsd_mongo_database', value: "{{ tsd_mongo_database }}"}
+    - { name: 'tsd_mongo_username', value: "{{ tsd_mongo_username }}"}
+    - { name: 'tsd_mongo_password', value: "{{ tsd_mongo_password }}"}
+    - { name: 'tsd_security_scim_url', value: "{{ tsd_security_scim_url }}"}
+    - { name: 'tsd_security_oidc_url', value: "{{ tsd_security_oidc_url }}"}
+    - { name: 'tsd_oidc_id', value: "{{ tsd_oidc_id }}"}
+    - { name: 'tsd_oidc_secret', value: "{{ tsd_oidc_secret }}"}
+
+# verify the port parameters (integer and correct port number)
+- name: Show error about wrong value for parameter {{ item.name }}, not a number
+  when: item.value|int == 0
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter '{{ item.name }}', must be a valid number"
+  with_items:
+    - { name: 'tsd_kafka_port', value: "{{ tsd_kafka_port }}"}
+    - { name: 'tsd_zookeeper_port', value: "{{ tsd_zookeeper_port }}"}
+    - { name: 'tsd_mongo_port', value: "{{ tsd_mongo_port }}"}
+
+- name: Show error about wrong value for parameter {{ item.name }}, must be a valid TCP/IP port number
+  when: item.value|int > 65535 or item.value|int < 0
+  fail:
+    msg: "{{ app_name }} - wrong value for parameter '{{ item.name }}', must be a valid TCP/IP port number"
+  with_items:
+    - { name: 'tsd_kafka_port', value: "{{ tsd_kafka_port }}"}
+    - { name: 'tsd_zookeeper_port', value: "{{ tsd_zookeeper_port }}"}
+    - { name: 'tsd_mongo_port', value: "{{ tsd_mongo_port }}"}
+
+
+# verify that the default password for mongo was changed
+- name: Show error when example value of tsd_mongo_password was not modified
+  debug:
+    msg: Do not use value "duser" and set a stong password for tsd_mongo_password for production environment
+  when: tsd_mongo_password == "duser"
+
+- name: Get info about locally installed 'mongodb' role executable
+  stat:
+    path: "{{ install_prefix }}/mongodb/bin/mongorestore"
+  register: inst_local_mongodb_stat
+
+- name: Get info about externally installed mongodb
+  when: not inst_local_mongodb_stat.stat.exists
+  command: "which mongorestore"
+  args:
+    warn: no
+  register: inst_ext_mongodb_stat
+  changed_when: false
+  ignore_errors: yes
+
+- name: Show error about mongodb not available
+  fail:
+    msg: MongoDB is not available ! Check that mongodb role is in the list or mongodb should be installed and available in PATH
+  when: not inst_local_mongodb_stat.stat.exists and inst_ext_mongodb_stat.rc != 0

@@ -1,0 +1,19 @@
+---
+# This common script starts systemd service associated with application
+#
+# It will silently fail if service does not exist - this allows to use
+#    it and do not care whether service is actually installed.
+#
+# Required role-level variable:
+# - app_service (e.g. 'talend-tac') - systemd service name
+
+- name: "Check systemd service status for {{ app_service }}"
+  stat:
+    path: "/etc/systemd/system/{{ app_service }}.service"
+  register: systemd_service_file
+
+- name: "Start systemd service {{ app_service }}"
+  when: systemd_service_file.stat.exists
+  systemd:
+    name: "{{ app_service }}.service"
+    state: started

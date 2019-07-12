@@ -1,0 +1,86 @@
+---
+
+# Basic Streamsrunner Configuration
+
+- name: Update streamsrunner server port
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'play.server.http.port = .*'
+    replace: 'play.server.http.port = {{ streamsrunner_server_port }}'
+
+- name: Update streamsrunner host
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'play.server.http.host = .*'
+    replace: 'play.server.http.host = {{ streamsrunner_server_host }}'
+
+- name: Update Spark Job Server host
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'app.svc.jobserver.host = .*'
+    replace: 'app.svc.jobserver.host = {{ sjs_host }}'
+
+- name: Update Spark Job Server port
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'app.svc.jobserver.port = .*'
+    replace: 'app.svc.jobserver.port = {{ sjs_port }}'
+
+- name: Update Spark Job Server protocol
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'app.svc.jobserver.protocol = .*'
+    replace: 'app.svc.jobserver.protocol = {{ sjs_protocol }}'
+
+# Advanced Streamsrunner Configuration
+
+- name: Update Streamsrunner max JSON payload size
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'play.http.parser.maxMemoryBuffer = .*'
+    replace: 'play.http.parser.maxMemoryBuffer = {{ streamsrunner_max_json_payload_size }}'
+
+
+- name: Update Support request compression
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'play.ws.compressionEnabled = .*'
+    replace: 'play.ws.compressionEnabled = {{ streamsrunner_request_compression }}'
+
+- name: Update Runner Id
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'runner.id = .*'
+    replace: 'runner.id = {{ runner_id }}'
+
+- name: Update Runner Type
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'runner.type = SparkRunner.*'
+    replace: 'runner.type = {{ runner_type }}'
+
+- name: Update Runner Properties
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'runner.properties = .*'
+    replace: 'runner.properties = "{{ runner_properties }}"'
+
+- name: Update Runner Tuning properties
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'runner.tuning.properties = .*'
+    replace: 'runner.tuning.properties = "{{ runner_tuning_properties }}"'
+
+- name: Update SparkRunner properties
+  replace:
+    path: "/etc/talend/streamsrunner/application.conf"
+    regexp:  'runner.SparkRunner.properties = .*'
+    replace: 'runner.SparkRunner.properties = "{{ sparkrunner_properties }}"'
+
+
+
+
+
+
+
+

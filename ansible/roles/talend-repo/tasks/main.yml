@@ -1,0 +1,6 @@
+---
+# Add talend repository if missing
+- name: Install the Talend RPM repository
+  template:
+      src: talend.repo
+      dest: /etc/yum.repos.d/talend.repo

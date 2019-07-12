@@ -1,0 +1,198 @@
+---
+# This script performs different parameters validation
+
+######################################
+# TAC-specific parameters validation
+######################################
+
+#    
+# Validation for TAC web-application name  
+#
+
+- name: Show error that no value is specified for tac_webapp_name
+  fail:
+    msg: No values is specified for "tac_webapp_name"
+  when: tac_webapp_name == ""
+
+#
+# Validation for admin user/password
+#  
+
+- name: Show error that no value is specified for tac_admin_user
+  fail:
+    msg: No values is specified for "tac_admin_user"
+  when: tac_admin_user == ""
+
+- name: Show error that no value is specified for tac_admin_pass
+  fail:
+    msg: No values is specified for "tac_admin_pass"
+  when: tac_admin_pass == ""
+
+#
+# Validation for SSO
+#
+
+- name: Show error about wrong value for parameter tac_use_sso
+  fail:
+    msg: Wrong value for parameter "tac_use_sso", must be 'yes' or 'no'
+  when: tac_use_sso != "no" and tac_use_sso != "yes"
+
+#
+# Validation for LogServer parameters
+#  
+
+- name: Show error about wrong value for parameter tac_use_logserver
+  fail:
+    msg: Wrong value for parameter "tac_use_logserver", must be 'yes' or 'no'
+  when: tac_use_logserver != "no" and tac_use_logserver != "yes"
+
+- name: Show error that no value is specified for tac_logserver_host
+  fail:
+    msg: No values is specified for "tac_logserver_host"
+  when: tac_use_logserver == "yes" and tac_logserver_host == ""
+
+- name: Show error about wrong value for parameter tac_logserver_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_logserver_port", must be a valid number
+  when: tac_use_logserver == "yes" and tac_logserver_port|int == 0
+
+- name: Show error about wrong value for parameter tac_logserver_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_logserver_port", must be a valid TCP/IP port number
+  when: tac_use_logserver == "yes" and ( tac_logserver_port|int  > 65535 or tac_logserver_port|int < 0 )
+
+#
+# Validation for Database parameters
+#  
+
+- name: Show error about wrong value for parameter tac_database
+  fail:
+    msg: Wrong value for parameter "tac_database", must be one of 'h2', 'mysql', 'oracle', 'mssql', 'postgresql', 'mariadb'
+  when: tac_database != "h2" and tac_database != "mysql" and tac_database != "oracle" and tac_database != "mssql" and tac_database != "postgresql" and tac_database != "mariadb"
+
+- name: Show error that no value is specified for tac_db_host
+  fail:
+    msg: No values is specified for "tac_db_host"
+  when: tac_db_host == ""
+
+- name: Show error that no value is specified for tac_db_name
+  fail:
+    msg: No values is specified for "tac_db_name"
+  when: tac_db_name == ""
+
+- name: Show error about wrong value for parameter tac_db_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_db_port", must be a valid number
+  when: tac_db_port|int == 0
+
+- name: Show error about wrong value for parameter tac_db_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_db_port", must be a valid TCP/IP port number
+  when: tac_db_port|int  > 65535 or tac_db_port|int < 0
+
+#
+# Validation for JobServer parameters
+#  
+
+- name: Show error about wrong value for parameter tac_setup_jobserver
+  fail:
+    msg: Wrong value for parameter "tac_setup_jobserver", must be 'yes' or 'no'
+  when: tac_setup_jobserver != "no" and tac_setup_jobserver != "yes"
+
+- name: Show error that no value is specified for tac_jobserver_name
+  fail:
+    msg: No values is specified for "tac_jobserver_name"
+  when: tac_setup_jobserver == "yes" and tac_jobserver_name == ""
+
+- name: Show error that no value is specified for tac_jobserver_host
+  fail:
+    msg: No values is specified for "tac_jobserver_host"
+  when: tac_setup_jobserver == "yes" and tac_jobserver_host == ""
+
+- name: Show error about wrong value for parameter tac_jobserver_command_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_jobserver_command_port", must be a valid number
+  when: tac_setup_jobserver == "yes" and tac_jobserver_command_port|int == 0
+
+- name: Show error about wrong value for parameter tac_jobserver_command_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_jobserver_command_port", must be a valid TCP/IP port number
+  when: tac_setup_jobserver == "yes" and ( tac_jobserver_command_port|int  > 65535 or tac_jobserver_command_port|int < 0 )
+
+- name: Show error about wrong value for parameter tac_jobserver_file_transfer_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_jobserver_file_transfer_port", must be a valid number
+  when: tac_setup_jobserver == "yes" and tac_jobserver_file_transfer_port|int == 0
+
+- name: Show error about wrong value for parameter tac_jobserver_file_transfer_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_jobserver_file_transfer_port", must be a valid TCP/IP port number
+  when: tac_setup_jobserver == "yes" and ( tac_jobserver_file_transfer_port|int  > 65535 or tac_jobserver_file_transfer_port|int < 0 )
+
+- name: Show error about wrong value for parameter tac_jobserver_monitoring_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_jobserver_monitoring_port", must be a valid number
+  when: tac_setup_jobserver == "yes" and tac_jobserver_monitoring_port|int == 0
+
+- name: Show error about wrong value for parameter tac_jobserver_monitoring_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_jobserver_monitoring_port", must be a valid TCP/IP port number
+  when: tac_setup_jobserver == "yes" and ( tac_jobserver_monitoring_port|int  > 65535 or tac_jobserver_monitoring_port|int < 0 )
+
+- name: Show error that no value is specified for tac_jobserver_username or tac_jobserver_password
+  fail:
+    msg: No values is specified for "tac_jobserver_username"/"tac_jobserver_password"
+  when: ( tac_jobserver_username != "" and tac_jobserver_password == "" ) or ( tac_jobserver_username == "" and tac_jobserver_password != "" )
+
+#
+# Validation for socket appender
+#
+
+- name: Show error that no value is specified for tac_appender_socket_host
+  fail:
+    msg: No values is specified for "tac_appender_socket_host"
+  when: tac_appender_socket_host == ""
+
+- name: Show error about wrong value for parameter tac_appender_socket_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_appender_socket_port", must be a valid number
+  when: tac_appender_socket_port|int == 0
+
+- name: Show error about wrong value for parameter tac_appender_socket_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_appender_socket_port", must be a valid TCP/IP port number
+  when: tac_appender_socket_port|int  > 65535 or tac_appender_socket_port|int < 0
+
+#
+# Validation for http appender
+#
+- name: Show error that no value is specified for tac_appender_http_host
+  fail:
+    msg: No values is specified for "tac_appender_http_host"
+  when: tac_appender_http_host == ""
+
+- name: Show error about wrong value for parameter tac_appender_http_port, not a number
+  fail:
+    msg: Wrong value for parameter "tac_appender_http_port", must be a valid number
+  when: tac_appender_http_port|int == 0
+
+- name: Show error about wrong value for parameter tac_appender_http_port, must be a valid number
+  fail:
+    msg: Wrong value for parameter "tac_appender_http_port", must be a valid TCP/IP port number
+  when: tac_appender_http_port|int  > 65535 or tac_appender_http_port|int < 0
+
+- name: Show error that no value is specified for tac_appender_http_username or tac_appender_http_password
+  fail:
+    msg: No values is specified for "tac_appender_http_username"/"tac_appender_http_password"
+  when: ( tac_appender_http_username != "" and tac_appender_http_password == "" ) or ( tac_appender_http_username == "" and tac_appender_http_password != "" )
+
+- name: Get info about license file
+  stat:
+    path: "{{ tac_license_file }}"
+  register: tac_license_file_stat
+  when: tac_install_license == "yes"
+
+- name: Show error about inaccessible license file
+  fail:
+    msg: "License file for TAC is not available: {{ tac_license_file }}"
+  when: tac_install_license == "yes" and not tac_license_file_stat.stat.exists

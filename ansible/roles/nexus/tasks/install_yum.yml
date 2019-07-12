@@ -1,0 +1,15 @@
+---
+# This file handles installation with yum (to default folder /opt/talend)
+#
+- name: "Install {{ app_name }} with yum"
+  when: rpm_is_installed.stdout == ''
+  yum:
+    name: "{{ rpm_name }}"
+    state: present
+  environment:
+    TALEND_INSTALL_USER:    "{{ install_user }}"
+    TALEND_INSTALL_GROUP:   "{{ install_group }}"
+    TALEND_INSTALL_SYSTEMD: "{{ '1' if app_install_systemd == 'yes' else '0' }}"
+    NEXUS_HOST:             "{{ '' if nexus_host == '0.0.0.0' else nexus_host }}"
+    NEXUS_PORT:             "{{ '' if nexus_port == '8081'    else nexus_port }}"
+    JAVA_HOME:              "{{ java_dir.stdout }}"

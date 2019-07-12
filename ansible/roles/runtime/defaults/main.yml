@@ -1,0 +1,44 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Runtime"
+rpm_name: "talend-runtime"
+rpm_folder: "runtime"
+app_service: "talend-runtime"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+##########################################################################
+# Runtime-specific configuration variables
+# We will use "rt_" prefix in var names
+##########################################################################
+
+# OSGI HTTP/HTTPS Service configuration (PID: org.ops4j.pax.web.cfg)
+
+rt_http_port: 8040
+rt_https_port: 9001
+
+#Karaf SSH shell configuration (PID: org.apache.karaf.shell.cfg)
+
+rt_ssh_port: 8101
+
+# JMX Management configuration (PID: org.apache.karaf.management.cfg)
+
+rt_rmi_registry_port: 1099
+rt_rmi_server_port: 44444
+
+# Jobserver configuration (PID: org.talend.remote.jobserver.server.cfg)
+
+rt_js_command_server_port: 8000
+rt_js_file_server_port: 8001
+rt_js_monitoring_port: 8888
+rt_js_process_message_port: 8555
+
+# Master password for default users (PID: users.properties)
+# Empty value (default) leaves passwords unchanged
+
+rt_master_password: ""

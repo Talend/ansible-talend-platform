@@ -1,0 +1,80 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend LogServer"
+rpm_name: "talend-logserver"
+rpm_folder: "logserver"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+######################################################
+#
+# IMPORTANT: Empty values ('') means the defaults settings (in most cases, entries in application
+#            configuration files will be commented out).
+#
+######################################################
+
+##########################
+#  Settings in logstash-talend.conf file
+##########################
+logserv_input_beats_port: 5044
+
+logserv_input_http_port: 8057
+logserv_input_http_codec: "json"
+logserv_input_http_type: "Audit"
+
+logserv_output_elasticsearch_host: "localhost:9200"
+logserv_output_elasticsearch_index: "%{esIndex}"
+
+##########################
+#  Settings for ElasticSearch
+##########################
+logserv_es_cluster_name: ""
+logserv_es_node_name: ""
+
+logserv_es_network_host: ""
+
+# Unless otherwise specified, port 9200 is used for HTTP
+logserv_es_http_port: ""
+
+##########################
+#  Settings for Kibana
+##########################
+
+# Kibana port (5601 by default)
+logserv_kibana_server_port: ""
+
+# Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
+# To allow connections from remote users, set this parameter to a non-loopback address.
+logserv_kibana_server_host: "0.0.0.0"
+
+# Display name of the Kibana server
+logserv_kibana_server_name: ""
+
+# URL of the ElasticSearch instance to use for all your queries. Default is "http://localhost:9200"
+logserv_kibana_elasticsearch_url: ""
+
+# If your ElasticSearch is protected with basic authentication, these settings provide
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# index at startup. Your Kibana users still need to authenticate with ElasticSearch, which
+# is proxied through the Kibana server.
+logserv_kibana_es_username: ""
+logserv_kibana_es_password: ""
+
+#####
+#  Internal section - do not change - start
+#####
+logserv_es_base_folder: "{{ 'elasticsearch-6.1.2' if rpm_base_version == 7.1 else 'elasticsearch-6.7.1' }}"
+logserv_kibana_base_folder: "{{ 'kibana-6.1.2-linux-x86_64' if rpm_base_version == 7.1 else 'kibana-6.7.1-linux-x86_64' }}"
+#####
+#  Internal section - do not change - end
+#####
+
+###########################
+#  Settings for Logstash
+###########################

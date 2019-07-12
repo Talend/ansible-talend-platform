@@ -1,0 +1,13 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend MDM Workflow Server"
+rpm_name: "talend-mwfl"
+rpm_folder: "mwfl"
+app_service: "talend-mwfl"
+
+# MWFL-specific properties
+
+# Port which will be used by MWFL server
+mwfl_port: 8280

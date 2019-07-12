@@ -1,0 +1,10 @@
+.DS_Store
+*.retry
+*.zip
+*.rpm
+*.tar.gz
+*.lock
+.rake_tasks~
+.project
+.idea
+.vagrant

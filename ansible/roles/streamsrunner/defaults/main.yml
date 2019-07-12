@@ -1,0 +1,37 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Streamsrunner"
+rpm_name: "talend-streamsrunner"
+rpm_folder: "streamsrunner"
+app_service: "talend-streamsrunner"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#########################################
+#
+# Parameters below can be used for configuration updates (re-configuration) "on the fly"
+#
+#########################################
+
+# Basic Streamsrunner configuration
+streamsrunner_server_host: "localhost"
+streamsrunner_server_port: "9060"
+sjs_host: "localhost"
+sjs_port: "8090"
+sjs_protocol: "http"
+
+# Advanced Streamsrunner configuration
+streamsrunner_max_json_payload_size: "100M"
+streamsrunner_request_compression: "true"
+runner_id: "standard-spark-runner"
+runner_type: "SparkRunner"
+runner_properties: ""
+runner_tuning_properties: ""
+
+# default Spark runner properties in the format "key=value;key=value"
+sparkrunner_properties: "usesProvidedSparkContext=true"

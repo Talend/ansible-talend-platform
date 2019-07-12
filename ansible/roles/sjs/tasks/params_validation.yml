@@ -1,0 +1,61 @@
+---
+- name: Show error about wrong value for parameter sjs_server_port
+  fail:
+    msg: Wrong value for parameter "sjs_server_port", must be between 1 and 65535
+  when: sjs_server_port|int <= 1 or sjs_server_port|int >= 65535
+
+- name: Show error about wrong value for parameter sjs_context_per_jvm
+  fail:
+    msg: Wrong value for parameter "sjs_context_per_jvm", must be 'true' or 'false'
+  when: sjs_context_per_jvm != "true" and sjs_context_per_jvm != "false"
+
+- name: Show error about wrong value for parameter sjs_h2_tcp_port
+  fail:
+    msg: Wrong value for parameter "sjs_h2_tcp_port", must be between 1 and 65535
+  when: sjs_h2_tcp_port|int <= 1 or sjs_h2_tcp_port|int >= 65535
+
+- name: Show error about wrong value for parameter sjs_jmx_port
+  fail:
+    msg: Wrong value for parameter "sjs_jmx_port", must be between 1 and 65535
+  when: sjs_jmx_port|int <= 1 or sjs_jmx_port|int >= 65535
+
+- name: Show error about wrong value for parameter sjs_short_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_short_timeout", must be an integer
+  when: sjs_short_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_context_creation_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_context_creation_timeout", must be an integer
+  when: sjs_context_creation_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_yarn_context_creation_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_yarn_context_creation_timeout", must be an integer
+  when: sjs_yarn_context_creation_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_default_sync_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_default_sync_timeout", must be an integer
+  when: sjs_default_sync_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_context_init_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_context_init_timeout", must be an integer
+  when: sjs_context_init_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_spray_request_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_spray_request_timeout", must be an integer
+  when: sjs_spray_request_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_spray_idle_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_spray_idle_timeout", must be an integer
+  when: sjs_spray_idle_timeout|int < 1
+
+- name: Show error about wrong value for parameter sjs_dao_ask_timeout
+  fail:
+    msg: Wrong value for parameter "sjs_dao_ask_timeout", must be an integer
+  when: sjs_dao_ask_timeout|int < 1
+

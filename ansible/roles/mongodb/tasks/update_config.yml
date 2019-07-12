@@ -1,0 +1,28 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config folder: {{install_prefix}}/mongodb/mongod.cfg
+#
+# All other parameters are from roles/mongodb/defaults/main.yml
+#
+
+# For MongoDB - most parameters can be set up only during installation.
+# The only parameter which can be updated after installation is port number
+
+- name: Update TCP/IP port number
+  replace:
+    path: "{{ install_prefix }}/mongodb/mongod.cfg"
+    regexp:  'port: .*'
+    replace: 'port: {{ mongodb_port }}'
+
+- name: Update MongoD listener (localhost only or global)
+  replace:
+    path: "{{ install_prefix }}/mongodb/mongod.cfg"
+    regexp:  'bindIpAll: .*'
+    replace: "bindIpAll: {{ 'true' if mongodb_localhost_only == 'no' else 'false' }}"
+  when: rpm_base_version == 7.2

@@ -1,0 +1,100 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend MDM"
+rpm_name: "talend-mdm"
+rpm_folder: "mdm"
+app_service: "talend-mdm"
+
+##########################################################################
+# MDM-specific configuration variables
+# We will use "mdm_" prefix in var names
+##########################################################################
+
+#####################################
+#
+# ATTENTION: Some variables can be set only for new installation !
+#            They will not affect existing installation !
+#            If one of these needs to be changed, this can be done manually or by removing s/w
+#     Such variables include:
+#            - Tomcat selection variables
+#            - Systemd selection variable
+#            - (MDM-specific) MDM web application name variable
+#
+#####################################
+
+#####
+# Tomcat-selection variables
+#####
+
+# This var shows whether we should use talend-tomcat in 'shared' mode (default settings)
+app_use_talend_tomcat: "yes" # allowed values are "yes" or "no"
+app_tomcat_port: "8180" # tomcat_port is used only if tomcat_setup == "yes" (or when app_use_talend_tomcat == "yes")
+
+# The following variables will be taken in account only if app_use_talend_tomcat == "no"
+app_tomcat_home: "/opt/tomcat" # home folder for customer tomcat
+app_tomcat_mode: "direct" # can be "direct" or "shared"
+app_tomcat_setup: "no" # whether to update customer tomcat configuration (ports)
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#####
+# MDM web-application name, default is "talendmdm"
+#####
+mdm_webapp_name: talendmdm
+
+#########################################
+#
+# Parameters below can be used for configuration updates (re-configuration) "on the fly"
+#
+#########################################
+# Use Audit enablement for Talend LogServer
+mdm_use_audit: "yes" # allowed values 'yes' or 'no'
+mdm_audit_server_host: "localhost"
+mdm_audit_server_port: 8057
+
+# Communication with IAM
+mdm_iam_url: "http://localhost:9080"
+mdm_oidc_url: "{{ mdm_iam_url }}/oidc"
+mdm_oidc_userauth_url: "{{ mdm_iam_url }}/oidc"
+mdm_scim_url: "{{ mdm_iam_url }}/scim"
+
+# Communication with TDS
+mdm_tds_root_url: "http://localhost:19999"
+mdm_tds_user: "administrator@company.com"
+mdm_tds_password: "administrator"
+
+# Database parameters
+# MDM_DATABASE = h2 | mysql8 | mysql | oracle | mssql | postgresql | db2
+mdm_database: "h2"
+
+mdm_db_name: "${container}" # Default: oracle/db2=TMDM_DB; others=${container}
+mdm_db_host: "localhost"
+mdm_db_port: "3306" # Default: mysql8/mysql=3306; oracle=1521; mssql=1433; postgresql=5432; db2=50000
+mdm_db_user: "system" # Default: oracle=mdm_master for Master
+mdm_db_password: "" # Default: oracle=mdm_master for Master
+mdm_db_driver: "" # Required for non-H2 databases, driver jar location
+mdm_db_driver_extra1: "/root/jdbc-lib/db2jcc_license_cisuz.jar" # DB2 Only
+mdm_db_driver_extra2: "/root/jdbc-lib/db2jcc_license_cu.jar" # DB2 Only
+mdm_search_index_dir: "{{ install_prefix + '/'+ rpm_folder +'/data/indexes/' + mdm_database + '-default/index' }}"
+
+# For oracle & db2
+mdm_db_schema: "mdm_master"
+mdm_db_staging_schema: "mdm_staging"
+mdm_db_staging_user: "mdm_staging"
+mdm_db_staging_password: "mdm_staging"
+mdm_db_system_schema: "mdm_system"
+mdm_db_system_user: "mdm_system"
+mdm_db_system_password: "mdm_system"
+
+#####
+# Internal configuration variables, do not change this block
+#####
+mdm_config_location: "{{ install_prefix + '/' + rpm_folder + '/conf' }}"
+#####
+# End of internal configuration variables block
+#####

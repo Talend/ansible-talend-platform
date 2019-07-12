@@ -1,0 +1,213 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all) - gives the location config folders:
+#        - {{install_prefix}}/logserver/                                 - base folder (for logstash-talend.conf)
+#        - {{install_prefix}}/logserver/elasticsearch-6.1.2/config       - configuration for Elasticsearch
+#        - {{install_prefix}}/logserver/kibana-6.1.2-linux-x86_64/config - configuration for Kibana
+#
+
+# Update main logstash-talend.conf
+- name: Update logstash-talend.conf - beats port
+  replace:
+    path:    "{{install_prefix}}/logserver/logstash-talend.conf"
+    regexp:  'port =>.*'
+    replace: 'port => {{ logserv_input_beats_port }}'
+    after:   'beats \{'
+    before:  'http \{'
+
+- name: Update logstash-talend.conf - http port
+  replace:
+    path:    "{{install_prefix}}/logserver/logstash-talend.conf"
+    regexp:  'port =>.*'
+    replace: 'port => {{ logserv_input_http_port }}'
+    after:   'http \{'
+    before:  '^\}'
+
+- name: Update logstash-talend.conf - http codec
+  replace:
+    path:    "{{install_prefix}}/logserver/logstash-talend.conf"
+    regexp:  'codec =>.*'
+    replace: 'codec => "{{ logserv_input_http_codec }}"'
+    after:   'http \{'
+    before:  '^\}'
+
+- name: Update logstash-talend.conf - http type
+  replace:
+    path:    "{{install_prefix}}/logserver/logstash-talend.conf"
+    regexp:  'type =>.*'
+    replace: 'type => "{{ logserv_input_http_type }}"'
+    after:   'http \{'
+    before:  '^\}'
+
+- name: Update logstash-talend.conf - elasticsearch host
+  replace:
+    path:    "{{install_prefix}}/logserver/logstash-talend.conf"
+    regexp:  'hosts =>.*'
+    replace: 'hosts => ["{{ logserv_output_elasticsearch_host }}"]'
+    after:   'elasticsearch \{'
+    before:  '^\}'
+
+- name: Update logstash-talend.conf - elasticsearch index
+  replace:
+    path:    "{{install_prefix}}/logserver/logstash-talend.conf"
+    regexp:  'index =>.*'
+    replace: 'index => "{{ logserv_output_elasticsearch_index }}"'
+    after:   'elasticsearch \{'
+    before:  '^\}'
+
+###################################################
+#
+#  Updates for elasticsearch.yml
+#
+###################################################
+- name: Update elastic search - cluster name - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '^(#)?\s*cluster.name:.*'
+    replace: 'cluster.name: {{ logserv_es_cluster_name }}'
+  when: logserv_es_cluster_name != ''
+
+- name: Update elastic search - cluster name - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*cluster.name:.*'
+    replace: '#cluster.name: my-application'
+  when: logserv_es_cluster_name == ''
+
+- name: Update elastic search - node name - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*node.name:.*'
+    replace: 'node.name: {{ logserv_es_node_name }}'
+  when: logserv_es_node_name != ''
+
+- name: Update elastic search - node name - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*node.name:.*'
+    replace: '#node.name: node-1'
+  when: logserv_es_node_name == ''
+
+- name: Update elastic search - network host - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*network.host:.*'
+    replace: 'network.host: {{ logserv_es_network_host }}'
+  when: logserv_es_network_host != ''
+
+- name: Update elastic search - network host - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*network.host:.*'
+    replace: '#network.host: 192.168.0.1'
+  when: logserv_es_network_host == ''
+
+- name: Update elastic search - http port - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*http.port:.*'
+    replace: 'http.port: {{ logserv_es_http_port }}'
+  when: logserv_es_http_port != ''
+
+- name: Update elastic search - http port - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_es_base_folder}}/config/elasticsearch.yml"
+    regexp:  '(#)?\s*http.port:.*'
+    replace: '#http.port: 9200'
+  when: logserv_es_http_port == ''
+
+###################################################
+#
+#  Updates for kibana.yml
+#
+###################################################
+- name: Update kibana - server port - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*server.port:.*'
+    replace: 'server.port: {{ logserv_kibana_server_port }}'
+  when: logserv_kibana_server_port != ''
+
+- name: Update kibana - server port - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*server.port:.*'
+    replace: '#server.port: 5601'
+  when: logserv_kibana_server_port == ''
+
+- name: Update kibana - server host - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*server.host:.*'
+    replace: 'server.host: {{ logserv_kibana_server_host }}'
+  when: logserv_kibana_server_host != ''
+
+- name: Update kibana - server host - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*server.host:.*'
+    replace: '#server.host: 127.0.0.1'
+  when: logserv_kibana_server_host == ''
+
+- name: Update kibana - server name - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*server.name:.*'
+    replace: 'server.name: "{{ logserv_kibana_server_name }}"'
+  when: logserv_kibana_server_name != ''
+
+- name: Update kibana - server name - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*server.name:.*'
+    replace: '#server.name: "your-hostname"'
+  when: logserv_kibana_server_name == ''
+
+- name: Update kibana - The URL of the Elasticsearch instance - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*elasticsearch.url:.*'
+    replace: 'elasticsearch.url: "{{ logserv_kibana_elasticsearch_url }}"'
+  when: logserv_kibana_elasticsearch_url != ''
+
+- name: Update kibana - The URL of the Elasticsearch instance - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*elasticsearch.url:.*'
+    replace: '#elasticsearch.url: "http://localhost:9200"'
+  when: logserv_kibana_elasticsearch_url == ''
+
+- name: Update kibana - user name - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*elasticsearch.username:.*'
+    replace: 'elasticsearch.username: "{{ logserv_kibana_es_username }}"'
+  when: logserv_kibana_es_username != ''
+
+- name: Update kibana - user name - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*elasticsearch.username:.*'
+    replace: '#elasticsearch.username: "user"'
+  when: logserv_kibana_es_username == ''
+
+- name: Update kibana - user password - not empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*elasticsearch.password:.*'
+    replace: 'elasticsearch.password: "{{ logserv_kibana_es_password }}"'
+  when: logserv_kibana_es_password != ''
+
+- name: Update kibana - user password - empty
+  replace:
+    path:    "{{install_prefix}}/logserver/{{logserv_kibana_base_folder}}/config/kibana.yml"
+    regexp:  '^(#)?\s*elasticsearch.password:.*'
+    replace: 'elasticsearch.password: "pass"'
+  when: logserv_kibana_es_password == ''
+

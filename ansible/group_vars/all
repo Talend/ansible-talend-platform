@@ -1,0 +1,41 @@
+---
+# Here we define global variables which are relevant for all roles
+#
+
+#
+# rpm_base_version: 7.1, 7.2, 7.3 etc.
+#   rpm_patch_version: 1, 2, 3 etc
+# rpm_build_number: used to identify exact build
+#
+rpm_base_version: 7.1
+rpm_patch_version: 1
+rpm_build_number: 201810261147
+
+rpm_version: "{{ rpm_base_version }}.{{ rpm_patch_version }}" 
+
+#
+# install_user and install_group will be used for ownership of installed packages
+#
+install_user:   talend
+install_group:  talend
+
+#
+# This is the installation path base (prefix), all RPMs will be installed
+#    into this base folder
+#
+install_prefix: /opt/talend
+
+#
+# Installation repository for RPM and yum
+#
+# Repository requires authentication, so it is mandatory to provide user and password
+#  - rpm_repo_user should use URL-encoded name (for example user@company.com -> user%40company.com)
+#  - rpm_repo_pass should contain a password
+
+rpm_repo_user: user%40company.com
+rpm_repo_pass: 1234567890ABCDEF
+
+rpm_repo_url: 'https://{{ rpm_repo_user }}:{{ rpm_repo_pass }}@www.opensourceetl.net/rpms/talend/{{ rpm_version }}/base/x86_64/'
+
+# Default package version (needs to be used in package URL)
+rpm_pkg_version: "{{ rpmversion }}-{{ rpm_build_number }}"

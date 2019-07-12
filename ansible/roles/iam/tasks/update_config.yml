@@ -1,0 +1,212 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, tomcat deployment, systemd status)
+# All other parameters must be reconfigured here
+
+# Update admin user/password
+
+- name: Update IAM TAC admin user
+  replace:
+    path: "{{ iam_config_location }}/iam.properties"
+    regexp:  'tac\.admin\.user=.*'
+    replace: 'tac.admin.user={{ iam_tac_user }}'
+
+- name: Update IAM TAC admin password
+  replace:
+    path: "{{ iam_config_location }}/iam.properties"
+    regexp:  'tac\.password=.*'
+    replace: 'tac.password={{ iam_tac_password }}'
+
+- name: Update IAM TAC URL
+  replace:
+    path: "{{ iam_config_location }}/iam.properties"
+    regexp:  'tac\.url=.*'
+    replace: 'tac.url={{ iam_tac_url }}'
+
+- name: Update IAM Host
+  replace:
+    path: "{{ iam_config_location }}/iam.properties"
+    regexp:  'iam\.host=.*'
+    replace: 'iam.host={{ iam_hostname | lower }}'
+
+- name: Update IAM Port
+  replace:
+    path: "{{ iam_config_location }}/iam.properties"
+    regexp:  'iam\.url=.*'
+    replace: 'iam.url=http://${iam.host}:{{ iam_tomcat_port }}'
+
+- name: Update IAM Tomcat Port in fediz
+  replace:
+    path: "{{ iam_config_location }}/fediz_config.xml"
+    regexp:  '<issuer>.*</issuer>'
+    replace: '<issuer>http://{{ iam_hostname | lower }}:{{ iam_tomcat_port }}/idp/federation</issuer>'
+
+- name: Update IAM Tomcat Host in Syncope Console
+  replace:
+    path: "{{ iam_webapps_location }}/syncope-console/WEB-INF/classes/console.properties"
+    regexp:  'host=.*'
+    replace: 'host={{ iam_hostname | lower }}'
+
+- name: Update IAM Tomcat Port in Syncope Console
+  replace:
+    path: "{{ iam_webapps_location }}/syncope-console/WEB-INF/classes/console.properties"
+    regexp:  'port=.*'
+    replace: 'port={{ iam_tomcat_port }}'
+
+- name: Update IAM Tomcat Host in Syncope Enduser
+  replace:
+    path: "{{ iam_webapps_location }}/syncope-enduser/WEB-INF/classes/enduser.properties"
+    regexp:  'host=.*'
+    replace: 'host={{ iam_hostname | lower }}'
+
+- name: Update IAM Tomcat Port in Syncope Enduser
+  replace:
+    path: "{{ iam_webapps_location }}/syncope-enduser/WEB-INF/classes/enduser.properties"
+    regexp:  'port=.*'
+    replace: 'port={{ iam_tomcat_port }}'
+
+- name: Update language in setenv.sh
+  replace:
+    path: "{{ iam_tomcat_location }}/bin/setenv.sh"
+    regexp:  '-Dspring.mvc.locale=..'
+    replace: '-Dspring.mvc.locale={{ iam_language }}'
+
+#
+# Updating clients json files
+#
+# For mdm-client.json ...
+- name: Load clients/mdm-client.json
+  slurp:
+    src: "{{ iam_clients_location }}/mdm-client.json"
+  register: iam_mdm_client_json_var
+
+- name: "Update mdm-client.json: post_logout_redirect_uris (if localhost)"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( 'http://localhost:' + iam_mdm_postlogon_port +'/talendmdm/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/talendmdm/') } ) | to_nice_json }}"
+  when: iam_mdm_postlogon_host == 'localhost'
+
+- name: "Update mdm-client.json: post_logout_redirect_uris (if non-localhost and short host)"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_mdm_postlogout_url_lc + 'talendmdm/', 'http://localhost:' + iam_mdm_postlogon_port +'/talendmdm/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/talendmdm/') } ) | to_nice_json }}"
+  when: iam_mdm_postlogon_host != 'localhost' and iam_mdm_postlogon_host == iam_mdm_postlogon_shorthost
+
+- name: "Update mdm-client.json: post_logout_redirect_uris (if non-localhost and FQDN host)"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_mdm_postlogout_url_lc + 'talendmdm/', 'http://' + iam_mdm_postlogon_shorthost + ':' + iam_mdm_postlogon_port +'/talendmdm/', 'http://localhost:' + iam_mdm_postlogon_port +'/talendmdm/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/talendmdm/') } ) | to_nice_json }}"
+  when: iam_mdm_postlogon_host != 'localhost' and iam_mdm_postlogon_host != iam_mdm_postlogon_shorthost
+
+- name: "Update mdm-client.json: redirect_uris (if localhost)"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var | from_json | combine( { 'redirect_uris': ( 'http://localhost:' + iam_mdm_postlogon_port +'/talendmdm/login', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/talendmdm/login') } ) | to_nice_json }}"
+  when: iam_mdm_postlogon_host == 'localhost'
+
+- name: "Update mdm-client.json: redirect_uris (if localhost and short host)"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var | from_json | combine( { 'redirect_uris': ( iam_mdm_postlogout_url_lc + 'talendmdm/login', 'http://localhost:' + iam_mdm_postlogon_port +'/talendmdm/login', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/talendmdm/login') } ) | to_nice_json }}"
+  when: iam_mdm_postlogon_host != 'localhost' and iam_mdm_postlogon_host == iam_mdm_postlogon_shorthost
+
+- name: "Update mdm-client.json: redirect_uris (if localhost and FQDN host)"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var | from_json | combine( { 'redirect_uris': ( iam_mdm_postlogout_url_lc + 'talendmdm/login', 'http://' + iam_mdm_postlogon_shorthost + ':' + iam_mdm_postlogon_port +'/talendmdm/login', 'http://localhost:' + iam_mdm_postlogon_port +'/talendmdm/login', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/talendmdm/login') } ) | to_nice_json }}"
+  when: iam_mdm_postlogon_host != 'localhost' and iam_mdm_postlogon_host != iam_mdm_postlogon_shorthost
+
+- name: "Update mdm-client.json: backchannel_logout_uri"
+  set_fact:
+    iam_mdm_client_json_var: "{{ iam_mdm_client_json_var | from_json | combine( { 'backchannel_logout_uri': iam_mdm_postlogout_url_lc + 'talendmdm/logout-op' } ) | to_nice_json }}"
+
+- name: Update mdm-client.json on disk
+  copy:
+    content: "{{ iam_mdm_client_json_var | from_json | to_nice_json }}"
+    dest:    "{{ iam_clients_location }}/mdm-client.json"
+
+# For tds-client.json
+- name: Load clients/tds-client.json
+  slurp:
+    src: "{{ iam_clients_location }}/tds-client.json"
+  register: iam_tds_client_json_var
+
+- name: "Update tds-client.json: post_logout_redirect_uris (if localhost)"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( 'http://localhost:' + iam_tds_postlogon_port +'/', 'http://127.0.0.1:' + iam_tds_postlogon_port + '/') } ) | to_nice_json }}"
+  when: iam_tds_postlogon_host == 'localhost'
+
+- name: "Update tds-client.json: post_logout_redirect_uris (if non-localhost and short host)"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_tds_postlogout_url_lc, 'http://localhost:' + iam_tds_postlogon_port +'/', 'http://127.0.0.1:' + iam_tds_postlogon_port + '/') } ) | to_nice_json }}"
+  when: iam_tds_postlogon_host != 'localhost' and iam_tds_postlogon_host == iam_tds_postlogon_shorthost
+
+- name: "Update tds-client.json: post_logout_redirect_uris (if non-localhost and FQDN host)"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_tds_postlogout_url_lc, 'http://' + iam_tds_postlogon_shorthost + ':' + iam_tds_postlogon_port +'/', 'http://localhost:' + iam_tds_postlogon_port +'/', 'http://127.0.0.1:' + iam_tds_postlogon_port + '/') } ) | to_nice_json }}"
+  when: iam_tds_postlogon_host != 'localhost' and iam_tds_postlogon_host != iam_tds_postlogon_shorthost
+
+- name: "Update tds-client.json: redirect_uris (if localhost)"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var | from_json | combine( { 'redirect_uris': ( 'http://localhost:' + iam_tds_postlogon_port +'/login', 'http://127.0.0.1:' + iam_tds_postlogon_port + '/login') } ) | to_nice_json }}"
+  when: iam_tds_postlogon_host == 'localhost'
+
+- name: "Update tds-client.json: redirect_uris (if localhost and short host)"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var | from_json | combine( { 'redirect_uris': ( iam_tds_postlogout_url_lc + 'login', 'http://localhost:' + iam_tds_postlogon_port +'/login', 'http://127.0.0.1:' + iam_tds_postlogon_port + '/login') } ) | to_nice_json }}"
+  when: iam_tds_postlogon_host != 'localhost' and iam_tds_postlogon_host == iam_tds_postlogon_shorthost
+
+- name: "Update tds-client.json: redirect_uris (if localhost and FQDN host)"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var | from_json | combine( { 'redirect_uris': ( iam_tds_postlogout_url_lc + 'login', 'http://' + iam_tds_postlogon_shorthost + ':' + iam_tds_postlogon_port +'/login', 'http://localhost:' + iam_tds_postlogon_port +'/login', 'http://127.0.0.1:' + iam_tds_postlogon_port + '/login') } ) | to_nice_json }}"
+  when: iam_tds_postlogon_host != 'localhost' and iam_tds_postlogon_host != iam_tds_postlogon_shorthost
+
+- name: "Update tds-client.json: backchannel_logout_uri"
+  set_fact:
+    iam_tds_client_json_var: "{{ iam_tds_client_json_var | from_json | combine( { 'backchannel_logout_uri': iam_tds_postlogout_url_lc + 'logout-op' } ) | to_nice_json }}"
+
+- name: Update tds-client.json on disk
+  copy:
+    content: "{{ iam_tds_client_json_var | from_json | to_nice_json }}"
+    dest:    "{{ iam_clients_location }}/tds-client.json"
+
+# For tdp-client.json
+- name: Load clients/tdp-client.json
+  slurp:
+    src: "{{ iam_clients_location }}/tdp-client.json"
+  register: iam_tdp_client_json_var
+
+- name: "Update tdp-client.json: post_logout_redirect_uris (if localhost)"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( 'http://localhost:' + iam_tdp_postlogon_port, 'http://127.0.0.1:' + iam_tdp_postlogon_port) } ) | to_nice_json }}"
+  when: iam_tdp_postlogon_host == 'localhost'
+
+- name: "Update tdp-client.json: post_logout_redirect_uris (if non-localhost and short host)"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_tdp_postlogout_url_lc, 'http://localhost:' + iam_tdp_postlogon_port, 'http://127.0.0.1:' + iam_tdp_postlogon_port) } ) | to_nice_json }}"
+  when: iam_tdp_postlogon_host != 'localhost' and iam_tdp_postlogon_host == iam_tdp_postlogon_shorthost
+
+- name: "Update tdp-client.json: post_logout_redirect_uris (if non-localhost and FQDN host)"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_tdp_postlogout_url_lc, 'http://' + iam_tdp_postlogon_shorthost + ':' + iam_tdp_postlogon_port, 'http://localhost:' + iam_tdp_postlogon_port, 'http://127.0.0.1:' + iam_tdp_postlogon_port) } ) | to_nice_json }}"
+  when: iam_tdp_postlogon_host != 'localhost' and iam_tdp_postlogon_host != iam_tdp_postlogon_shorthost
+
+- name: "Update tdp-client.json: redirect_uris (if localhost)"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var | from_json | combine( { 'redirect_uris': ( 'http://localhost:' + iam_tdp_postlogon_port +'/signIn', 'http://127.0.0.1:' + iam_tdp_postlogon_port + '/signIn') } ) | to_nice_json }}"
+  when: iam_tdp_postlogon_host == 'localhost'
+
+- name: "Update tdp-client.json: redirect_uris (if localhost and short host)"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var | from_json | combine( { 'redirect_uris': ( iam_tdp_postlogout_url_lc + '/signIn', 'http://localhost:' + iam_tdp_postlogon_port +'/signIn', 'http://127.0.0.1:' + iam_tdp_postlogon_port + '/signIn') } ) | to_nice_json }}"
+  when: iam_tdp_postlogon_host != 'localhost' and iam_tdp_postlogon_host == iam_tdp_postlogon_shorthost
+
+- name: "Update tdp-client.json: redirect_uris (if localhost and FQDN host)"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var | from_json | combine( { 'redirect_uris': ( iam_tdp_postlogout_url_lc + '/signIn', 'http://' + iam_tdp_postlogon_shorthost + ':' + iam_tdp_postlogon_port +'/signIn', 'http://localhost:' + iam_tdp_postlogon_port +'/signIn', 'http://127.0.0.1:' + iam_tdp_postlogon_port + '/signIn') } ) | to_nice_json }}"
+  when: iam_tdp_postlogon_host != 'localhost' and iam_tdp_postlogon_host != iam_tdp_postlogon_shorthost
+
+- name: "Update tdp-client.json: backchannel_logout_uri"
+  set_fact:
+    iam_tdp_client_json_var: "{{ iam_tdp_client_json_var | from_json | combine( { 'backchannel_logout_uri': iam_tdp_postlogout_url_lc + '/logout-op' } ) | to_nice_json }}"
+
+- name: Update tdp-client.json on disk
+  copy:
+    content: "{{ iam_tdp_client_json_var | from_json | to_nice_json }}"
+    dest:    "{{ iam_clients_location }}/tdp-client.json"

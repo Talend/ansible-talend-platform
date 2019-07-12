@@ -1,0 +1,57 @@
+---
+# This script performs different parameters validation
+
+######################################
+# Jobserver-specific parameters validation
+######################################
+
+# Check port-type parameter: js_command_server_port, js_file_server_port, js_monitoring_port, js_process_message_port
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid TCP/IP port number !"
+  when: not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "js_command_server_port",  value: "{{ js_command_server_port }}"  }
+    - { name: "js_file_server_port",     value: "{{ js_file_server_port }}"     }
+    - { name: "js_monitoring_port",      value: "{{ js_monitoring_port }}"      }
+    - { name: "js_process_message_port", value: "{{ js_process_message_port }}" }
+
+# Check true/false parameters: js_enabled_process_message, js_use_ssl, js_force_load, js_security_mode, js_jmxmp_useSSL, js_jmxmp_ssl_authenticate
+- name: Check boolean parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a boolean (must be true or false) !"
+  when: item.value | lower != "true" and item.value | lower != "false"
+  with_items:
+    - { name: "js_enabled_process_message",  value: "{{ js_enabled_process_message }}"  }
+    - { name: "js_use_ssl",                  value: "{{ js_use_ssl }}"                  }
+    - { name: "js_force_load",               value: "{{ js_force_load }}"               }
+    - { name: "js_security_mode",            value: "{{ js_security_mode }}"            }
+    - { name: "js_jmxmp_useSSL",             value: "{{ js_jmxmp_useSSL }}"             }
+    - { name: "js_jmxmp_ssl_authenticate",   value: "{{ js_jmxmp_ssl_authenticate }}"   }
+
+# Check true/false for optional parameter
+- name: Check optional boolean parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a boolean (must be true or false) !"
+  when: item.value != "" and item.value | lower != "true" and item.value | lower != "false"
+  with_items:
+    - { name: "js_remote_server_ssl_authenticate", value: "{{ js_remote_server_ssl_authenticate }}" }
+
+# Check for positive integers (>0): js_checkFileCountBeforeFire, js_max_concurrent_connections, js_frequency_clean_action
+#    js_min_number_job_executions_before_release, js_max_duration_before_job_execution_release_abnormal_case,
+#    js_max_duration_before_cleaning_old_executions_logs, js_max_old_executions_logs
+#    js_max_duration_before_cleaning_old_jobs, js_max_old_jobs
+- name: Check positive integer parameter above zero
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid positive integer number !"
+  when: item.value | int < 1
+  with_items:
+    - { name: "js_checkFileCountBeforeFire",                                 value: "{{ js_checkFileCountBeforeFire }}" }
+    - { name: "js_max_concurrent_connections",                               value: "{{ js_max_concurrent_connections }}" }
+    - { name: "js_frequency_clean_action",                                   value: "{{ js_frequency_clean_action }}" }
+    - { name: "js_min_number_job_executions_before_release",                 value: "{{ js_min_number_job_executions_before_release }}" }
+    - { name: "js_max_duration_before_job_execution_release_abnormal_case",  value: "{{ js_max_duration_before_job_execution_release_abnormal_case }}" }
+    - { name: "js_max_duration_before_cleaning_old_executions_logs",         value: "{{ js_max_duration_before_cleaning_old_executions_logs }}" }
+    - { name: "js_max_old_executions_logs",                                  value: "{{ js_max_old_executions_logs }}" }
+    - { name: "js_max_duration_before_cleaning_old_jobs",                    value: "{{ js_max_duration_before_cleaning_old_jobs }}" }
+    - { name: "js_max_old_jobs",                                             value: "{{ js_max_old_jobs }}" }

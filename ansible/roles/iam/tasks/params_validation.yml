@@ -1,0 +1,49 @@
+---
+# This script performs different parameters validation
+
+######################################
+# IAM-specific parameters validation
+######################################
+
+# Check port-type parameter: iam_tomcat_port
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid TCP/IP port number !"
+  when: not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "iam_tomcat_port", value: "{{ iam_tomcat_port }}" }
+
+# Check language
+- name: Check language setting
+  fail:
+    msg: "Parameter iam_language must be one of en, fr, ja, zh"
+  when: iam_language != "en" and iam_language != "fr" and iam_language != "ja" and iam_language != "zh"
+
+- name: Check URL params
+  fail:
+    msg: "Parameter {{ item.name }} must not be empty !"
+  when: item.value == ""
+  with_items:
+    - { name: "iam_tac_url",            value: "{{ iam_tac_url }}" }
+    - { name: "iam_tds_postlogout_url", value: "{{ iam_tds_postlogout_url }}" }
+    - { name: "iam_tdp_postlogout_url", value: "{{ iam_tdp_postlogout_url }}" }
+    - { name: "iam_mdm_postlogout_url", value: "{{ iam_mdm_postlogout_url }}" }
+    - { name: "iam_hostname",           value: "{{ iam_hostname }}" }
+
+- name: Check post-logout URLs format
+  fail:
+    msg: "Post-logout URL {{ item.name }} must be ended with slash, but it is not: {{ item.value }}"
+  when: item.value[-1] != '/'
+  with_items:
+    - { name: "iam_tds_postlogout_url", value: "{{ iam_tds_postlogout_url }}" }
+    - { name: "iam_tdp_postlogout_url", value: "{{ iam_tdp_postlogout_url }}" }
+    - { name: "iam_mdm_postlogout_url", value: "{{ iam_mdm_postlogout_url }}" }
+
+- name: Check post-logout URLs ports
+  fail:
+    msg: "Post-logout URL {{ item.name }} does not have a valid port number, detected value: {{ item.value | urlsplit('port') }}"
+  when: item.value | urlsplit('port') > 65535 or item.value | urlsplit('port') < 1
+  with_items:
+    - { name: "iam_tds_postlogout_url", value: "{{ iam_tds_postlogout_url }}" }
+    - { name: "iam_tdp_postlogout_url", value: "{{ iam_tdp_postlogout_url }}" }
+    - { name: "iam_mdm_postlogout_url", value: "{{ iam_mdm_postlogout_url }}" }

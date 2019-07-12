@@ -1,0 +1,18 @@
+---
+- hosts: tac-group
+  remote_user: root
+  roles:
+    - java
+    - talend-repo
+    - runtime
+  vars:
+    rt_http_port: 8041
+    rt_https_port: 9002
+    rt_ssh_port: 8102
+    rt_rmi_registry_port: 1100
+    rt_rmi_server_port: 44445
+    rt_js_command_server_port: 8010
+    rt_js_file_server_port: 8011
+    rt_js_monitoring_port: 8898
+    rt_js_process_message_port: 8556
+    rt_master_password: 'password'

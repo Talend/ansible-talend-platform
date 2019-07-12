@@ -1,0 +1,198 @@
+---
+# This script used for updating current application parameters (first install & upgrade)
+# It can be run just after the installation or after some time (re-configuration)
+
+#####
+# Set the path to the tomcat config location of TDS
+#####
+- name: Set tds_config_location when talend tomcat is used or customer tomcat in shared mode
+  when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
+  set_fact:
+    tds_config_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship.properties"
+
+- name: Set tds_config_location when customer tomcat is used in direct mode
+  when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
+  set_fact:
+    tds_config_location: "{{ app_tomcat_home }}/conf/data-stewardship.properties"
+
+
+#####
+# Update TDS configuration
+#####
+# Kafka
+- name: Update kafka broker
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^kafka\.broker=.*'
+    replace: 'kafka.broker={{ tds_kafka_host }}:{{ tds_kafka_port }}'
+
+
+# MongoDB
+- name: Update MongoDB hosts
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^spring\.data\.mongodb\.host=.*'
+    replace: 'spring.data.mongodb.host={{ tds_mongo_host }}'
+
+- name: Update MongoDB port
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^spring\.data\.mongodb\.port=.*'
+    replace: 'spring.data.mongodb.port={{ tds_mongo_port }}'
+
+- name: Update MongoDB dbname
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^spring\.data\.mongodb\.database=.*'
+    replace: 'spring.data.mongodb.database={{ tds_mongo_database }}'
+
+- name: Update MongoDB user
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^spring\.data\.mongodb\.username=.*'
+    replace: 'spring.data.mongodb.username={{ tds_mongo_username }}'
+
+- name: Update MongoDB password
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^spring\.data\.mongodb\.password=.*'
+    replace: 'spring.data.mongodb.password={{ tds_mongo_password }}'
+
+
+# Security / authent
+- name: Update scim url (IAM)
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^scim\.url=.*'
+    replace: 'scim.url={{ tds_security_scim_url }}'
+    
+- name: Update oidc url
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.url=.*'
+    replace: 'oidc.url={{ tds_security_oidc_url }}'
+    
+- name: Update oidc userauth url
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.userauth\.url=.*'
+    replace: 'oidc\.userauth.url={{ tds_security_oidc_user_auth_url }}'
+    
+- name: Update oidc gateway ID
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.gateway\.id=.*'
+    replace: 'oidc.gateway.id={{ tds_oidc_id }}'
+    
+- name: Update oidc gateway secret
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.gateway\.secret=.*'
+    replace: 'oidc.gateway.secret={{ tds_oidc_secret }}'
+    
+- name: Update oidc tds ID
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.tds\.id=.*'
+    replace: 'oidc.tds.id={{ tds_oidc_id }}'
+    
+- name: Update oidc tds secret
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.tds\.secret=.*'
+    replace: 'oidc.tds.secret={{ tds_oidc_secret }}'
+    
+- name: Update oidc history ID
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.history\.id=.*'
+    replace: 'oidc.history.id={{ tds_oidc_id }}'
+    
+- name: Update oidc history secret
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.history\.secret=.*'
+    replace: 'oidc.history.secret={{ tds_oidc_secret }}'
+    
+- name: Update oidc schema ID
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.schema\.id=.*'
+    replace: 'oidc.schema.id={{ tds_oidc_id }}'
+    
+- name: Update oidc schema secret
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.schema\.secret=.*'
+    replace: 'oidc.schema.secret={{ tds_oidc_secret }}'
+    
+
+# Activate semantic or not
+- name: Activate semantic dictionary
+  when: tds_use_semantic_dictionary == "yes"
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^semanticservice\.url=.*'
+    replace: 'semanticservice.url={{ tds_semantic_dictionary_url }}'
+
+- name: Deactivate semantic dictionary
+  when: tds_use_semantic_dictionary == "no"
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^semanticservice\.url=.*'
+    replace: "semanticservice.url="
+
+
+# Active switch to TDP or not
+- name: Activate switch between TDS & TDP
+  when: tds_use_tdp_switch == "yes"
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^#tds\.front\.tdpUrl=.*'
+    replace: "tds.front.tdpUrl={{ tds_front_tdp_url }}"
+
+- name: Deactivate switch between TDS & TDP
+  when: tds_use_tdp_switch == "no"
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^tds\.front\.tdpUrl=.*'
+    replace: "#tds.front.tdpUrl="
+
+# Set the language
+- name: Update language value (locale)
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^tds\.locale=.*'
+    replace: 'tds.locale={{ tds_language }}'
+
+# Copy missing 'data-stewardship-monitoring-service-logback.xml' file
+- name: Copy data-stewardship-monitoring-service-logback.xml
+  copy:
+    src: "{{ install_prefix }}/{{ rpm_folder }}/config/data-stewardship-monitoring-service-logback.xml"
+    dest: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship-monitoring-service-logback.xml"
+    mode: 0644
+    owner: "{{install_user}}"
+    group: "{{install_group}}"
+    remote_src: yes
+
+# Copy missing 'internal#data-stewardship-monitoring-service.xml' file
+- name: "Copy internal#data-stewardship-monitoring-service.xml"
+  copy:
+    src: "{{ install_prefix }}/{{ rpm_folder }}/context/internal#data-stewardship-monitoring-service.xml"
+    dest: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/Catalina/localhost/internal#data-stewardship-monitoring-service.xml"
+    mode: 0644
+    owner: "{{install_user}}"
+    group: "{{install_group}}"
+    remote_src: yes
+
+- name: Update oidc.monitoring.id
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.monitoring\.id=.*'
+    replace: 'oidc.monitoring.id=tl6K6ac7tSE-LQ'
+
+- name: Update oidc.monitoring.secret
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '^oidc\.monitoring\.secret=.*'
+    replace: 'oidc.monitoring.secret=sLbyFKTzM8F0dTL10mHd3A'

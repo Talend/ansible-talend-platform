@@ -1,0 +1,542 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, tomcat deployment, systemd status)
+# All other parameters must be reconfigured here
+
+#
+# Work with IAM 
+#
+- name: Update oidc.url
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'oidc\.url=.*'
+    replace: "oidc.url={{ mdm_oidc_url }}"
+
+- name: Update oidc.userauth.url
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'oidc\.userauth\.url=.*'
+    replace: "oidc.userauth.url={{ mdm_oidc_userauth_url }}"
+
+- name: Update scim.url
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'scim\.url=.*'
+    replace: "scim.url={{ mdm_scim_url }}"
+
+#
+# Work with TDS 
+#
+- name: Update TDS URL
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'tds\.root\.url=.*'
+    replace: "tds.root.url={{ mdm_tds_root_url }}"
+
+- name: Update TDS User
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'tds\.user=.*'
+    replace: "tds.user={{ mdm_tds_user }}"
+
+- name: Update TDS Password
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'tds\.password=.*'
+    replace: "tds.password={{ mdm_tds_password }}"
+
+#
+# Work with LogServer (Audit)
+#
+- name: Update audit configuration
+  when: mdm_use_audit == 'yes'
+  replace:
+    path: "{{ mdm_config_location }}/audit.properties"
+    regexp:  'appender\.http\.url=.*'
+    replace: "appender.http.url=http://{{ mdm_audit_server_host }}:{{ mdm_audit_server_port }}/"
+
+#
+# Copy DB Driver
+#
+- name: Copy DB Driver (talend tomcat)
+  when: mdm_database != "h2" and app_use_talend_tomcat == "yes"
+  copy:
+    src: "{{ mdm_db_driver }}"
+    dest: "{{ install_prefix + '/' + rpm_folder + '/tomcat/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+- name: Copy DB Driver Extra1 (talend tomcat)
+  when: mdm_database == "db2" and mdm_db_driver_extra1 != "" and app_use_talend_tomcat == "yes"
+  copy:
+    src: "{{ mdm_db_driver_extra1 }}"
+    dest: "{{ install_prefix + '/' + rpm_folder + '/tomcat/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+- name: Copy DB Driver Extra2 (talend tomcat)
+  when: mdm_database == "db2" and mdm_db_driver_extra2 != "" and app_use_talend_tomcat == "yes"
+  copy:
+    src: "{{ mdm_db_driver_extra2 }}"
+    dest: "{{ install_prefix + '/' + rpm_folder + '/tomcat/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+- name: Copy DB Driver (other tomcat)
+  when: mdm_database != "h2" and app_use_talend_tomcat == "no"
+  copy:
+    src: "{{ mdm_db_driver }}"
+    dest: "{{ app_tomcat_home + '/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+- name: Copy DB Driver Extra1 (other tomcat)
+  when: mdm_database == "db2" and mdm_db_driver_extra1 != "" and app_use_talend_tomcat == "no"
+  copy:
+    src: "{{ mdm_db_driver_extra1 }}"
+    dest: "{{ app_tomcat_home + '/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+- name: Copy DB Driver Extra2 (other tomcat)
+  when: mdm_database == "db2" and mdm_db_driver_extra2 != "" and app_use_talend_tomcat == "no"
+  copy:
+    src: "{{ mdm_db_driver_extra2 }}"
+    dest: "{{ app_tomcat_home + '/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
+#
+# Update database parameters
+#
+
+# 
+# For H2 database
+#
+- name: Update H2 Datasource of mdm.conf
+  when: mdm_database == "h2"
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'db\.default\.datasource=.*'
+    replace: "db.default.datasource=H2-Default"
+
+- name: Update H2 Master&Staging URL
+  when: mdm_database == "h2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  'jdbc:h2:///opt/talend/mdm/data/h2-Default/\${container}'
+    replace: "jdbc:h2://{{ install_prefix }}/{{ rpm_folder }}/data/h2-default/{{ mdm_db_name }}"
+
+- name: Update H2 System URL
+  when: mdm_database == "h2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  'jdbc:h2:///opt/talend/mdm/data/h2-Default/TMDM_DB_SYSTEM'
+    replace: "jdbc:h2://{{ install_prefix }}/{{ rpm_folder }}/data/h2-default/TMDM_DB_SYSTEM"
+
+- name: Update H2 DB User
+  when: mdm_database == "h2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  "<connection-username>system</connection-username>"
+    replace: "<connection-username>{{ mdm_db_user }}</connection-username>"
+
+- name: Update H2 DB Password
+  when: mdm_database == "h2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  "<connection-password></connection-password>"
+    replace: "<connection-password>{{ mdm_db_password }}</connection-password>"
+
+- name: Update H2 Fulltext Index Directory
+  when: mdm_database == "h2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '/opt/talend/mdm/data/h2-Default/index'
+    replace: "{{ mdm_search_index_dir }}"
+
+#
+# For MySQL8/MySQL database
+#
+- name: Update MySQL8/MySQL Datasource of mdm.conf
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'db\.default\.datasource=.*'
+    replace: "db.default.datasource=MySQL-Default"
+
+- name: Update MySQL8 DB Driver
+  when: mdm_database == "mysql8"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdriverclassmysql\$\$'
+    replace: "com.mysql.cj.jdbc.Driver"
+
+- name: Update MySQL8/MySQL MySQL DB Driver
+  when: mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdriverclassmysql\$\$'
+    replace: "com.mysql.jdbc.Driver"
+
+- name: Update MySQL8/MySQL DB URL
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdburlmysql\$\$'
+    replace: "jdbc:mysql://{{ mdm_db_host }}:{{ mdm_db_port }}/{{ mdm_db_name }}"
+
+- name: Update MySQL8/MySQL DB User
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbusermysql\$\$'
+    replace: "{{ mdm_db_user }}"
+
+- name: Update MySQL8/MySQL DB Password
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordmysql\$\$'
+    replace: "{{ mdm_db_password }}"
+
+- name: Update MySQL8/MySQL Fulltext Index Directory
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmsearchindexdirmysql\$\$'
+    replace: "{{ mdm_search_index_dir }}"
+
+- name: Update MySQL8/MySQL DB Name
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbnamemysql\$\$'
+    replace: "{{ mdm_db_name }}"
+
+- name: Update MySQL8/MySQL DB Small URL
+  when: mdm_database == "mysql8" or mdm_database == "mysql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbsmallurlmysql\$\$'
+    replace: "jdbc:mysql://{{ mdm_db_host }}:{{ mdm_db_port }}"
+
+#
+# For Oracle database
+#
+- name: Update Oracle Datasource of mdm.conf
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'db\.default\.datasource=.*'
+    replace: "db.default.datasource=Oracle-Default"
+
+- name: Update Oracle DB Driver
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdriverclassoracle\$\$'
+    replace: "oracle.jdbc.driver.OracleDriver"
+
+- name: Update Oracle DB URL
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdburloracle\$\$'
+    replace: "jdbc:oracle:thin:@{{ mdm_db_host }}:{{ mdm_db_port }}:{{ mdm_db_name }}"
+
+- name: Update Oracle Fulltext Index Directory
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmsearchindexdiroracle\$\$'
+    replace: "{{ mdm_search_index_dir }}"
+
+# Master    
+- name: Update Oracle Master User
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbuseroracle\$\$'
+    replace: "{{ mdm_db_user }}"
+
+- name: Update Oracle Master Password
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordoracle\$\$'
+    replace: "{{ mdm_db_password }}"
+
+- name: Update Oracle Master Schema
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmschemaofcontaineroracle\$\$'
+    replace: "{{ mdm_db_schema }}"
+
+# Staging
+- name: Update Oracle Staging User
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbuserstagingoracle\$\$'
+    replace: "{{ mdm_db_staging_user }}"
+
+- name: Update Oracle Staging Password
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordstagingoracle\$\$'
+    replace: "{{ mdm_db_staging_password }}"
+
+- name: Update Oracle Staging Schema
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmschemaofstagingareaoracle\$\$'
+    replace: "{{ mdm_db_staging_schema }}"
+
+# System
+- name: Update Oracle System User
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbusersystemoracle\$\$'
+    replace: "{{ mdm_db_system_user }}"
+
+- name: Update Oracle System Password
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordsystemoracle\$\$'
+    replace: "{{ mdm_db_system_password }}"
+
+- name: Update Oracle System Schema
+  when: mdm_database == "oracle"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmschemaofsystemobjectsoracle\$\$'
+    replace: "{{ mdm_db_system_schema }}"
+
+#
+# For Microsoft SQL
+#
+- name: Update MSSQL Datasource of mdm.conf
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'db\.default\.datasource=.*'
+    replace: "db.default.datasource=SQLServer-Default"
+
+- name: Update MSSQL DB Driver
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdriverclasssqlserver\$\$'
+    replace: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+
+- name: Update MSSQL DB URL
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdburlsqlserver\$\$'
+    replace: "jdbc:sqlserver://{{ mdm_db_host }}:{{ mdm_db_port }};databaseName={{ mdm_db_name }}"
+
+- name: Update MSSQL DB User
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbusersqlserver\$\$'
+    replace: "{{ mdm_db_user }}"
+
+- name: Update MSSQL DB Password
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordsqlserver\$\$'
+    replace: "{{ mdm_db_password }}"
+
+- name: Update MSSQL Fulltext Index Directory
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmsearchindexdirsqlserver\$\$'
+    replace: "{{ mdm_search_index_dir }}"
+
+- name: Update MSSQL DB Name
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbnamesqlserver\$\$'
+    replace: "{{ mdm_db_name }}"
+
+- name: Update MSSQL DB Small URL
+  when: mdm_database == "mssql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbsmallurlsqlserver\$\$'
+    replace: "jdbc:sqlserver://{{ mdm_db_host }}:{{ mdm_db_port }}"
+
+#
+# For PostgreSQL
+#
+- name: Update PostgreSQL Datasource of mdm.conf
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'db\.default\.datasource=.*'
+    replace: "db.default.datasource=PostgreSQL-Default"
+
+- name: Update PostgreSQL DB Driver
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdriverclasspostgressql\$\$'
+    replace: "org.postgresql.Driver"
+
+- name: Update PostgreSQL DB URL
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdburlpostgressql\$\$'
+    replace: "jdbc:postgresql://{{ mdm_db_host }}:{{ mdm_db_port }}/{{ mdm_db_name }}"
+
+- name: Update PostgreSQL DB User
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbuserpostgressql\$\$'
+    replace: "{{ mdm_db_user }}"
+
+- name: Update PostgreSQL DB Password
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordpostgressql\$\$'
+    replace: "{{ mdm_db_password }}"
+
+- name: Update PostgreSQL Fulltext Index Directory
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmsearchindexdirpostgressql\$\$'
+    replace: "{{ mdm_search_index_dir }}"
+
+- name: Update PostgreSQL DB Name
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbnamepostgressql\$\$'
+    replace: "{{ mdm_db_name }}"
+
+- name: Update PostgreSQL DB Small URL
+  when: mdm_database == "postgresql"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbsmallurlpostgressql\$\$'
+    replace: "jdbc:postgresql://{{ mdm_db_host }}:{{ mdm_db_port }}"
+
+#
+# For DB2
+#
+- name: Update DB2 Datasource of mdm.conf
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'db\.default\.datasource=.*'
+    replace: "db.default.datasource=DB2-Default"
+
+- name: Update DB2 DB Driver
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdriverclassdb2\$\$'
+    replace: "com.ibm.db2.jcc.DB2Driver"
+
+- name: Update DB2 DB URL
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdburldb2\$\$'
+    replace: "jdbc:db2://{{ mdm_db_host }}:{{ mdm_db_port }}/{{ mdm_db_name }}"
+
+- name: Update DB2 Fulltext Index Directory
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmsearchindexdirdb2\$\$'
+    replace: "{{ mdm_search_index_dir }}"
+
+# Master    
+- name: Update DB2 Master User
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbuserdb2\$\$'
+    replace: "{{ mdm_db_user }}"
+
+- name: Update DB2 Master Password
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpassworddb2\$\$'
+    replace: "{{ mdm_db_password }}"
+
+- name: Update DB2 Master Schema
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmschemaofcontainerdb2\$\$'
+    replace: "{{ mdm_db_schema }}"
+
+# Staging
+- name: Update DB2 Staging User
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbuserstagingdb2\$\$'
+    replace: "{{ mdm_db_staging_user }}"
+
+- name: Update DB2 Staging Password
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordstagingdb2\$\$'
+    replace: "{{ mdm_db_staging_password }}"
+
+- name: Update DB2 Staging Schema
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmschemaofstagingareadb2\$\$'
+    replace: "{{ mdm_db_staging_schema }}"
+
+# System
+- name: Update DB2 System User
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbusersystemdb2\$\$'
+    replace: "{{ mdm_db_system_user }}"
+
+- name: Update DB2 System Password
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmdbpasswordsystemdb2\$\$'
+    replace: "{{ mdm_db_system_password }}"
+
+- name: Update DB2 System Schema
+  when: mdm_database == "db2"
+  replace:
+    path: "{{ mdm_config_location }}/datasources.xml"
+    regexp:  '\$\$mdmschemaofsystemobjectsdb2\$\$'
+    replace: "{{ mdm_db_system_schema }}"

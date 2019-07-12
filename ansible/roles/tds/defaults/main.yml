@@ -1,0 +1,83 @@
+---
+# Important : every variables need to have a value
+
+#############################################
+# Read only variables
+#############################################
+# Do not modify this part
+app_name: "Talend Data Stewardship"
+rpm_name: "talend-tds"
+rpm_folder: "tds"
+app_service: "talend-tds"
+
+#############################################
+# First install only variables
+#############################################
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#####
+# Tomcat-selection variables
+#####
+# This var shows whether we should use talend-tomcat in 'shared' mode (default settings)
+app_use_talend_tomcat: "yes" # allowed values are "yes" or "no"
+app_tomcat_port: 19999 # app_tomcat_port is used only if app_use_talend_tomcat == "yes" or when app_tomcat_setup == "yes"
+
+# The following variables will be taken in account only if app_use_talend_tomcat == "no"
+app_tomcat_home: "/opt/tomcat" # home folder for customer's tomcat
+app_tomcat_mode: "direct" # can be one of "direct" or "shared"
+app_tomcat_setup: "no" # whether to update customer's tomcat configuration (ports)
+
+#############################################
+# First install and upgradable variables
+#############################################
+#####
+# Kafka variables
+#####
+tds_kafka_host: "localhost"
+tds_kafka_port: 9092
+
+#####
+# MongoDB variables
+#####
+tds_mongo_host: "localhost"
+tds_mongo_port: 27017
+tds_mongo_database: "tds"
+tds_mongo_username: "tds-user"
+# Default password is 'duser'. For production environment, it must be changed for security reasons.
+#   Do not forget to change this password in 'mongo' role as well (if embedded MongoDB server will be used)
+tds_mongo_password: "duser"
+
+#####
+# "Talend Identity and Access Management" variables
+#####
+tds_security_scim_url: "http://localhost:9080/scim"
+tds_security_oidc_url: "http://localhost:9080/oidc"
+tds_security_oidc_user_auth_url: "http://localhost:9080/oidc"
+tds_oidc_id: "tl6K6ac7tSE-LQ"
+tds_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
+
+#####
+# "Talend Semantic Dictionary" link
+#####
+# If you have a Talend Semantic Dictionary licence, set to "yes" and tds_semantic_dictionary_url will be used
+tds_use_semantic_dictionary: "yes"
+# Url of Talend Dictionary Service
+tds_semantic_dictionary_url: "http://localhost:8187/"
+
+#####
+# "Talend Data Preparation" link
+#####
+# If you have a Talend Dictionary Perparation (TDP) licence, set this one to "yes" to activate the switch between TDS & TDP
+tds_use_tdp_switch: "yes"
+# TDP Url
+tds_front_tdp_url: "http://localhost:9999" # Change the port value if you change it
+
+#####
+# Misc
+#####
+# Language of TDS. See README for the list of supported values
+tds_language: "en-US"

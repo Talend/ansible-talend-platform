@@ -1,0 +1,20 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend Filebeat"
+rpm_name: "talend-filebeat"
+rpm_folder: "filebeat"
+app_service: "talend-filebeat"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+# Filebeat-related properties
+
+# A list of logstash hosts in form "host1:port1, host2:port2 ..."
+# Currently, only logstash hosts are supported as output (no Elasticsearch hosts)
+
+filebeat_logstash_hosts: "localhost:5044"

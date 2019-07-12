@@ -1,0 +1,10 @@
+---
+
+# Update tcomp server port
+
+- name: Update TCOMP server port
+  replace:
+    path: "/etc/talend/tcomp/application.properties"
+    regexp:  'server\.port=.*'
+    replace: 'server.port={{ tcomp_server_port }}'
+

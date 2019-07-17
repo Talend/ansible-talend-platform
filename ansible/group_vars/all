@@ -38,4 +38,4 @@ rpm_repo_pass: 1234567890ABCDEF
 rpm_repo_url: 'https://{{ rpm_repo_user }}:{{ rpm_repo_pass }}@www.opensourceetl.net/rpms/talend/{{ rpm_version }}/base/x86_64/'
 
 # Default package version (needs to be used in package URL)
-rpm_pkg_version: "{{ rpmversion }}-{{ rpm_build_number }}"
+rpm_pkg_version: "{{ rpm_version }}-{{ rpm_build_number }}"

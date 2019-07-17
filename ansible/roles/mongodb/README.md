@@ -14,7 +14,7 @@ Before running the script, you can change the following variables in the *defaul
 
 | Parameter             | Description         | Value                         |
 | --------------------- | ------------------- | ----------------------------- |
-| `mongodb_pkg_version` | MongoDB RPM version | Example: `{{ rpmversion }}-1` |
+| `mongodb_pkg_version` | MongoDB RPM version | Example: `{{ rpm_version }}-1` |
 
 ### Systemd
 

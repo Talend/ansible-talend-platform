@@ -8,7 +8,7 @@ rpm_folder: "mongodb"
 app_service: "talend-mongodb"
 
 # Variable (RPM version) for MongoDB RPM
-mongodb_pkg_version: "{{ rpmversion }}-1"
+mongodb_pkg_version: "{{ rpm_version }}-1"
 
 #####
 # Installation as systemd service

@@ -7,7 +7,7 @@ rpm_name: "talend-kafka"
 rpm_folder: "kafka"
 
 # Variable (RPM version) for Kafka RPM
-kafka_pkg_version: "{{ rpmversion }}-1"
+kafka_pkg_version: "{{ rpm_version }}-1"
 
 #####
 # Installation as systemd service

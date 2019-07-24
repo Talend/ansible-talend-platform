@@ -14,7 +14,7 @@ Before running the script, you can change the following variables in the *defaul
 
 | Parameter              | Description                                    | Value                                                                                                                                                    |
 | ---------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `amc_install_into_tac` | Whether to install Repository Manager into TAC | Supported values: `yes`  (recommended) or `no`<br/>If set to `no`, Repository Manager will be installed as separate systemd service (`talend-repo-mgr`). |
+| `repomgr_install_into_tac` | Whether to install Repository Manager into TAC | Supported values: `yes`  (recommended) or `no`<br/>If set to `no`, Repository Manager will be installed as separate systemd service (`talend-repo-mgr`). |
 
 ### Tomcat
 
@@ -34,13 +34,14 @@ Before running the script, you can change the following variables in the *defaul
 
 ### Database configuration updates
 
-  To re-configure the Repository Manager database on-the-fly, the following parameters can be used:
-  | Parameter                   | Description                    | Value                                                                                               |
-  | --------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------- |
-  | `repomgr_database_url`      | URL of database in JDBC format | Default value (MySQL on `localhost`): `jdbc:mysql://localhost:3306/repository_manager?useSSL=false` |
-  | `repomgr_database_driver`   | Database driver                | Default value (MySQL): `com.mysql.cj.jdbc.Driver`                                                   |
-  | `repomgr_database_username` | User name of database user     | Default value: `root`                                                                               |
-  | `repomgr_database_password` | Password of database user      | Default value: `root`                                                                               |
+To re-configure the Repository Manager database on-the-fly, the following parameters can be used:
+
+| Parameter                   | Description                    | Value                                                                                               |
+| --------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------- |
+| `repomgr_database_url`      | URL of database in JDBC format | Default value (MySQL on `localhost`): `jdbc:mysql://localhost:3306/repository_manager?useSSL=false` |
+| `repomgr_database_driver`   | Database driver                | Default value (MySQL): `com.mysql.cj.jdbc.Driver`                                                   |
+| `repomgr_database_username` | User name of database user     | Default value: `root`                                                                               |
+| `repomgr_database_password` | Password of database user      | Default value: `root`                                                                               |
 
 ### Database configuration page password in web app
 

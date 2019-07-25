@@ -14,7 +14,7 @@
 # Extra check: if repomgr_install_into_tac == 'yes', then TAC must be installed at that moment
 #
 - name: Check talend-tac status in case of using RepoManager deployed to TAC
-  command: "set -o pipefail | rpm -qa talend-tac"
+  shell: "set -o pipefail | rpm -qa talend-tac"
   args:
     warn: no
   when: repomgr_install_into_tac == "yes"

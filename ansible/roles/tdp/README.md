@@ -136,14 +136,15 @@ The live dataset feature allows creating a job in Talend Studio, executing it on
 
 ### Data Quality settings
 
-| Parameter                                      | Description                                          | Value                                                              |
-| ---------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------ |
-| `tdp_dataquality_server_url`                   | URL of Data Quality server                           | Default value: `http://localhost:8187/`                            |
-| `tdp_dataquality_indexes_file_location`        | Path to index storage                                | Default value: `data/data-quality/org.talend.dataquality.semantic` |
-| `tdp_dataquality_semantic_list_enable`         | Whether to display semantic types within dataprep UI | Possible values: `true` (default) or `false`                       |
-| `tdp_dataquality_semantic_update_enable`       | Whether to receive data quality updates              | Possible values: `true` (default) or `false`                       |
-| `tdp_dataquality_event_store`                  | *Do not modify*                                      | Only possible value: `mongodb`                                     |
-| `tdp_spring_cloud_stream_kafka_binder_brokers` | Host of Kafka server                                 | Default value: `localhost`                                         |
+| Parameter                                      | Description                                            | Value                                                              |
+| ---------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------ |
+| `tdp_dataquality_server_url`                   | URL of Data Quality server                             | Default value: `http://localhost:8187/`                            |
+| `tdp_dataquality_indexes_file_location`        | Path to index storage                                  | Default value: `data/data-quality/org.talend.dataquality.semantic` |
+| `tdp_dataquality_semantic_list_enable`         | Whether to display semantic types within dataprep UI   | Possible values: `true` (default) or `false`                       |
+| `tdp_dataquality_semantic_update_enable`       | Whether to receive data quality updates (for 7.1 only) | Possible values: `true` (default) or `false`                       |
+| `tdp_tsd_consumer_enabled`                     | Whether to receive data quality updates (for 7.2 only) | Possible values: `true` or `false` (default)                       |
+| `tdp_dataquality_event_store`                  | *Do not modify*                                        | Only possible value: `mongodb`                                     |
+| `tdp_spring_cloud_stream_kafka_binder_brokers` | Host of Kafka server                                   | Default value: `localhost`                                         |
 
 ### Streams Runner configuration parameters
 

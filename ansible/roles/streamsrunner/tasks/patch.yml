@@ -1,0 +1,37 @@
+---
+# This script is used to patch existing issues in StreamsRunner RPM, when installed
+#   into non-default folder.
+# There are 2 issues:
+#   1. 'config' folder is empty - it must point on /etc/talend/streamsrunner
+#   2. systemd descriptor contains hard-coded /opt/talend
+
+- name: Get status of 'conf' folder
+  stat:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/conf"
+  register: str_conf_folder_stat
+
+- name: Remove 'conf' folder
+  file:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/conf"
+    state: absent
+  when: str_conf_folder_stat.stat.exists and str_conf_folder_stat.stat.isdir
+
+- name: Recreate 'conf' as link
+  file:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/conf"
+    src: "/etc/talend/{{ rpm_folder }}"
+    state: link
+  when: str_conf_folder_stat.stat.exists and str_conf_folder_stat.stat.isdir
+
+# Update systemd descriptor
+- name: Update systemd descriptor file for StreamsRunner
+  replace:
+    path: "/etc/systemd/system/{{ app_service }}.service"
+    regexp: "/opt/talend/"
+    replace: "{{ install_prefix }}/"
+
+- name: Reload changes in systemd descriptor file
+  shell: "systemctl daemon-reload"
+  args:
+    warn: no
+  changed_when: false

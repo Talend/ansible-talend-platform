@@ -19,6 +19,10 @@
 - include_tasks: ../../common/tasks/install_rpm.yml
   when: install_prefix != '/opt/talend'
 
+# Patch installation if installing into non-default folder
+- include_tasks: patch.yml
+  when: install_prefix != '/opt/talend'
+
 # Update configuration
 - import_tasks: update_config_installed.yml
 

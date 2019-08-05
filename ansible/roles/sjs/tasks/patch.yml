@@ -1,0 +1,37 @@
+---
+# This script is used to patch existing issues in SJS RPM, when installed
+#   into non-default folder.
+# There are 2 issues:
+#   1. 'settings.sh' file is absent - it must point on /etc/talend/sjs/settings.sh
+#   2. systemd descriptor contains hard-coded /opt/talend
+
+- name: Get status of 'settings.sh' file
+  stat:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/settings.sh"
+  register: sjs_config_file_stat
+
+- name: Remove 'settings.sh' file
+  file:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/settings.sh"
+    state: absent
+  when: sjs_config_file_stat.stat.exists and not sjs_config_file_stat.stat.islink
+
+- name: Recreate 'settings.sh' as link
+  file:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/settings.sh"
+    src: "/etc/talend/{{ rpm_folder }}/settings.sh"
+    state: link
+  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islink
+
+# Update systemd descriptor
+- name: Update systemd descriptor file for SJS
+  replace:
+    path: "/etc/systemd/system/{{ app_service }}.service"
+    regexp: "/opt/talend/"
+    replace: "{{ install_prefix }}/"
+
+- name: Reload changes in systemd descriptor file
+  shell: "systemctl daemon-reload"
+  args:
+    warn: no
+  changed_when: false

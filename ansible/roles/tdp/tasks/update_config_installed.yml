@@ -281,7 +281,7 @@
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "tsd.consumer.enabled=.*"
-      replace: "tsd.consumer.enabled={{ tdp_dataquality_semantic_update_enable }}"
+      replace: "tsd.consumer.enabled={{ tdp_tsd_consumer_enabled }}"
 
 - name: Modify Data Preparation dataquality event store
   replace:

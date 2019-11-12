@@ -4,6 +4,7 @@
 # There are 2 issues:
 #   1. 'config' folder is empty - it must point on /etc/talend/tdp
 #   2. systemd descriptor contains hard-coded /opt/talend
+# As these issues are fixed in 7.3.1, we will apply this patch only if old configuration is detected (7.1.1/7.2.1)
 
 - name: Get status of 'config' folder
   stat:
@@ -25,12 +26,14 @@
 
 # Update systemd descriptor
 - name: Update systemd descriptor file for TDP
+  when: tdp_config_folder_stat.stat.exists and tdp_config_folder_stat.stat.isdir
   replace:
     path: "/etc/systemd/system/{{ app_service }}.service"
     regexp: "/opt/talend/"
     replace: "{{ install_prefix }}/"
 
 - name: Reload changes in systemd descriptor file
+  when: tdp_config_folder_stat.stat.exists and tdp_config_folder_stat.stat.isdir
   shell: "systemctl daemon-reload"
   args:
     warn: no

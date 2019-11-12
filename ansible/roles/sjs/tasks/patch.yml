@@ -25,12 +25,14 @@
 
 # Update systemd descriptor
 - name: Update systemd descriptor file for SJS
+  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islink
   replace:
     path: "/etc/systemd/system/{{ app_service }}.service"
     regexp: "/opt/talend/"
     replace: "{{ install_prefix }}/"
 
 - name: Reload changes in systemd descriptor file
+  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islink
   shell: "systemctl daemon-reload"
   args:
     warn: no

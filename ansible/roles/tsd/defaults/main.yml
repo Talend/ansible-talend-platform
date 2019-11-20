@@ -64,3 +64,8 @@ tsd_security_scim_url: "http://localhost:9080/scim"
 tsd_security_oidc_url: "http://localhost:9080/oidc"
 tsd_oidc_id: "tl6K6ac7tSE-LQ"
 tsd_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
+
+#####
+# Hybrid mode support
+#####
+tsd_hybrid_mode: "no"       # Can be "yes" or "no"

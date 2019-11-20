@@ -780,3 +780,219 @@
       path: "/etc/talend/tdp/streams_tuning.properties"
       regexp: "spark.executor.cores=.*"
       replace: "spark.executor.cores={{ tdp_spark_executor_cores }}"
+
+#
+# Hybrid actions - activation
+#
+- name: Activate Hybrid mode (1)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.ip='
+      line: "#iam.ip={{ tdp_iam_ip }}"
+
+- name: Activate Hybrid mode (2)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.uri=http://'
+      line: "#iam.uri=http://${iam.ip}:9080"
+
+- name: Activate Hybrid mode (3)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.api\.uri=\$'
+      line: "#iam.api.uri=${iam.uri}"
+
+- name: Activate Hybrid mode (4)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.license\.url='
+      line: "#iam.license.url=${iam.uri}/oidc/api"
+
+- name: Activate Hybrid mode (5)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'security\.oidc\.client\.keyUri='
+      line: "#security.oidc.client.keyUri=${iam.uri}/oidc/jwk/keys"
+
+- name: Activate Hybrid mode (6)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'audit\.log\.enabled='
+      line: "audit.log.enabled=false"
+
+- name: Activate Hybrid mode (7)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'dataprep\.hybrid\.enabled='
+      line: "dataprep.hybrid.enabled=true"
+
+- name: Activate Hybrid mode (8)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'client\.session-management\.enabled='
+      line: "client.session-management.enabled=${dataprep.hybrid.enabled}"
+
+- name: Activate Hybrid mode (9)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.uri=https://'
+      line: "iam.uri=https://iam.{{ tdp_hybrid_region }}.cloud.talend.com"
+
+- name: Activate Hybrid mode (10)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.api\.uri=https://'
+      line: "iam.api.uri=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1"
+
+- name: Activate Hybrid mode (11)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iamproxy\.service\.url='
+      line: "iamproxy.service.url=${iam.api.uri}/iam"
+
+- name: Activate Hybrid mode (12)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'server\.portal\.url='
+      line: "server.portal.url=https://portal.{{ tdp_hybrid_region }}.cloud.talend.com"
+
+- name: Activate Hybrid mode (13)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'external\.user\.preferences\.url='
+      line: "external.user.preferences.url=${server.portal.url}/user/aboutme"
+
+- name: Activate Hybrid mode (14)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'security\.oauth2\.resource\.jwt\.key-uri='
+      line: "security.oauth2.resource.jwt.key-uri=${iam.uri}/oidc/jwk/keys"
+
+- name: Activate Hybrid mode (15)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'security\.oidc\.client\.sessionManagementUri='
+      line: "security.oidc.client.sessionManagementUri=${iam.uri}/oidc/session-management"
+
+#
+# Hybrid actions - de-activation
+#
+- name: Deactivate Hybrid mode (1)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.ip='
+      line: "iam.ip={{ tdp_iam_ip }}"
+
+- name: Deactivate Hybrid mode (2)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.uri=http://'
+      line: "iam.uri=http://${iam.ip}:9080"
+
+- name: Deactivate Hybrid mode (3)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.api\.uri=\$'
+      line: "iam.api.uri=${iam.uri}"
+
+- name: Deactivate Hybrid mode (4)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.license\.url='
+      line: "iam.license.url=${iam.uri}/oidc/api"
+
+- name: Deactivate Hybrid mode (5)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'security\.oidc\.client\.keyUri='
+      line: "security.oidc.client.keyUri=${iam.uri}/oidc/jwk/keys"
+
+- name: Deactivate Hybrid mode (6)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'audit\.log\.enabled='
+      line: "audit.log.enabled={{ tdp_audit_log_enabled }}"
+
+- name: Deactivate Hybrid mode (7)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'dataprep\.hybrid\.enabled='
+      line: "#dataprep.hybrid.enabled=true"
+
+- name: Deactivate Hybrid mode (8)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'client\.session-management\.enabled='
+      line: "#client.session-management.enabled=${dataprep.hybrid.enabled}"
+
+- name: Deactivate Hybrid mode (9)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.uri=https://'
+      line: "#iam.uri=https://iam.{{ tdp_hybrid_region }}.cloud.talend.com"
+
+- name: Deactivate Hybrid mode (10)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iam\.api\.uri=https://'
+      line: "#iam.api.uri=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1"
+
+- name: Deactivate Hybrid mode (11)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'iamproxy\.service\.url='
+      line: "#iamproxy.service.url=${iam.api.uri}/iam"
+
+- name: Deactivate Hybrid mode (12)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'server\.portal\.url='
+      line: "#server.portal.url=https://portal.{{ tdp_hybrid_region }}.cloud.talend.com"
+
+- name: Deactivate Hybrid mode (13)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'external\.user\.preferences\.url='
+      line: "#external.user.preferences.url=${server.portal.url}/user/aboutme"
+
+- name: Deactivate Hybrid mode (14)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'security\.oauth2\.resource\.jwt\.key-uri='
+      line: "#security.oauth2.resource.jwt.key-uri=${iam.uri}/oidc/jwk/keys"
+
+- name: Deactivate Hybrid mode (15)
+  when: tdp_hybrid_mode != 'yes' and rpm_base_version >= 7.3
+  lineinfile:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'security\.oidc\.client\.sessionManagementUri='
+      line: "#security.oidc.client.sessionManagementUri=${iam.uri}/oidc/session-management"

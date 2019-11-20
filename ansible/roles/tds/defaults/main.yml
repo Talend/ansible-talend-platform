@@ -81,3 +81,11 @@ tds_front_tdp_url: "http://localhost:9999" # Change the port value if you change
 #####
 # Language of TDS. See README for the list of supported values
 tds_language: "en-US"
+
+#####
+# Hybrid mode 
+#####
+tds_hybrid_mode:        "no"              # Can be "yes" or "no"
+tds_hybrid_region:      "us"              # Can be one of "us", "eu" or "ap"
+tds_hybrid_data_center:     "us-east-1"   # Data center, see AWS docs
+tds_hybrid_cloud_provider:  "AWS"         # Can be "AWS" or "azure"

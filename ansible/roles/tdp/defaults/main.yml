@@ -148,3 +148,7 @@ tdp_appender_http_async: "true"
 tdp_spark_executor_memory: "3g"
 tdp_spark_executor_instances: "10"
 tdp_spark_executor_cores: "4"
+
+# Hybrid mode
+tdp_hybrid_mode:   "no"     # Can be "yes" or "no"
+tdp_hybrid_region: "us"     # Can be one of "us", "eu" or "ap"

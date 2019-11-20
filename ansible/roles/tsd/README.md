@@ -34,6 +34,7 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tsd_security_oidc_url` | No                 | URL to Talend Identity and Access Management                                                                               | `http://localhost:9080/oidc` |
 | `tsd_oidc_id`           | No                 | Talend Identity and Access Management OIDC client identifier                                                               | `tl6K6ac7tSE-LQ`             |
 | `tsd_oidc_secret`       | No                 | Talend Identity and Access Management OIDC password                                                                        | `sLbyFKTzM8F0dTL10mHd3A`     |
+| `tsd_hybrid_mode`       | No                 | Installation in Hybrid mode (see docs for details), available values are `yes` or `no`                                        | `no` |
 
 ## Dependencies
 

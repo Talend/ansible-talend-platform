@@ -38,6 +38,10 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tds_use_tdp_switch`              | No                 | Enable Talend Data Preparation app switch: `yes` (only if you have a license) or `no`                                      | no                           |
 | `tds_front_tdp_url`               | No                 | URL of Talend Data Preparation                                                                                             | `http://localhost:9999`      |
 | `tds_language`                    | No                 | Set the language. Supported values: `en-US` or `fr-FR` or `ja-JP` or `zh-CN`                                               | `en-US`                      |
+| `tds_hybrid_mode`                 | No                 | Installation of TDS in Hybrid mode. Available values are `yes` and `no`                                                    | `no` |
+| `tds_hybrid_region`               | No                 | Hybrid region location, can be one of `us`, `eu` or `ap`                                                                   | `us` |
+| `tds_hybrid_data_center`          | No                 | Hybrid data center to use, provider-specific notation (for AWS, can be `us-east-1`, `eu-central-1` or `ap-south-1`)        | `us-east-1` |
+| `tds_hybrid_cloud_provider`       | No                 | The cloud provider for Hybrid mode, can be either `AWS` or `azure`                                                         | `AWS` |
 
 ## Dependencies
 

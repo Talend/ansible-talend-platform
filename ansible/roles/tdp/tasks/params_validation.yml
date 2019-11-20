@@ -178,3 +178,18 @@
   fail:
     msg: Wrong value for parameter "tdp_spark_executor_cores", must be an integer
   when: tdp_spark_executor_cores|int < 1
+
+- name: Show error about wrong value for parameter tdp_hybrid_mode
+  fail:
+    msg: Wrong value for parameter "tdp_hybrid_mode", must be "yes" or "no"
+  when: tdp_hybrid_mode != "yes" and tdp_hybrid_mode != "no"
+
+- name: Show error about wrong value for parameter tdp_hybrid_mode (2)
+  fail:
+    msg: Wrong value for parameter "tdp_hybrid_mode", it can be set to "yes" only for version 7.3 and above
+  when: tdp_hybrid_mode == "yes" and rpm_base_version < 7.3
+
+- name: Show error about wrong value for parameter tdp_hybrid_region
+  fail:
+    msg: Wrong value for parameter "tdp_hybrid_region", must be one of "us", "eu" or "ap"
+  when: tdp_hybrid_region != "us" and tdp_hybrid_region != "eu" and tdp_hybrid_region != "ap"

@@ -32,6 +32,16 @@ The following options increase network throughput and are activated by default:
 | `tdp_server_compression_enabled`    | Whether to enable compression of responses                              | Possible values: `true` (default) or `false` |
 | `tdp_server_compression_mime_types` | Comma-separated mime-types which are targets for compression operations | Default value: `text/plain,text/html,text/css,application/json,application/x-javascript,text/xml,application/xml,application/xml+rss,text/javascript,application/javascript,text/x-js` |
 
+### Hybrid configuration
+
+Talend Cloud lets you install and host Talend Data Preparation application on premises. This setup allows you to store sensitive data behind your firewall, while still managing your users and the rest of your platform from Talend Cloud.
+
+| Parameter           | Description                            | Value               |
+| ------------------- | -------------------------------------- | ------------------- |
+| `tdp_hybrid_mode`   | Hybrid mode (`yes` or `no`)            | Default value: `no` |
+| `tdp_hybrid_region` | The region to use (`us`, `eu` or `ap`) | Default value: `us` |
+
+
 ### IAM configuration
 
 | Parameter    | Description                   | Value                      |

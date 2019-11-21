@@ -22,6 +22,14 @@
     - { name: 'tsd_oidc_id', value: "{{ tsd_oidc_id }}"}
     - { name: 'tsd_oidc_secret', value: "{{ tsd_oidc_secret }}"}
 
+# verify flag yes/no have a correct value and are non empty
+- name: Show error about wrong value for parameter {{ item.name }}
+  when: item.value != "no" and item.value != "yes"
+  fail:
+    msg: "Wrong value for parameter {{ item.name }}, must be 'yes' or 'no'"
+  with_items:
+    - { name: 'tsd_hybrid_mode', value: "{{ tsd_hybrid_mode }}"}
+
 # verify the port parameters (integer and correct port number)
 - name: Show error about wrong value for parameter {{ item.name }}, not a number
   when: item.value|int == 0

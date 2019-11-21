@@ -196,3 +196,119 @@
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.monitoring\.secret=.*'
     replace: 'oidc.monitoring.secret=sLbyFKTzM8F0dTL10mHd3A'
+
+
+# Hybrid stuff - activation
+- name: Activate hybrid mode (1)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: "security.oauth2.resource.jwt.key-uri="
+    line: "security.oauth2.resource.jwt.key-uri=${security.oidc.client.keyUri}"
+
+- name: Activate hybrid mode (2)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'spring\.profiles\.active='
+    line: "spring.profiles.active=hybrid"
+
+- name: Activate hybrid mode (3)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'iam\.server\.url='
+    line: "iam.server.url=https://api.{{ tds_hybrid_region }}.cloud.talend.com/v1/iam"
+
+- name: Activate hybrid mode (4)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.portalUrl='
+    line: "tds.front.portalUrl=https://portal.{{ tds_hybrid_region }}.cloud.talend.com"
+
+- name: Activate hybrid mode (5)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.pendoDataCenter='
+    line: "tds.front.pendoDataCenter={{ tds_hybrid_data_center }}"
+
+- name: Activate hybrid mode (6)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.pendoCloudProvider='
+    line: "tds.front.pendoCloudProvider={{ tds_hybrid_cloud_provider }}"
+
+- name: Activate hybrid mode (7)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.deploymentMode='
+    line: "tds.front.deploymentMode=HYBRID"
+
+- name: Activate hybrid mode (8)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'audit\.log\.enabled='
+    line: "audit.log.enabled=false"
+
+
+# Hybrid stuff - Deactivation
+- name: Deactivate hybrid mode (1)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: "security.oauth2.resource.jwt.key-uri="
+    state: absent
+
+- name: Deactivate hybrid mode (2)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'spring\.profiles\.active='
+    state: absent
+
+- name: Deactivate hybrid mode (3)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'iam\.server\.url='
+    state: absent
+
+- name: Deactivate hybrid mode (4)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds.front.portalUrl='
+    state: absent
+
+- name: Deactivate hybrid mode (5)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.pendoDataCenter='
+    state: absent
+
+- name: Deactivate hybrid mode (6)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.pendoCloudProvider='
+    state: absent
+
+- name: Deactivate hybrid mode (7)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.deploymentMode='
+    line: "tds.front.deploymentMode=ON_PREMISE"
+
+- name: Deactivate hybrid mode (8)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'audit\.log\.enabled='
+    line: "audit.log.enabled=true"

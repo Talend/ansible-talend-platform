@@ -41,6 +41,13 @@ Talend Cloud lets you install and host Talend Data Preparation application on pr
 | `tdp_hybrid_mode`   | Hybrid mode (`yes` or `no`)            | Default value: `no` |
 | `tdp_hybrid_region` | The region to use (`us`, `eu` or `ap`) | Default value: `us` |
 
+For hybrid mode, it is important to set up also these 2 variables:
+
+| Parameter                                 | Description                                                               |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `tdp_security_oauth2_client_clientId`     | Client ID for your account (retrieved from Talend Management Console)     |
+| `tdp_security_oauth2_client_clientSecret` | Client Secret for your account (retrieved from Talend Management Console) |
+
 
 ### IAM configuration
 

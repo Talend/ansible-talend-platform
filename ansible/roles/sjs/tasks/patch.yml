@@ -14,7 +14,7 @@
   file:
     path: "{{ install_prefix }}/{{ rpm_folder }}/bin/settings.sh"
     state: absent
-  when: sjs_config_file_stat.stat.exists and not sjs_config_file_stat.stat.islink
+  when: sjs_config_file_stat.stat.exists and not sjs_config_file_stat.stat.islnk
 
 - name: Recreate 'settings.sh' as link
   file:

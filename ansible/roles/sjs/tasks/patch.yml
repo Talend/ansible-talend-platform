@@ -14,23 +14,25 @@
   file:
     path: "{{ install_prefix }}/{{ rpm_folder }}/bin/settings.sh"
     state: absent
-  when: sjs_config_file_stat.stat.exists and not sjs_config_file_stat.stat.islink
+  when: sjs_config_file_stat.stat.exists and not sjs_config_file_stat.stat.islnk
 
 - name: Recreate 'settings.sh' as link
   file:
     path: "{{ install_prefix }}/{{ rpm_folder }}/bin/settings.sh"
     src: "/etc/talend/{{ rpm_folder }}/settings.sh"
     state: link
-  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islink
+  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islnk
 
 # Update systemd descriptor
 - name: Update systemd descriptor file for SJS
+  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islnk
   replace:
     path: "/etc/systemd/system/{{ app_service }}.service"
     regexp: "/opt/talend/"
     replace: "{{ install_prefix }}/"
 
 - name: Reload changes in systemd descriptor file
+  when: not sjs_config_file_stat.stat.exists or not sjs_config_file_stat.stat.islnk
   shell: "systemctl daemon-reload"
   args:
     warn: no

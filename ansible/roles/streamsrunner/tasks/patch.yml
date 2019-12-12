@@ -25,12 +25,14 @@
 
 # Update systemd descriptor
 - name: Update systemd descriptor file for StreamsRunner
+  when: str_conf_folder_stat.stat.exists and str_conf_folder_stat.stat.isdir
   replace:
     path: "/etc/systemd/system/{{ app_service }}.service"
     regexp: "/opt/talend/"
     replace: "{{ install_prefix }}/"
 
 - name: Reload changes in systemd descriptor file
+  when: str_conf_folder_stat.stat.exists and str_conf_folder_stat.stat.isdir
   shell: "systemctl daemon-reload"
   args:
     warn: no

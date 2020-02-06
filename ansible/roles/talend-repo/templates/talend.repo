@@ -1,5 +1,5 @@
-[talend-7.1-base]
-name=Talend 7.1
+[talend-{{ rpm_base_version }}-base]
+name=Talend {{ rpm_base_version }}
 baseurl='{{ rpm_repo_url }}'
 enabled=1
 gpgcheck=1

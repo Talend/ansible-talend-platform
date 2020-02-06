@@ -284,8 +284,8 @@
       regexp: "dataquality.semantic.update.enable=.*"
       replace: "dataquality.semantic.update.enable={{ tdp_dataquality_semantic_update_enable }}"
 
-- name: Modify Data Preparation dataquality semantic update enable for 7.2
-  when: rpm_base_version == 7.2
+- name: Modify Data Preparation dataquality semantic update enable for 7.2 / 7.3
+  when: rpm_base_version != 7.1
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "tsd.consumer.enabled=.*"

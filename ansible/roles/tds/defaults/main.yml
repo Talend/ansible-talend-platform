@@ -52,11 +52,15 @@ tds_mongo_username: "tds-user"
 tds_mongo_password: "duser"
 
 #####
-# "Talend Identity and Access Management" variables
+# "Talend Identity and Access Management" variables - only used for non-hybrid mode
 #####
 tds_security_scim_url: "http://localhost:9080/scim"
 tds_security_oidc_url: "http://localhost:9080/oidc"
 tds_security_oidc_user_auth_url: "http://localhost:9080/oidc"
+
+#
+# OIDC_ID and Secret, used in both Hybrid and non-hybrid modes
+#
 tds_oidc_id: "tl6K6ac7tSE-LQ"
 tds_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 

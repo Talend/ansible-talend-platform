@@ -35,6 +35,7 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tsd_oidc_id`           | No                 | Talend Identity and Access Management OIDC client identifier                                                               | `tl6K6ac7tSE-LQ`             |
 | `tsd_oidc_secret`       | No                 | Talend Identity and Access Management OIDC password                                                                        | `sLbyFKTzM8F0dTL10mHd3A`     |
 | `tsd_hybrid_mode`       | No                 | Installation in Hybrid mode (see docs for details), available values are `yes` or `no`                                     | `no`                         |
+| `tsd_hybrid_region`     | No                 | For Hybrid mode, specifies a region to use, available values are `us`, `eu` or `ap`                                        | `us`                         |
 
 ## Dependencies
 

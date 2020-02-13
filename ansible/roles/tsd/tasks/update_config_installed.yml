@@ -79,18 +79,34 @@
     replace: 'dq.mongo.password={{ tsd_mongo_password }}'
 
 
-# Security / authent
-- name: Update scim url (IAM)
+# Security / authentication
+- name: Update scim url (IAM) (non-hybrid)
+  when: tsd_hybrid_mode == 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^scim\.url=.*'
     replace: 'scim.url={{ tsd_security_scim_url }}'
     
-- name: Update oidc url
+- name: Update oidc url (non-hybrid)
+  when: tsd_hybrid_mode == 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.url=.*'
     replace: 'oidc.url={{ tsd_security_oidc_url }}'
+    
+- name: Update scim url (IAM) (hybrid)
+  when: tsd_hybrid_mode != 'no'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^scim\.url=.*'
+    replace: 'scim.url=https://api.{{ tsd_hybrid_region }}.cloud.talend.com/v1/scim'
+    
+- name: Update oidc url (hybrid)
+  when: tsd_hybrid_mode != 'no'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^oidc\.url=.*'
+    replace: 'oidc.url=https://iam.{{ tsd_hybrid_region }}.cloud.talend.com/oidc'
     
 - name: Update oidc gateway ID
   replace:

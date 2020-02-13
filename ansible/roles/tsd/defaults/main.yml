@@ -58,14 +58,20 @@ tsd_mongo_username: "tsd-user"
 tsd_mongo_password: "duser"
 
 #####
-# "Talend Identity and Access Management" variables
+# "Talend Identity and Access Management" variables - used only in non-hybrid mode
 #####
 tsd_security_scim_url: "http://localhost:9080/scim"
 tsd_security_oidc_url: "http://localhost:9080/oidc"
+
+#
+# OIDC_ID and Secret, used in both Hybrid and non-hybrid modes
+# Normally they must match with TDS OIDC vars
+#
 tsd_oidc_id: "tl6K6ac7tSE-LQ"
 tsd_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 
 #####
 # Hybrid mode support
 #####
-tsd_hybrid_mode: "no"       # Can be "yes" or "no"
+tsd_hybrid_mode:   "no"   # Can be "yes" or "no"
+tsd_hybrid_region: "us"   # Can be one of "us", "eu" or "ap"

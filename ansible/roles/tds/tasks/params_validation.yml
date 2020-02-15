@@ -25,16 +25,28 @@
 
 
 # verify flag yes/no have a correct value and are non empty
-- name: Show error about wrong value for parameter tds_use_semantic_dictionary
+- name: Show error about wrong value for parameter {{ item.name }}
+  when: item.value != "no" and item.value != "yes"
   fail:
-    msg: Wrong value for parameter "tds_use_semantic_dictionary", must be 'yes' or 'no'
-  when: tds_use_semantic_dictionary != "no" and tds_use_semantic_dictionary != "yes"
+    msg: "Wrong value for parameter {{ item.name }}, must be 'yes' or 'no'"
+  with_items:
+    - { name: 'tds_use_semantic_dictionary', value: "{{ tds_use_semantic_dictionary }}"}
+    - { name: 'tds_hybrid_mode',             value: "{{ tds_hybrid_mode }}"}
 
 - name: Show error about wrong value for parameter tds_use_tdp_switch
   fail:
     msg: Wrong value for parameter "tds_use_tdp_switch", must be 'yes' or 'no'
   when: tds_use_tdp_switch != "no" and tds_use_tdp_switch != "yes"
 
+- name: Show error about wrong value for parameter tds_hybrid_region
+  fail:
+    msg: Wrong value for parameter "tds_hybrid_region", must be one of 'us', 'eu' or 'ap'
+  when: tds_hybrid_region != "us" and tds_hybrid_region != "eu" and tds_hybrid_region != "ap"
+
+- name: Show error about wrong value for parameter tds_hybrid_cloud_provider
+  fail:
+    msg: Wrong value for parameter "tds_hybrid_cloud_provider", must be 'AWS' or 'azure'
+  when: tds_hybrid_cloud_provider != "AWS" and tds_hybrid_cloud_provider != "azure"
 
 # specific non empty check for tds_front_tdp_url
 - name: Show error that no value is specified for tds_front_tdp_url when tds_use_tdp_switch is 'yes'

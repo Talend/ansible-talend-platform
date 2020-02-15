@@ -79,18 +79,34 @@
     replace: 'dq.mongo.password={{ tsd_mongo_password }}'
 
 
-# Security / authent
-- name: Update scim url (IAM)
+# Security / authentication
+- name: Update scim url (IAM) (non-hybrid)
+  when: tsd_hybrid_mode == 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^scim\.url=.*'
     replace: 'scim.url={{ tsd_security_scim_url }}'
     
-- name: Update oidc url
+- name: Update oidc url (non-hybrid)
+  when: tsd_hybrid_mode == 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.url=.*'
     replace: 'oidc.url={{ tsd_security_oidc_url }}'
+    
+- name: Update scim url (IAM) (hybrid)
+  when: tsd_hybrid_mode != 'no'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^scim\.url=.*'
+    replace: 'scim.url=https://api.{{ tsd_hybrid_region }}.cloud.talend.com/v1/scim'
+    
+- name: Update oidc url (hybrid)
+  when: tsd_hybrid_mode != 'no'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '^oidc\.url=.*'
+    replace: 'oidc.url=https://iam.{{ tsd_hybrid_region }}.cloud.talend.com/oidc'
     
 - name: Update oidc gateway ID
   replace:
@@ -103,4 +119,50 @@
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.semanticservice\.secret=.*'
     replace: 'oidc.semanticservice.secret={{ tsd_oidc_secret }}'
-    
+
+
+# Hybrid mode activation
+- name: Activate hybrid mode (1)
+  when: tsd_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tsd_config_location }}"
+    regexp: "security.oauth2.resource.jwt.key-uri="
+    line: "security.oauth2.resource.jwt.key-uri=${security.oidc.client.keyUri}"
+
+- name: Activate hybrid mode (2)
+  when: tsd_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tsd_config_location }}"
+    regexp: 'spring\.profiles\.active='
+    line: "spring.profiles.active=hybrid"
+
+- name: Activate hybrid mode (3)
+  when: tsd_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tsd_config_location }}"
+    regexp: 'audit\.log\.enabled='
+    line: "audit.log.enabled=false"
+
+
+# Hybrid mode de-activation
+- name: Deactivate hybrid mode (1)
+  when: tsd_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tsd_config_location }}"
+    regexp: "security.oauth2.resource.jwt.key-uri="
+    state: absent
+
+- name: Deactivate hybrid mode (2)
+  when: tsd_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tsd_config_location }}"
+    regexp: 'spring\.profiles\.active='
+    state: absent
+
+- name: Deactivate hybrid mode (3)
+  when: tsd_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tsd_config_location }}"
+    regexp: 'audit\.log\.enabled='
+    line: "audit.log.enabled=true"
+

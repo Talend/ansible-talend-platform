@@ -31,13 +31,17 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tds_security_scim_url`           | No                 | URL to Talend Identity and Access Management SCIM                                                                          | `http://localhost:9080/scim` |
 | `tds_security_oidc_url`           | No                 | URL to Talend Identity and Access Management                                                                               | `http://localhost:9080/oidc` |
 | `tds_security_oidc_user_auth_url` | No                 | URL to Talend Identity and Access Management User Authentication                                                           | `http://localhost:9080/oidc` |
-| `tds_oidc_id`                     | No                 | Talend Identity and Access Management OIDC client identifier                                                               | `tl6K6ac7tSE-LQ`             |
-| `tds_oidc_secret`                 | No                 | Talend Identity and Access Management OIDC password                                                                        | `sLbyFKTzM8F0dTL10mHd3A`     |
 | `tds_use_semantic_dictionary`     | No                 | Enable link with Talend Semantic Dictionary: `yes` (only if you have a license) or `no`                                    | `yes`                        |
 | `tds_semantic_dictionary_url`     | No                 | URL of Talend Semantic Dictionary                                                                                          | `http://localhost:8187`      |
 | `tds_use_tdp_switch`              | No                 | Enable Talend Data Preparation app switch: `yes` (only if you have a license) or `no`                                      | no                           |
 | `tds_front_tdp_url`               | No                 | URL of Talend Data Preparation                                                                                             | `http://localhost:9999`      |
 | `tds_language`                    | No                 | Set the language. Supported values: `en-US` or `fr-FR` or `ja-JP` or `zh-CN`                                               | `en-US`                      |
+| `tds_hybrid_mode`                 | No                 | Installation of TDS in Hybrid mode. Available values are `yes` and `no`                                                    | `no`                         |
+| `tds_hybrid_region`               | No                 | Hybrid region location, can be one of `us`, `eu` or `ap`                                                                   | `us`                         |
+| `tds_hybrid_data_center`          | No                 | Hybrid data center to use, provider-specific notation (for AWS, can be `us-east-1`, `eu-central-1` or `ap-south-1`)        | `us-east-1`                  |
+| `tds_hybrid_cloud_provider`       | No                 | The cloud provider for Hybrid mode, can be either `AWS` or `azure`                                                         | `AWS`                        |
+| `tds_oidc_id`                     | No                 | Talend Identity and Access Management OIDC client identifier                                                               | `tl6K6ac7tSE-LQ`             |
+| `tds_oidc_secret`                 | No                 | Talend Identity and Access Management OIDC password                                                                        | `sLbyFKTzM8F0dTL10mHd3A`     |
 
 ## Dependencies
 

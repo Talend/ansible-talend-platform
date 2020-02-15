@@ -22,6 +22,14 @@
     - { name: 'tsd_oidc_id', value: "{{ tsd_oidc_id }}"}
     - { name: 'tsd_oidc_secret', value: "{{ tsd_oidc_secret }}"}
 
+# verify flag yes/no have a correct value and are non empty
+- name: Show error about wrong value for parameter {{ item.name }}
+  when: item.value != "no" and item.value != "yes"
+  fail:
+    msg: "Wrong value for parameter {{ item.name }}, must be 'yes' or 'no'"
+  with_items:
+    - { name: 'tsd_hybrid_mode', value: "{{ tsd_hybrid_mode }}"}
+
 # verify the port parameters (integer and correct port number)
 - name: Show error about wrong value for parameter {{ item.name }}, not a number
   when: item.value|int == 0
@@ -66,3 +74,8 @@
   fail:
     msg: MongoDB is not available ! Check that mongodb role is in the list or mongodb should be installed and available in PATH
   when: not inst_local_mongodb_stat.stat.exists and inst_ext_mongodb_stat.rc != 0
+
+- name: Show error about wrong hybrid region
+  fail:
+    msg: Wrong hybrid region ! Can be one of 'us', 'eu' or 'ap'
+  when: tsd_hybrid_mode == 'yes' and not (tsd_hybrid_region == 'us' or tsd_hybrid_region == 'eu' or tsd_hybrid_region == 'ap')

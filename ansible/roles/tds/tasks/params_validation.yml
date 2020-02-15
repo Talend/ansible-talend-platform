@@ -41,7 +41,7 @@
 - name: Show error about wrong value for parameter tds_hybrid_region
   fail:
     msg: Wrong value for parameter "tds_hybrid_region", must be one of 'us', 'eu' or 'ap'
-  when: tds_hybrid_region != "us" and tds_hybrid_region != "eu" and tds_hybrid_region != "ap" and tds_hybrid_region != "staging"
+  when: tds_hybrid_region != "us" and tds_hybrid_region != "eu" and tds_hybrid_region != "ap"
 
 - name: Show error about wrong value for parameter tds_hybrid_cloud_provider
   fail:

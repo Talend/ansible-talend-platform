@@ -4,6 +4,8 @@ This role installs **Talend Streamsrunner**.
 
 Make sure you have completed the requirements listed in the [Root README](../../../README.md) file.
 
+**Attention:** Talend Streamsrunner RPM requires Java 8 (Oracle Java or OpenJDK). It will **not** work with Java 11.
+
 ## Role variables
 
 Before running the script, you can change the following variables in the *defaults/main.yml* file:

@@ -473,7 +473,7 @@
 
 - name: Modify Data Preparation iam scim url
   when: tdp_hybrid_mode == 'no'
-  lineinfile:
+  replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "iam.scim.url=.*"
       replace: "iam.scim.url={{ tdp_iam_scim_url }}"
@@ -890,7 +890,7 @@
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "iam.scim.url=.*"
-      replace: "https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1/scim/"
+      replace: "iam.scim.url=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1/scim/"
 
 
 #

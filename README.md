@@ -74,6 +74,7 @@ To change the RPM version to install, edit the following parameters:
 
 > **Important**: Always include **java** and then **talend-repo** roles in as first roles in playbooks. If Tomcat is needed for the set of roles that are installed, also include the **tomcat** role between **talend-repo** and the following roles.
 
+
 ## Uninstalling applications
 
 You can remove installed applications using `sudo yum remove <list_of_packages>` manually on every host.
@@ -113,7 +114,13 @@ The following roles install third-party components:
 | [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                              |
 | [nexus](ansible/roles/nexus)     | Nexus Repository Manager                                                                                                                    |
 
+## List of applications compatible with Talend Cloud Hybrid setup
 
+Talend Cloud lets you install and host Talend Data Preparation ([tdp](ansible/roles/tdp)), Talend Data Stewardship ([tds](ansible/roles/tds)) and Talend Dictionary Service [tsd](ansible/roles/tsd) on premises. This setup allows you to store sensitive data behind your firewall, while still managing your users and the rest of your platform from Talend Cloud.
+
+Ansible roles corresponding to these applications are compatible with the Hybrid setup for Talend Cloud. See dedicated hybrid parameters in the details of each role.
+
+To learn more about it, refer to [Talend Help Center](https://help.talend.com/access/sources/content/map?pageid=cloud_hybrid_install&afs:lang=en&EnrichVersion=Cloud).
 
 
 ## List of ports to open

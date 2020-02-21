@@ -10,11 +10,20 @@
   set_fact:
     tds_config_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship.properties"
 
+- name: Set tds_config_audit_location when talend tomcat is used or customer tomcat in shared mode
+  when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
+  set_fact:
+    tds_config_audit_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/audit.properties"
+
 - name: Set tds_config_location when customer tomcat is used in direct mode
   when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
   set_fact:
     tds_config_location: "{{ app_tomcat_home }}/conf/data-stewardship.properties"
 
+- name: Set tds_config_audit_location when customer tomcat is used in direct mode
+  when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
+  set_fact:
+    tds_config_audit_location: "{{ app_tomcat_home }}/conf/audit.properties"
 
 #####
 # Update TDS configuration
@@ -200,6 +209,14 @@
     path: "{{ tds_config_location }}"
     regexp:  '^tds\.locale=.*'
     replace: 'tds.locale={{ tds_language }}'
+
+# Set appender.http.url in audit.properties
+- name: Update appender.http.url
+  when: tds_hybrid_mode == "no" and tds_audit_enabled == "true"
+  replace:
+    path: "{{ tds_config_audit_location }}"
+    regexp:  'appender\.http\.url=.*'
+    replace: 'appender.http.url={{ tds_appender_http_url }}'
 
 # Copy missing 'data-stewardship-monitoring-service-logback.xml' file
 - name: Copy data-stewardship-monitoring-service-logback.xml

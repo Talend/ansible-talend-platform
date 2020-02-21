@@ -52,6 +52,12 @@ tds_mongo_username: "tds-user"
 tds_mongo_password: "duser"
 
 #####
+# Audit log settings (will be used only for non-hybrid mode)
+#####
+tds_audit_enabled:     "true"
+tds_appender_http_url: "http://localhost:8057/"
+
+#####
 # "Talend Identity and Access Management" variables - only used for non-hybrid mode
 #####
 tds_security_scim_url: "http://localhost:9080/scim"

@@ -92,3 +92,9 @@
   fail:
     msg: "{{ app_name }} - wrong value for parameter 'tds_language', must be in the following list : en-US or fr-FR or ja-JP or zh-CN"
   when: tds_language not in ["en-US","fr-FR","ja-JP","zh-CN"]
+
+# Verify audit settings
+- name: Show error about wrong audit setting
+  fail:
+    msg: Wrong value for tds_audit_enabled - can be only 'true' or 'false'
+  when: tds_hybrid_mode == "no" and tds_audit_enabled not in ["true", "false"]

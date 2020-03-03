@@ -6,7 +6,7 @@ This repository contains [Ansible](https://www.ansible.com/) roles and playbooks
 
 Specifically, this repository, through its playblooks:
 
-* Installs Talend 7.1 or 7.2 RPM packages.
+* Installs Talend 7.1, 7.2 or 7.3 RPM packages.
 * Starts services using systemd scripts.
 * Provides configuration options for Talend packages.
 
@@ -37,6 +37,12 @@ To change the RPM version to install, edit the following parameters:
     rpm_base_version: 7.2
     rpm_patch_version: 1
     rpm_build_number: 201906201446
+    ```
+    * 7.3 applications:
+    ```
+    rpm_base_version: 7.3
+    rpm_patch_version: 1
+    rpm_build_number: 202002191130
     ```
 
 2. Configure the playbook you want to install by specifying:

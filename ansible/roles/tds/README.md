@@ -42,8 +42,8 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tds_hybrid_region`               | No                 | Hybrid region location, can be one of `us`, `eu` or `ap`                                                                   | `us`                         |
 | `tds_hybrid_data_center`          | No                 | Hybrid data center to use, provider-specific notation (for AWS, can be `us-east-1`, `eu-central-1` or `ap-south-1`)        | `us-east-1`                  |
 | `tds_hybrid_cloud_provider`       | No                 | The cloud provider for Hybrid mode, can be either `AWS` or `azure`                                                         | `AWS`                        |
-| `tds_oidc_id`                     | No                 | Talend Identity and Access Management OIDC client identifier                                                               | `tl6K6ac7tSE-LQ`             |
-| `tds_oidc_secret`                 | No                 | Talend Identity and Access Management OIDC password                                                                        | `sLbyFKTzM8F0dTL10mHd3A`     |
+| `tds_oidc_id`                     | No                 | Client ID for your account (retrieved from Talend Management Console)                                                      | `tl6K6ac7tSE-LQ`             |
+| `tds_oidc_secret`                 | No                 | Client Secret for your account (retrieved from Talend Management Console)                                                  | `sLbyFKTzM8F0dTL10mHd3A`     |
 
 ## Dependencies
 

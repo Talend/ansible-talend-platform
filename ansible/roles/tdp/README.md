@@ -47,6 +47,7 @@ For hybrid mode, it is important to set up also these 2 variables:
 | ----------------------------------------- | ------------------------------------------------------------------------- |
 | `tdp_security_oauth2_client_clientId`     | Client ID for your account (retrieved from Talend Management Console)     |
 | `tdp_security_oauth2_client_clientSecret` | Client Secret for your account (retrieved from Talend Management Console) |
+Note: in non-hybrid mode, these two variables should be set to Talend IAM OIDC client identifier and client secret.
 
 
 ### IAM configuration

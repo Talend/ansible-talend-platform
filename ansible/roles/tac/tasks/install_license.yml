@@ -23,6 +23,11 @@
     group: "{{install_group}}"
     mode: '0644'
 
+- name: Set execute permission on metaservlet
+  file:
+    path: "{{tac_config_location}}/MetaServletCaller.sh"
+    mode: '0755'
+
 - name: Install license using metaservlet
   when: tac_install_license == 'yes' and tac_license_file is file
   script:

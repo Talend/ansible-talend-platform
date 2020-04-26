@@ -3,7 +3,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-declare tac_install_user="{1?missing tac_install_user}"
+declare tac_install_user="${1?missing tac_install_user}"
 declare tac_license_filename="${2?missing tac_license_filename}"
 declare tac_config_location="${3?missing tac_config_location parameter}"
 declare app_tomcat_port="${4?missing app_tomcat_port  parameter}"

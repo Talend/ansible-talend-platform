@@ -186,13 +186,12 @@
     msg: No values is specified for "tac_appender_http_username"/"tac_appender_http_password"
   when: ( tac_appender_http_username != "" and tac_appender_http_password == "" ) or ( tac_appender_http_username == "" and tac_appender_http_password != "" )
 
-- name: Get info about license file
-  stat:
-    path: "{{ tac_license_file }}"
+- name: Get info about local license file
+  local_action: stat path="{{ tac_license_file }}"
   register: tac_license_file_stat
   when: tac_install_license == "yes"
 
 - name: Show error about inaccessible license file
   fail:
-    msg: "License file for TAC is not available: {{ tac_license_file }}"
+    msg: "Could not find TAC license file '{{ tac_license_file }}'"
   when: tac_install_license == "yes" and not tac_license_file_stat.stat.exists

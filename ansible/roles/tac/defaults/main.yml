@@ -116,6 +116,6 @@ tac_scheduler_conf_jobExecutionLogs_rootPath: "{{ install_prefix + '/tac/executi
 tac_scheduler_conf_archivesJobsRootPath: "{{ install_prefix + '/tac/archivesJobs' }}"
 
 # Install license automatically during installation
-# Note that file must be on a controller host (local file)
+# Note that file must be on the controller host (local file)
 tac_install_license: "no" # Allowed values 'yes' or 'no'
-tac_license_file: "/mnt/share/licenses/last.license"
+tac_license_file: ""

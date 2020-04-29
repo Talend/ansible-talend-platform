@@ -14,8 +14,14 @@
 # depends on tac_admin_user and tac_admin_pass
 # only works on linux since metaservlet is hardcoded with .sh extension
 
+
+- name: Get info about local license file
+  local_action: stat path="{{ tac_license_file }}"
+  register: tac_license_file_stat
+  when: tac_install_license == "yes"
+
 - name: Copy license file to TAC
-  when: tac_install_license == 'yes' and tac_license_file is file
+  when: tac_install_license == 'yes' and tac_license_file_stat.stat.exists
   copy:
     src: "{{tac_license_file}}"
     dest: "/home/{{install_user}}"
@@ -29,7 +35,7 @@
     mode: '0755'
 
 - name: Install license using metaservlet
-  when: tac_install_license == 'yes' and tac_license_file is file
+  when: tac_install_license == 'yes' and tac_license_file_stat.stat.exists
   script:
     cmd: set-license.sh "{{install_user}}" "{{tac_license_file | basename}}" "{{tac_config_location}}" "{{app_tomcat_port}}" "{{tac_webapp_name}}" "{{tac_admin_user}}" "{{tac_admin_pass}}"
   register: install_license_result

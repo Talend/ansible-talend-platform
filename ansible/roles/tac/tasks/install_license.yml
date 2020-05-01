@@ -39,6 +39,3 @@
   script:
     cmd: set-license.sh "{{install_user}}" "{{tac_license_file | basename}}" "{{tac_config_location}}" "{{app_tomcat_port}}" "{{tac_webapp_name}}" "{{tac_admin_user}}" "{{tac_admin_pass}}"
   register: install_license_result
-
-- debug:
-    var: install_license_result

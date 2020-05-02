@@ -5,7 +5,7 @@
 # Some parameters cannot be re-configured (installation path, user, group, tomcat deployment, systemd status)
 # All other parameters must be reconfigured here
 
-# Update admin user/password
+# Update iam properties
 
 - name: Update IAM TAC admin user
   replace:
@@ -37,11 +37,22 @@
     regexp:  'iam\.url=.*'
     replace: 'iam.url=http://${iam.host}:{{ iam_tomcat_port }}'
 
+- name: Update IAM additional top level domains with elements of the iam_tds_postlogout_url hostname
+  lineinfile:
+    path: "{{ iam_config_location }}/iam.properties"
+    regexp: '^iam.additionalTLDs='
+    line: "iam.additionalTLDs=lan,{{ iam_tds_postlogout_url_lc | urlsplit('hostname') | replace('.',',') }}"
+    
+
+# update fediz configuration
+
 - name: Update IAM Tomcat Port in fediz
   replace:
     path: "{{ iam_config_location }}/fediz_config.xml"
     regexp:  '<issuer>.*</issuer>'
     replace: '<issuer>http://{{ iam_hostname | lower }}:{{ iam_tomcat_port }}/idp/federation</issuer>'
+
+# update syncope configuration
 
 - name: Update IAM Tomcat Host in Syncope Console
   replace:
@@ -66,6 +77,8 @@
     path: "{{ iam_webapps_location }}/syncope-enduser/WEB-INF/classes/enduser.properties"
     regexp:  'port=.*'
     replace: 'port={{ iam_tomcat_port }}'
+
+# update tomcat env
 
 - name: Update language in setenv.sh
   replace:

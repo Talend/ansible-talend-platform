@@ -41,7 +41,7 @@
   lineinfile:
     path: "{{ iam_config_location }}/iam.properties"
     regexp: '^iam.additionalTLDs='
-    line: "iam.additionalTLDs=lan,{{ iam_tds_postlogout_url_lc | urlsplit('hostname') | replace('.',',') }}"
+    line: "iam.additionalTLDs=lan,{{ iam_hostname | replace('.',',') }}"
     
 
 # update fediz configuration

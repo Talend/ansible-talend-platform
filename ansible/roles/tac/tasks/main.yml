@@ -28,3 +28,6 @@
 
 # Starting systemd service
 - include_tasks: ../../common/tasks/start_service.yml
+
+# Install license
+- import_tasks: install_license.yml

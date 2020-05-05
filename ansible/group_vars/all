@@ -7,9 +7,19 @@
 #   rpm_patch_version: 1, 2, 3 etc
 # rpm_build_number: used to identify exact build
 #
-rpm_base_version: 7.1
+
+# rpm_base_version: 7.1
+# rpm_patch_version: 1
+# rpm_build_number: 201810261147
+
+# rpm_base_version: 7.2
+# rpm_patch_version: 1
+# rpm_build_number: 201906201446
+
+rpm_base_version: 7.3
 rpm_patch_version: 1
-rpm_build_number: 201810261147
+rpm_build_number: 202002191130
+
 
 rpm_version: "{{ rpm_base_version }}.{{ rpm_patch_version }}" 
 

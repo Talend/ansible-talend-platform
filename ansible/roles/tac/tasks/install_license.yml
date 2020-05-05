@@ -1,0 +1,41 @@
+---
+
+# This script used to install the license on the TAC server.
+# It uses the metaservlet from the local Talend webapp.
+# The service must be running before the license can be installed.
+
+# path to metaservlet depends on variable app_use_talend_tomcat
+# if app_use_talend_tomcat is no
+#     app_tomcat_home
+#     app_tomcate_mode
+# if app_use_talend_tomcat is yes
+#     app_tomcat_port
+# depends on  tac_webapp_name
+# depends on tac_admin_user and tac_admin_pass
+# only works on linux since metaservlet is hardcoded with .sh extension
+
+
+- name: Get info about local license file
+  local_action: stat path="{{ tac_license_file }}"
+  register: tac_license_file_stat
+  when: tac_install_license == "yes"
+
+- name: Copy license file to TAC
+  when: tac_install_license == 'yes' and tac_license_file_stat.stat.exists
+  copy:
+    src: "{{tac_license_file}}"
+    dest: "/home/{{install_user}}"
+    owner: "{{install_user}}"
+    group: "{{install_group}}"
+    mode: '0644'
+
+- name: Set execute permission on metaservlet
+  file:
+    path: "{{tac_config_location}}/MetaServletCaller.sh"
+    mode: '0755'
+
+- name: Install license using metaservlet
+  when: tac_install_license == 'yes' and tac_license_file_stat.stat.exists
+  script:
+    cmd: set-license.sh "{{install_user}}" "{{tac_license_file | basename}}" "{{tac_config_location}}" "{{app_tomcat_port}}" "{{tac_webapp_name}}" "{{tac_admin_user}}" "{{tac_admin_pass}}"
+  register: install_license_result

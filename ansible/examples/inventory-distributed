@@ -1,0 +1,34 @@
+# sample inventory for distributed deployment of iam and tdp on different nodes.
+# variables initialized with public hostnames of different nodes so that tdp and iam can communicate.
+
+all:
+  children:
+    tac_group:
+      hosts:
+        tac-host:
+          ansible_host: "{{tac_node_private_ip}}"
+      vars:
+        iam_hostname: "{{tac_node_public_hostname}}"
+        iam_tds_postlogout_url: "http://{{tdp_node_public_hostname}}:19999/"
+        iam_tdp_postlogout_url: "http://{{tdp_node_public_hostname}}:9999/"
+
+    tdp_group:
+      hosts:
+        tdp-host:
+          ansible_host: "{{tdp_node_private_ip}}"
+      vars:
+        tdp_public_ip: "{{tdp_node_public_hostname}}"
+        tdp_iam_ip: "{{tac_node_public_hostname}}"
+  vars:
+    # tac node
+    tac_node_private_ip: 10.0.0.118
+    tac_node_hostname: ip-10-0-0-118
+    tac_node_private_hostname: ip-10-0-0-118.ec2.internal
+    tac_node_public_ip: 54.198.89.239
+    tac_node_public_hostname: ec2-54-198-89-239.compute-1.amazonaws.com
+    # tdp node
+    tdp_node_private_ip: 10.0.0.181
+    tdp_node_hostname: ip-10-0-0-181
+    tdp_node_private_hostname: ip-10-0-0-181.ec2.internal
+    tdp_node_public_ip: 52.87.200.219
+    tdp_node_public_hostname: ec2-52-87-200-219.compute-1.amazonaws.com

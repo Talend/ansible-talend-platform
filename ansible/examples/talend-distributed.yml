@@ -1,0 +1,54 @@
+---
+
+# use this playbook with the inventory-distributed example to deploy iam and tdp on different nodes.
+# the example is designed to work on centos nodes in EC2.
+# set the ATP_PLAYBOOK environment variable to the location of your playbook on the control node.
+# be sure to load your license in that directory as well.
+
+# TAC Server
+
+- hosts: tac_group
+  become: yes
+  become_user: root
+  become_method: sudo
+  remote_user: centos
+  #remote_user: ec2-user
+  roles:
+    - java
+    - talend-repo
+    - tomcat
+    - tac
+    - amc
+    - iam
+    - nexus
+  vars:
+    # TAC variables
+    tac_setup_jobserver: 'no'
+    tac_use_logserver: 'no'
+    tac_install_license: 'yes'
+    tac_license_file: "/home/centos/{{ lookup('env', 'ATP_PLAYBOOK') }}/license"
+    # tac_license_file: /home/ec2-user/{{ lookup('env','ATP_PLAYBOOK') }}/license
+  tags:
+    - tac
+
+
+# Talend Data Prep Server
+
+- hosts: tdp_group
+  become: yes
+  become_user: root
+  become_method: sudo
+  remote_user: centos
+  #remote_user: ec2-user
+  roles:
+    - java
+    - talend-repo
+    - tomcat
+    - mongodb
+    - kafka
+    - jobserver
+    - tsd
+    - tdp
+  tags:
+    - tdp
+

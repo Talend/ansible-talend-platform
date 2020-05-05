@@ -453,12 +453,3 @@
     line: "scheduler.conf.archivesJobsRootPath={{ tac_scheduler_conf_archivesJobsRootPath }}"
     state: present
 
-#
-# Install license automatically during installation
-#
-- name: Install license to TAC
-  when: tac_install_license == 'yes' and rpm_is_installed.stdout == ''  # This will be executed only on new installation
-  lineinfile:
-    path: "{{ tac_config_location }}/install.txt"
-    line: "license.key={{ lookup( 'file', tac_license_file ) }}"
-    create: yes

@@ -382,6 +382,7 @@
       replace: "security.oauth2.resource.tokenInfoUri={{ tdp_security_oauth2_resource_tokenInfoUri }}"
 
 - name: Modify Data Preparation security oauth2 resource uri
+  when: tdp_security_oauth2_resource_uri
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "security.oauth2.resource.uri=.*"

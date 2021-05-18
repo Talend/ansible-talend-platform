@@ -16,7 +16,7 @@ Before running the script, you can change the following variables in the *defaul
 
 | Parameter                | Description               | Value               |
 | ------------------------ | ------------------------- | ------------------- |
-| `tomcat_rpm_pkg_version` | Talend Tomcat RPM version | Example: `9.0.41-1` |
+| `tomcat_rpm_pkg_version` | Talend Tomcat RPM version | Example: `9.0.46-1` |
 
 ## Example playbook
 

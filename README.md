@@ -166,6 +166,9 @@ sudo firewall-cmd --add-service=Talend-IAM --permanent
 sudo firewall-cmd --reload
 ```
 
+## Issues
+
+Issues are tracked in the [Installer (TINSTL)]((https://jira.talendforge.org/browse/TINSTL)) project on Jira.
 
 ## Licence
 

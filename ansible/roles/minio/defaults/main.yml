@@ -1,0 +1,32 @@
+---
+# app_name, rpm_name and rpm_folder are standard variables, must be redefined for each role
+# it allows re-usage of tasks
+
+app_name: "Talend MinIO"
+rpm_name: "talend-minio"
+rpm_folder: "minio"
+app_service: "talend-minio"
+
+# Variable (RPM version) for Minio RPM
+minio_pkg_version: "{{ rpm_version }}-1"
+
+#####
+# Installation as systemd service
+#####
+app_install_systemd: "yes" # allowed values "yes" and "no"
+
+#
+# MinIO-specific properties
+# Attention: if anything is changed from default, then update also TDS, TDP and TSD variables)
+#
+
+# TCP/IP port used by MinIO server
+minio_port: 9000
+
+# Bucket
+minio_bucket: "default-bucket"
+
+# AccessKey, SecretKey and Region
+minio_accesskey: "usr7xJ0agsFq"
+minio_secretkey: "pwd9jYF26Van"
+minio_region:    "us-east-1"

@@ -1,0 +1,38 @@
+---
+
+# This script used for updating current application parameters if the application is already installed
+# It can be run just after the installation or after some time (re-configuration)
+# Some parameters cannot be re-configured (installation path, user, group, systemd status)
+# All other parameters must be reconfigured here
+
+# Input params:
+#   - install_prefix - (defined in group_vars/all)
+#
+# All other parameters are from "roles/minio/defaults/main.yml"
+#
+# There is no configuration file for MinIO RPM and instead all parameters are stored in minio/start.sh script
+
+# Updating TCP-IP port
+- name: Update MinIO tcp-ip port
+  replace:
+    path: "{{ install_prefix }}/minio/start.sh"
+    regexp:  '--address :(\d)+'
+    replace: '--address :{{ minio_port }}'
+
+- name: Update MinIO access key
+  replace:
+    path: "{{ install_prefix }}/minio/start.sh"
+    regexp:  '^MINIO_ACCESS_KEY=.*'
+    replace: 'MINIO_ACCESS_KEY={{ minio_accesskey }}'
+
+- name: Update MinIO secret key
+  replace:
+    path: "{{ install_prefix }}/minio/start.sh"
+    regexp:  '^MINIO_SECRET_KEY=.*'
+    replace: 'MINIO_SECRET={{ minio_secretkey }}'
+
+- name: Update MinIO region
+  replace:
+    path: "{{ install_prefix }}/minio/start.sh"
+    regexp:  '^MINIO_REGION=.*'
+    replace: 'MINIO_REGION={{ minio_region }}'

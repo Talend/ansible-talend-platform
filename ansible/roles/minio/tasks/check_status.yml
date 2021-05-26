@@ -1,0 +1,37 @@
+---
+
+# This common script checks the current status of application
+# If it is already installed, we should compare setting and throw error
+#    if actual settins are different
+# MinIO-specific: we cannot use common/tasks/check_status.yml, as MinIO RPM do not use install.params file
+
+- name: "Check whether {{ app_name }} RPM is installed"
+  command: "rpm -qa {{ rpm_name }}"
+  args:
+    warn: no
+  register: rpm_is_installed
+  changed_when: false
+
+- name: "Get actual installation prefix for {{ app_name }}"
+  when: rpm_is_installed.stdout != ''
+  shell: "set -o pipefail | rpm -ql {{ rpm_name }} | grep -v '/etc/talend/{{ rpm_folder }}' | head -n 1"
+  args:
+    warn: no
+  register: rpm_install_path
+  changed_when: false
+
+- name: "Show error if {{ app_name }} is already installed with a different prefix"
+  fail:
+    msg: "Error: {{ app_name }} is already installed with a different prefix ( {{ rpm_install_path.stdout }} )"
+  when: rpm_is_installed.stdout != '' and rpm_install_path.stdout != install_prefix
+
+- name: Check that installation is valid
+  when: rpm_is_installed.stdout != ''
+  stat:
+    path: "{{ install_prefix }}/{{ rpm_folder }}/bin/minio"
+  register: inst_params_status
+
+- name: "Show error about corrupted installation for {{ app_name }}"
+  fail:
+    msg: "Installation of {{ app_name }} is broken ! File server.properties is missing in {{ install_prefix }}/{{ rpm_folder }}/config"
+  when: rpm_is_installed.stdout != '' and not inst_params_status.stat.exists

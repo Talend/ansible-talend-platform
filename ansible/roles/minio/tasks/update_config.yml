@@ -10,7 +10,7 @@
 #
 # All other parameters are from "roles/minio/defaults/main.yml"
 #
-# There is no configuration file for MinIO RPM and instead all parameters are stored in minio/start.sh script
+# There is no configuration file for MinIO RPM and instead all parameters are stored in minio/start_minio.sh script
 
 # Updating TCP-IP port
 - name: Update MinIO tcp-ip port

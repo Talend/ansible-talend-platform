@@ -27,5 +27,5 @@
 
 - name: Show error when used with RPM 7.3 or less
   fail:
-    msg: MinIO role can be used only with version 7.4 or above
+    msg: MinIO role can be used only with version 8.0 or above
   when: rpm_base_version <= 7.3

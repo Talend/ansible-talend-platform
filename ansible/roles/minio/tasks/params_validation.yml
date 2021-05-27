@@ -1,0 +1,26 @@
+---
+# This script performs different parameters validation
+
+######################################
+# MDM-specific parameters validation
+######################################
+
+# Check port-type parameter: zook_clientPort
+- name: Check port-type parameters
+  fail:
+    msg: "Parameter {{ item.name }} has value {{ item.value }}, which is not a valid TCP/IP port number !"
+  when: not ( item.value | string | regex_search( '[0-9]*' ) ) or ( item.value | int < 0 ) or ( item.value | int > 65535 )
+  with_items:
+    - { name: "minio_port", value: "{{ minio_port }}" }
+
+# Check buket name
+- name: Check bucket name
+  fail:
+    msg: "Parameter minio_bucket is not valid, use only alphanumeric value plus dot and dash !"
+  when: not ( minio_bucket | string | regex_search( '[0-9a-zA-Z.-]*' ) )
+
+
+- name: Show error if accesskey or secretkey or region is empty
+  fail:
+    msg: Any of parameter "minio_accesskey", "minio_secretkey" or "minio_region" cannot be empty !
+  when: minio_accesskey == "" or minio_secretkey == "" or minio_region == ""

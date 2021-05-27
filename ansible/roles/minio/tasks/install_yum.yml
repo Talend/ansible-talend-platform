@@ -1,0 +1,17 @@
+---
+# This file handles installation with yum (to default folder /opt/talend)
+#
+- name: "Install {{ app_name }} with yum"
+  yum:
+    name: "{{ rpm_name }}"
+    state: present
+  environment:
+    TALEND_INSTALL_USER: '{{ install_user }}'
+    TALEND_INSTALL_GROUP: '{{ install_group }}'
+    TALEND_INSTALL_SYSTEMD: "{{ '1' if app_install_systemd == 'yes' else '0' }}"
+    JAVA_HOME:              "{{ java_dir.stdout }}"
+    TALEND_MINIO_PORT:      "{{ minio_port }}"
+    TALEND_MINIO_BUCKET:    "{{ minio_bucket }}"
+    TALEND_MINIO_USER:      "{{ minio_accesskey }}"
+    TALEND_MINIO_PASS:      "{{ minio_secretkey }}"
+    TALEND_MINIO_REGION:    "{{ minio_region }}"

@@ -1,0 +1,43 @@
+---
+# This file handles installation with rpm (when non-default prefix is used)
+- name: "Check whether {{ app_name }} RPM is installed"
+  when: install_prefix != '/opt/talend'
+  command: "rpm -qa {{ rpm_name }}"
+  args:
+    warn: no
+  register: rpm_is_installed
+
+
+- name: "Get actual installation prefix for {{ app_name }}"
+  when: install_prefix != '/opt/talend' and rpm_is_installed.stdout != ''
+  shell: "set -o pipefail | rpm -ql {{ rpm_name }} | head -n 1"
+  args:
+    warn: no
+  register: rpm_install_path
+
+
+- name: "{{ app_name }} RPM is already installed with correct path"
+  when: install_prefix != '/opt/talend' and rpm_is_installed.stdout != '' and rpm_install_path.stdout == install_prefix
+  debug:
+    msg: "{{ app_name }} RPM is already installed"
+
+- name: "Check if {{ app_name }} RPM is already installed into other path"
+  fail:
+    msg: "FATAL: {{ app_name }} package is already installed with a different prefix {{ rpm_install_path.stdout }} !"
+  when: install_prefix != '/opt/talend' and rpm_is_installed.stdout != '' and rpm_install_path.stdout != install_prefix
+
+- name: "Install {{ app_name }} with rpm (non-default folder)"
+  when: install_prefix != '/opt/talend' and (rpm_is_installed.stdout == '' or rpm_install_path.stdout != install_prefix)
+  command: "rpm -i --prefix={{ install_prefix }} {{ rpm_repo_url }}/{{ rpm_name }}-{{ kafka_pkg_version }}.x86_64.rpm"
+  args:
+    warn: no
+  environment:
+    TALEND_INSTALL_USER: '{{ install_user }}'
+    TALEND_INSTALL_GROUP: '{{ install_group }}'
+    TALEND_INSTALL_SYSTEMD: "{{ '1' if app_install_systemd == 'yes' else '0' }}"
+    JAVA_HOME:              "{{ java_dir.stdout }}"
+    TALEND_MINIO_PORT:      "{{ minio_port }}"
+    TALEND_MINIO_BUCKET:    "{{ minio_bucket }}"
+    TALEND_MINIO_USER:      "{{ minio_accesskey }}"
+    TALEND_MINIO_PASS:      "{{ minio_secretkey }}"
+    TALEND_MINIO_REGION:    "{{ minio_region }}"

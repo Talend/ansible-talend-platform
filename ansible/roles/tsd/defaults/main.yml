@@ -75,3 +75,13 @@ tsd_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 #####
 tsd_hybrid_mode:   "no"   # Can be "yes" or "no"
 tsd_hybrid_region: "us"   # Can be one of "us", "eu" or "ap"
+
+#####
+# Communication with AWS S3 (defaults are set for using a local MinIO RPM)
+#####
+tsd_s3endpoint: "http://localhost:9000"
+tsd_s3bucket:   "default-bucket"
+tsd_s3region:   "us-east-1"
+tsd_s3user:     "usr7xJ0agsFq"
+tsd_s3pass:     "pwd9jYF26Van"
+tsd_basepath:   ""

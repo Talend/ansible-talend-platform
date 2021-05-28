@@ -367,3 +367,40 @@
     path: "{{ tds_config_location }}"
     regexp: 'tds\.front\.cloudDeployment='
     state: absent
+
+## AWS S3 communication
+- name: Update AWS S3 endpoint URL
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '\.s3Repository\.s3\.endpoint=.*'
+    replace: '.s3Repository.s3.endpoint={{ tds_s3endpoint }}'
+
+- name: Update AWS S3 bucket URL
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '\.s3Repository\.bucket-url=.*'
+    replace: '.s3Repository.bucket-url=s3://{{ tds_s3bucket }}'
+
+- name: Update AWS S3 username
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '\.s3Repository\.username=.*'
+    replace: '.s3Repository.username={{ tds_s3user }}'
+
+- name: Update AWS S3 password
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '\.s3Repository\.password=.*'
+    replace: '.s3Repository.password={{ tds_s3pass }}'
+
+- name: Update AWS S3 region
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '\.s3Repository\.password=.*'
+    replace: '.s3Repository.password={{ tds_s3pass }}'
+
+- name: Update AWS S3 base path
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  '\.s3Repository\.base-path=.*'
+    replace: '.s3Repository.base-path={{ tds_basepath }}'

@@ -99,3 +99,13 @@ tds_hybrid_mode:        "no"              # Can be "yes" or "no"
 tds_hybrid_region:      "us"              # Can be one of "us", "eu" or "ap"
 tds_hybrid_data_center:     "us-east-1"   # Data center, see AWS docs
 tds_hybrid_cloud_provider:  "AWS"         # Can be "AWS" or "azure"
+
+#####
+# Communication with AWS S3 (defaults are set for using a local MinIO RPM)
+#####
+tds_s3endpoint: "http://localhost:9000"
+tds_s3bucket:   "default-bucket"
+tds_s3region:   "us-east-1"
+tds_s3user:     "usr7xJ0agsFq"
+tds_s3pass:     "pwd9jYF26Van"
+tds_basepath:   ""

@@ -158,3 +158,13 @@ tdp_spark_executor_cores: "4"
 # Hybrid mode
 tdp_hybrid_mode:   "no"     # Can be "yes" or "no"
 tdp_hybrid_region: "us"     # Can be one of "us", "eu" or "ap"
+
+#####
+# Communication with AWS S3 (defaults are set for using a local MinIO RPM)
+#####
+tdp_s3endpoint: "http://localhost:9000"
+tdp_s3bucket:   "default-bucket"
+tdp_s3region:   "us-east-1"
+tdp_s3user:     "usr7xJ0agsFq"
+tdp_s3pass:     "pwd9jYF26Van"
+tdp_basepath:   ""

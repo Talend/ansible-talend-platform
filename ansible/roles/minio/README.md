@@ -22,7 +22,7 @@ Before running the script, you can change the following variables in the *defaul
 | --------------------- | --------------------------------------- | ------------------------------- |
 | `app_install_systemd` | Whether to install as a systemd service | Supported values: `yes` or `no` |
 
-### MongoDB port
+### Minio port
 
 | Parameter      | Description                        | Value                  |
 | -------------- | ---------------------------------- | ---------------------- |
@@ -54,7 +54,10 @@ Before running the script, you can change the following variables in the *defaul
     - java
     - talend-repo
     - tomcat
+    - kafka
     - mongodb
     - minio
+    - tsd
     - tds
+    - tdp
 ```

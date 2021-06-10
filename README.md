@@ -118,6 +118,7 @@ The following roles install third-party components:
 | [mongodb](ansible/roles/mongodb) | MongoDB server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                                   |
 | [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                              |
 | [nexus](ansible/roles/nexus)     | Nexus Repository Manager                                                                                                                    |
+| [minio](ansible/roles/minio)     | MinIO server (required by [tsd](ansible/roles/tsd), [tds](ansible/roles/tds), [tdp](ansible/roles/tdp)                                      |
 
 ## List of applications compatible with Talend Cloud Hybrid setup
 
@@ -144,10 +145,11 @@ Each application requires some TCP/IP ports to be open by default:
 * tdq: 8187
 * logserver: 9200 and 9300 for Elastic Search; 5601 for Kibana; 5044, 8057 and 9600 for LogStash.
 
-In addition, service components (Kafka and MongoDB) require open ports when accessed from other hosts:
+In addition, service components (Kafka, MongoDB and Minio) require open ports when accessed from other hosts:
 
 * kafka: 2181, 9092
 * mongodb: 27017
+* minio: 9000
 
 To open a port, you can use one of the methods described below:
 

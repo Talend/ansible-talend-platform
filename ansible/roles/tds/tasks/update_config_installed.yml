@@ -396,8 +396,8 @@
 - name: Update AWS S3 region
   replace:
     path: "{{ tds_config_location }}"
-    regexp:  '\.s3Repository\.password=.*'
-    replace: '.s3Repository.password={{ tds_s3pass }}'
+    regexp:  '\.s3Repository\.s3\.region=.*'
+    replace: '.s3Repository.s3.region={{ tds_s3region }}'
 
 - name: Update AWS S3 base path
   replace:

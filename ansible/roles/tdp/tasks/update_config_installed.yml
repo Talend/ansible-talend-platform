@@ -1023,8 +1023,8 @@
 - name: Update AWS S3 region
   replace:
     path: "/etc/talend/tdp/application.properties"
-    regexp:  '\.s3Repository\.password=.*'
-    replace: '.s3Repository.password={{ tdp_s3pass }}'
+    regexp:  '\.s3Repository\.s3\.region=.*'
+    replace: '.s3Repository.s3.region={{ tdp_s3region }}'
 
 - name: Update AWS S3 base path
   replace:

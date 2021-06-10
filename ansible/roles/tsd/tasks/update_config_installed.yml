@@ -51,32 +51,32 @@
 - name: Update MongoDB hosts
   replace:
     path: "{{ tsd_config_location }}"
-    regexp:  '^dq\.mongo\.host=.*'
-    replace: 'dq.mongo.host={{ tsd_mongo_host }}'
+    regexp:  '\.mongodb\.host=.*'
+    replace: '.mongodb.host={{ tsd_mongo_host }}'
 
 - name: Update MongoDB port
   replace:
     path: "{{ tsd_config_location }}"
-    regexp:  '^dq\.mongo\.port=.*'
-    replace: 'dq.mongo.port={{ tsd_mongo_port }}'
+    regexp:  '\.mongodb\.port=.*'
+    replace: '.mongodb.port={{ tsd_mongo_port }}'
 
 - name: Update MongoDB dbname
   replace:
     path: "{{ tsd_config_location }}"
-    regexp:  '^dq\.mongo\.database\.name=.*'
-    replace: 'dq.mongo.database.name={{ tsd_mongo_database }}'
+    regexp:  '\.mongodb\.database=.*'
+    replace: '.mongodb.database={{ tsd_mongo_database }}'
 
 - name: Update MongoDB user
   replace:
     path: "{{ tsd_config_location }}"
-    regexp:  '^dq\.mongo\.username=.*'
-    replace: 'dq.mongo.username={{ tsd_mongo_username }}'
+    regexp:  '\.mongodb\.username=.*'
+    replace: '.mongodb.username={{ tsd_mongo_username }}'
 
 - name: Update MongoDB password
   replace:
     path: "{{ tsd_config_location }}"
-    regexp:  '^dq\.mongo\.password=.*'
-    replace: 'dq.mongo.password={{ tsd_mongo_password }}'
+    regexp:  '\.mongodb\.password=.*'
+    replace: '.mongodb.password={{ tsd_mongo_password }}'
 
 
 # Security / authentication
@@ -194,8 +194,8 @@
 - name: Update AWS S3 region
   replace:
     path: "{{ tsd_config_location }}"
-    regexp:  '\.s3Repository\.password=.*'
-    replace: '.s3Repository.password={{ tsd_s3pass }}'
+    regexp:  '\.s3Repository\.s3\.region=.*'
+    replace: '.s3Repository.s3.region={{ tsd_s3region }}'
 
 - name: Update AWS S3 base path
   replace:

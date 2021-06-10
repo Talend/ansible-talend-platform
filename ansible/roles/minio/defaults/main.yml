@@ -17,7 +17,7 @@ app_install_systemd: "yes" # allowed values "yes" and "no"
 
 #
 # MinIO-specific properties
-# Attention: if anything is changed from default, then update also TDS, TDP and TSD variables)
+# Attention: if anything is changed from default, then update also TDS, TDP and TSD variables
 #
 
 # TCP/IP port used by MinIO server

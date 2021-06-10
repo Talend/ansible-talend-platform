@@ -118,7 +118,7 @@ The following roles install third-party components:
 | [mongodb](ansible/roles/mongodb) | MongoDB server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                                   |
 | [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                              |
 | [nexus](ansible/roles/nexus)     | Nexus Repository Manager                                                                                                                    |
-| [minio](ansible/roles/minio)     | MinIO server (required by [tsd](ansible/roles/tsd), [tds](ansible/roles/tds), [tdp](ansible/roles/tdp) )                                    |
+| [minio](ansible/roles/minio)     | MinIO server (required by [tsd](ansible/roles/tsd), [tds](ansible/roles/tds), [tdp](ansible/roles/tdp))                                    |
 
 ## List of applications compatible with Talend Cloud Hybrid setup
 

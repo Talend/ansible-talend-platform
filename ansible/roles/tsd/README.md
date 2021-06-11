@@ -50,7 +50,7 @@ The following variables control the connection to AWS S3 and by default they are
 | tsd_s3region   | Used AWS S3 region | `us-east-1` (do not change it if using embedded **minio** role   |
 | tsd_s3user     | AWS S3 access key  | `usr7xJ0agsFq`                                                   |
 | tsd_s3pass     | AWS S3 secret key  | `pwd9jYF26Van`                                                   |
-| tsd_basepath   | The base path      |                                                                  |
+| tsd_basepath   | The base path      | *(empty value)*                                                  |
 
 ## Dependencies
 

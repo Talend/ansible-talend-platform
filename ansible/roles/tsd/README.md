@@ -37,6 +37,21 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tsd_hybrid_mode`       | No                 | Installation in Hybrid mode (see docs for details), available values are `yes` or `no`                                     | `no`                         |
 | `tsd_hybrid_region`     | No                 | For Hybrid mode, specifies a region to use, available values are `us`, `eu` or `ap`                                        | `us`                         |
 
+## Connection to AWS S3
+
+**Talend Semantic Dictionary** requires connection to AWS S3 server. If you do not have an existing AWS S3 account, then embedded Minio server (**minio** role) can be used instead.
+
+The following variables control the connection to AWS S3 and by default they are set to use embedded **minio** role:
+
+| Parameter      | Description        | Default value                                                    |
+|----------------|--------------------|------------------------------------------------------------------|
+| tsd_s3endpoint | S3 endpoint URL    | `http://localhost:9000`                                          |
+| tsd_s3bucket   | Bucket name        | `default-bucket`                                                 |
+| tsd_s3region   | Used AWS S3 region | `us-east-1` (do not change it if using embedded **minio** role   |
+| tsd_s3user     | AWS S3 access key  | `usr7xJ0agsFq`                                                   |
+| tsd_s3pass     | AWS S3 secret key  | `pwd9jYF26Van`                                                   |
+| tsd_basepath   | The base path      |                                                                  |
+
 ## Dependencies
 
 The following roles must be used to successfully install TSD:

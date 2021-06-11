@@ -317,6 +317,21 @@ Apache Spark is a fast and general-purpose cluster computing system. It provides
 
 More information about Spark configuration properties can be found at https://spark.apache.org/docs/1.6.2/configuration.html
 
+## Connection to AWS S3
+
+**Talend Data Preparation** requires connection to AWS S3 server. If you do not have an existing AWS S3 account, then embedded Minio server (**minio** role) can be used instead.
+
+The following variables control the connection to AWS S3 and by default they are set to use embedded **minio** role:
+
+| Parameter      | Description        | Default value                                                    |
+|----------------|--------------------|------------------------------------------------------------------|
+| tdp_s3endpoint | S3 endpoint URL    | `http://localhost:9000`                                          |
+| tdp_s3bucket   | Bucket name        | `default-bucket`                                                 |
+| tdp_s3region   | Used AWS S3 region | `us-east-1` (do not change it if using embedded **minio** role)  |
+| tdp_s3user     | AWS S3 access key  | `usr7xJ0agsFq`                                                   |
+| tdp_s3pass     | AWS S3 secret key  | `pwd9jYF26Van`                                                   |
+| tdp_basepath   | The base path      | *(empty value)*                                                  |
+
 ## Dependencies
 
 The following roles must be used to successfully install and deploy Talend Data Preparation:

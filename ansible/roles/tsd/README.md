@@ -39,7 +39,7 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 
 ## Connection to Minio / AWS S3 service
 
-**Talend Semantic Dictionary** new architecture relies on Minio (or AWS S3) server to share semantic dictionaries.
+**Talend Dictionary Service** new architecture relies on Minio (or AWS S3) server to share semantic dictionaries.
 If you do not have an existing Minio (or AWS S3) account, then embedded Minio server (**minio** role) can be used instead.
 
 The following variables control the connection to Minio / AWS S3 and by default they are set to use embedded **minio** role:

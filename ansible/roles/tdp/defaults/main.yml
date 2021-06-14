@@ -160,7 +160,7 @@ tdp_hybrid_mode:   "no"     # Can be "yes" or "no"
 tdp_hybrid_region: "us"     # Can be one of "us", "eu" or "ap"
 
 #####
-# Communication with AWS S3 (defaults are set for using a local MinIO RPM)
+# Communication with Minio / AWS S3 (defaults are set for using a local "minio" role)
 #####
 tdp_s3endpoint: "http://localhost:9000"
 tdp_s3bucket:   "default-bucket"

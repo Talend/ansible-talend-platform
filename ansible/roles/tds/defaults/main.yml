@@ -101,7 +101,7 @@ tds_hybrid_data_center:     "us-east-1"   # Data center, see AWS docs
 tds_hybrid_cloud_provider:  "AWS"         # Can be "AWS" or "azure"
 
 #####
-# Communication with AWS S3 (defaults are set for using a local MinIO RPM)
+# Communication with Minio / AWS S3 (defaults are set for using a local "minio" role)
 #####
 tds_s3endpoint: "http://localhost:9000"
 tds_s3bucket:   "default-bucket"

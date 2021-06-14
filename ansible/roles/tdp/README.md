@@ -319,9 +319,10 @@ More information about Spark configuration properties can be found at https://sp
 
 ## Connection to AWS S3
 
-**Talend Data Preparation** requires connection to AWS S3 server. If you do not have an existing AWS S3 account, then embedded Minio server (**minio** role) can be used instead.
+**Talend Data Preparation** requires connection to Minio (or AWS S3) server to share semantic dictionary with **TSD**.
+If you do not have an existing Minio / AWS S3 account, then embedded Minio server (**minio** role) can be used instead.
 
-The following variables control the connection to AWS S3 and by default they are set to use embedded **minio** role:
+The following variables control the connection to Minio / AWS S3 and by default they are set to use embedded **minio** role:
 
 | Parameter      | Description        | Default value                                                    |
 |----------------|--------------------|------------------------------------------------------------------|

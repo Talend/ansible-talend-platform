@@ -45,20 +45,21 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tds_oidc_id`                     | No                 | Talend Identity and Access Management OIDC client identifier.<br>For Hybrid mode: Client ID for your account (retrieved from Talend Management Console)  | `tl6K6ac7tSE-LQ`             |
 | `tds_oidc_secret`                 | No                 | Talend Identity and Access Management OIDC password.<br>For Hybrid mode: Client Secret for your account (retrieved from Talend Management Console)  | `sLbyFKTzM8F0dTL10mHd3A`     |
 
-## Connection to AWS S3
+## Connection to Minio / AWS S3
 
-**Talend Data Stewardship** requires connection to AWS S3 server. If you do not have an existing AWS S3 account, then embedded Minio server (**minio** role) can be used instead.
+**Talend Data Stewardship** requires connection to Minio (or AWS S3) server to share semantic dictionary with **TSD**.
+If you do not have an existing Minio / AWS S3 account, then embedded Minio server (**minio** role) can be used instead.
 
-The following variables control the connection to AWS S3 and by default they are set to use embedded **minio** role:
+The following variables control the connection to Minio / AWS S3 and by default they are set to use embedded **minio** role:
 
-| Parameter      | Description        | Default value                                                    |
-|----------------|--------------------|------------------------------------------------------------------|
-| tds_s3endpoint | S3 endpoint URL    | `http://localhost:9000`                                          |
-| tds_s3bucket   | Bucket name        | `default-bucket`                                                 |
-| tds_s3region   | Used AWS S3 region | `us-east-1` (do not change it if using embedded **minio** role)  |
-| tds_s3user     | AWS S3 access key  | `usr7xJ0agsFq`                                                   |
-| tds_s3pass     | AWS S3 secret key  | `pwd9jYF26Van`                                                   |
-| tds_basepath   | The base path      | *(empty value)*                                                  |
+| Parameter      | Description         | Default value                                                    |
+|----------------|---------------------|------------------------------------------------------------------|
+| tds_s3endpoint | AWS S3 endpoint URL | `http://localhost:9000`                                          |
+| tds_s3bucket   | Bucket name         | `default-bucket`                                                 |
+| tds_s3region   | Used AWS S3 region  | `us-east-1` (do not change it if using embedded **minio** role)  |
+| tds_s3user     | AWS S3 access key   | `usr7xJ0agsFq`                                                   |
+| tds_s3pass     | AWS S3 secret key   | `pwd9jYF26Van`                                                   |
+| tds_basepath   | The base path       | *(empty value)*                                                  |
 
 ## Dependencies
 

@@ -44,7 +44,6 @@ Before running the script, you can change the following variables in the *defaul
 
 > **Note**: If you update any of these values from defaults, then you will need to update also AWS S3 values in tds, tsd and tdp roles
 
-
 ## Example playbook
 
 ```yaml

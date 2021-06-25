@@ -79,3 +79,8 @@
   fail:
     msg: Wrong hybrid region ! Can be one of 'us', 'eu' or 'ap'
   when: tsd_hybrid_mode == 'yes' and not (tsd_hybrid_region == 'us' or tsd_hybrid_region == 'eu' or tsd_hybrid_region == 'ap')
+
+- name: Check correct MinIO port (if MinIO is used)
+  fail:
+    msg: Incorrect value tsd_s3endpoint, port does not match with variable minio_port
+  when: minio_port is defined and tsd_s3endpoint | urlsplit('port') != minio_port

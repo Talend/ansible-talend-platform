@@ -24,3 +24,8 @@
   fail:
     msg: Any of parameter "minio_accesskey", "minio_secretkey" or "minio_region" cannot be empty !
   when: minio_accesskey == "" or minio_secretkey == "" or minio_region == ""
+
+- name: Show error when used with RPM 7.3 or less
+  fail:
+    msg: MinIO role can be used only with version 7.4 or above
+  when: rpm_base_version <= 7.3

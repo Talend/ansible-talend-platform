@@ -98,3 +98,8 @@
   fail:
     msg: Wrong value for tds_audit_enabled - can be only 'true' or 'false'
   when: tds_hybrid_mode == "no" and tds_audit_enabled not in ["true", "false"]
+
+- name: Check correct MinIO port (if MinIO is used)
+  fail:
+    msg: Incorrect value tds_s3endpoint, port does not match with variable minio_port
+  when: minio_port is defined and tds_s3endpoint | urlsplit('port') != minio_port

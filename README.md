@@ -96,7 +96,6 @@ The following applications can be installed from this repository using their ded
 | [tac](ansible/roles/tac)                       | Talend Administration Center (TAC)                                                                                                         |
 | [iam](ansible/roles/iam)                       | Talend Identity and Access Management (IAM) service                                                                                        |
 | [mdm](ansible/roles/mdm)                       | Talend Master Data Management (MDM)                                                                                                        |
-| [mwfl](ansible/roles/mwfl)                     | Talend MDM Workflow Server (MWFL)                                                                                                          |
 | [amc](ansible/roles/amc)                       | Talend Activity Monitoring Console (AMC)                                                                                                   |
 | [logserver](ansible/roles/logserver)           | Talend Log Server                                                                                                                          |
 | [jobserver](ansible/roles/jobserver)           | Talend Job Server                                                                                                                          |
@@ -107,7 +106,7 @@ The following applications can be installed from this repository using their ded
 | [streamsrunner](ansible/roles/streamsrunner)   | Streams Runner                                                                                                                             |
 | [tcomp](ansible/roles/tcomp)                   | Talend Component Server                                                                                                                    |
 | [tds](ansible/roles/tds)                       | Talend Data Stewardship (TDS)                                                                                                              |
-| [tsd](ansible/roles/tsd)                       | Talend Semantic Dictionary (TSD)                                                                                                           |
+| [tsd](ansible/roles/tsd)                       | Talend Dictionary Service (TSD)                                                                                                            |
 | [sap-rfc-server](ansible/roles/sap-rfc-server) | Talend SAP RFC Server                                                                                                                      |
 | [filebeat](ansible/roles/filebeat)             | Talend Filebeat service                                                                                                                    |
 
@@ -115,7 +114,7 @@ The following roles install third-party components:
 
 | Role                             | Application                                                                                                                                 |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [tomcat](ansible/roles/tomcat)   | Apache Tomcat server (required by [tac](ansible/roles/tac) , [iam](ansible/roles/iam), [tds](ansible/roles/tds), [tsd](ansible/roles/tsd) ) |
+| [tomcat](ansible/roles/tomcat)   | Apache Tomcat server (required by [tac](ansible/roles/tac), [iam](ansible/roles/iam), [tds](ansible/roles/tds), [tsd](ansible/roles/tsd)) |
 | [mongodb](ansible/roles/mongodb) | MongoDB server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                                   |
 | [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                              |
 | [nexus](ansible/roles/nexus)     | Nexus Repository Manager                                                                                                                    |

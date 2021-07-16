@@ -1,6 +1,6 @@
-# Talend Semantic Dictionary
+# Talend Dictionary Service
 
-This role installs **Talend Semantic Dictionary**.
+This role installs **Talend Dictionary Service**.
 
 Make sure you have completed the requirements listed in the [Root README](../../../README.md) file.
 

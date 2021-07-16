@@ -5,7 +5,7 @@
 # Read only variables
 #############################################
 # Do not modify this part
-app_name: "Talend Semantic Dictionary"
+app_name: "Talend Dictionary Service"
 rpm_name: "talend-dictionary-service"
 rpm_folder: "dictionary-service"
 app_service: "talend-dictionary-service"

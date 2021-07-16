@@ -102,4 +102,4 @@
 - name: Check correct MinIO port (if MinIO is used)
   fail:
     msg: Incorrect value tds_s3endpoint, port does not match with variable minio_port
-  when: minio_port is defined and tds_s3endpoint | urlsplit('port') != minio_port
+  when: minio_port is defined and tds_s3endpoint | urlsplit('port') != minio_port | int

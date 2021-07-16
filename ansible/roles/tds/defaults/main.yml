@@ -73,7 +73,7 @@ tds_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 #####
 # "Talend Dictionary Service" link
 #####
-# If you have a Talend Dictionary service licence, set to "yes" and tds_semantic_dictionary_url will be used
+# If you have a Talend Dictionary Service licence, set to "yes" and tds_semantic_dictionary_url will be used
 tds_use_semantic_dictionary: "yes"
 # Url of Talend Dictionary Service
 tds_semantic_dictionary_url: "http://localhost:8187/"

@@ -172,15 +172,15 @@
     replace: 'oidc.monitoring.secret={{ tds_oidc_secret }}'
 
 
-# Activate Talend Dictionary service or not
-- name: Activate Dictionary service
+# Activate Talend Dictionary Service or not
+- name: Activate Dictionary Service
   when: tds_use_semantic_dictionary == "yes"
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^semanticservice\.url=.*'
     replace: 'semanticservice.url={{ tds_semantic_dictionary_url }}'
 
-- name: Deactivate Dictionary service
+- name: Deactivate Dictionary Service
   when: tds_use_semantic_dictionary == "no"
   replace:
     path: "{{ tds_config_location }}"

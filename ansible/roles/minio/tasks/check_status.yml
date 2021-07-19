@@ -1,9 +1,8 @@
 ---
-
-# This common script checks the current status of application
-# If it is already installed, we should compare setting and throw error
-#    if actual settins are different
-# MinIO-specific: we cannot use common/tasks/check_status.yml, as MinIO RPM do not use install.params file
+# This common script checks the current status of the application
+# If it is already installed, we should compare settings and throw an error
+# if actual settings are different
+# MinIO-specific: we cannot use common/tasks/check_status.yml, as MinIO RPM does not use the install.params file
 
 - name: "Check whether {{ app_name }} RPM is installed"
   command: "rpm -qa {{ rpm_name }}"

@@ -137,7 +137,6 @@ Each application requires some TCP/IP ports to be open by default:
 * nexus: 8081
 * iam: 9080
 * mdm: 8180
-* mwfl: 8280
 * runtime: 1099, 8000, 8001, 8040, 8101, 8555, 8888, 9001, 44444
 * jobserver: 8000, 8001, 8555, 8888
 * tdp: 9999

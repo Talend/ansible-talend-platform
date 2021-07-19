@@ -28,7 +28,7 @@
 
 - name: "Install {{ app_name }} with rpm (non-default folder)"
   when: install_prefix != '/opt/talend' and (rpm_is_installed.stdout == '' or rpm_install_path.stdout != install_prefix)
-  command: "rpm -i --prefix={{ install_prefix }} {{ rpm_repo_url }}/{{ rpm_name }}-{{ kafka_pkg_version }}.x86_64.rpm"
+  command: "rpm -i --prefix={{ install_prefix }} {{ rpm_repo_url }}/{{ rpm_name }}-{{ minio_pkg_version }}.x86_64.rpm"
   args:
     warn: no
   environment:

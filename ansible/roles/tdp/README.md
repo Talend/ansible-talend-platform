@@ -317,7 +317,7 @@ Apache Spark is a fast and general-purpose cluster computing system. It provides
 
 More information about Spark configuration properties can be found at https://spark.apache.org/docs/1.6.2/configuration.html
 
-## Connection to AWS S3
+## Connection to Minio / AWS S3
 
 **Talend Data Preparation** requires connection to Minio (or AWS S3) server to share semantic dictionary with **TSD**.
 If you do not have an existing Minio / AWS S3 account, then embedded Minio server (**minio** role) can be used instead.

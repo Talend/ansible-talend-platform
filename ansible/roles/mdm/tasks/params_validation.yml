@@ -2,7 +2,7 @@
 # This script performs different parameters validation
 
 ######################################
-# MDM-specific parameters validation
+# MDM-specific parameter validation
 ######################################
 
 - name: Show error about wrong value for parameter mdm_use_audit

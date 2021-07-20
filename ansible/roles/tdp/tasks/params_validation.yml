@@ -193,3 +193,8 @@
   fail:
     msg: Wrong value for parameter "tdp_hybrid_region", must be one of "us", "eu" or "ap"
   when: tdp_hybrid_region != "us" and tdp_hybrid_region != "eu" and tdp_hybrid_region != "ap"
+
+- name: Check correct MinIO port (if MinIO is used)
+  fail:
+    msg: Incorrect value tdp_s3endpoint, port does not match with variable minio_port
+  when: minio_port is defined and tdp_s3endpoint | urlsplit('port') != minio_port | int

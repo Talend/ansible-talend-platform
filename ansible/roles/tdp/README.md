@@ -27,9 +27,9 @@ Before running the script, you can change the following variables in the *defaul
 
 The following options increase network throughput and are activated by default:
 
-| Parameter                           | Description                                                             | Value                                        |
-| ----------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------- |
-| `tdp_server_compression_enabled`    | Whether to enable compression of responses                              | Possible values: `true` (default) or `false` |
+| Parameter                           | Description                                                             | Value                                                                                                                                                                                  |
+| ----------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tdp_server_compression_enabled`    | Whether to enable compression of responses                              | Possible values: `true` (default) or `false`                                                                                                                                           |
 | `tdp_server_compression_mime_types` | Comma-separated mime-types which are targets for compression operations | Default value: `text/plain,text/html,text/css,application/json,application/x-javascript,text/xml,application/xml,application/xml+rss,text/javascript,application/javascript,text/x-js` |
 
 ### Hybrid configuration
@@ -273,16 +273,16 @@ Do not modify the default settings of the following parameters unless instructed
 
 | Parameter                              | Description                                    | Value                                                                              |
 | -------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `tdp_async_runtime_contextPath`        | Runtime context path for async operations      | Default value: `/api`                                                                  |
+| `tdp_async_runtime_contextPath`        | Runtime context path for async operations      | Default value: `/api`                                                              |
 | `tdp_spring_mvc_async_request_timeout` | Timeout (in milliseconds) for async executions | Default value: `600000`<br/>This value may need to be increased for large datasets |
 
 ### Logging properties
 
 | Parameter                           | Description                                                                                                              | Value                                                                                                                                                                      |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tdp_root_logger`                   | Logger name (SLF4J) prefix added to the event category                                                                   | Default value: `audit`                                                                                                                                                          |
+| `tdp_root_logger`                   | Logger name (SLF4J) prefix added to the event category                                                                   | Default value: `audit`                                                                                                                                                     |
 | `tdp_backend`                       | Logging backend. If set to `auto`, the audit library will try to detect and use the logging library is present           | Possible values: `auto`, `logback`, `log4j1`                                                                                                                               |
-| `tdp_encoding`                      | Encoding to use when writing events using appenders                                                                      | Default value: `UTF-8`                                                                                                                                                          |
+| `tdp_encoding`                      | Encoding to use when writing events using appenders                                                                      | Default value: `UTF-8`                                                                                                                                                     |
 | `tdp_application_name`              | Name of the application that logs audit events. This value will be put into MDC for each logged event                    | Default value: `Data Preparation`                                                                                                                                          |
 | `tdp_instance_name`                 | Name of the instance of the service. This value will be put into MDC for each logged event                               | Default value: `DefaultInstance`                                                                                                                                           |
 | `tdp_propagate_appender_exceptions` | Behaviour of API calls if one or more appenders could not process the event. *Only used in Data Preparation version 7.1* | Possible values: `all` (default), `none`                                                                                                                                   |
@@ -302,7 +302,7 @@ The file appender puts log entries into a JSON file. In most cases, there should
 
 | Parameter                 | Description                                   | Value                                        |
 | ------------------------- | --------------------------------------------- | -------------------------------------------- |
-| `tdp_appender_http_url`   | URL of target where logging data will be sent | Default value: `http://localhost:8057/`                            |
+| `tdp_appender_http_url`   | URL of target where logging data will be sent | Default value: `http://localhost:8057/`      |
 | `tdp_appender_http_async` | Whether to use asynchronous mode              | Possible values: `true` (default) or `false` |
 
 ### Spark properties
@@ -316,6 +316,22 @@ Apache Spark is a fast and general-purpose cluster computing system. It provides
 | `tdp_spark_executor_cores`     | Number of cores to use on each executor. Used in YARN and standalone mode only | Default value: `4`  |
 
 More information about Spark configuration properties can be found at https://spark.apache.org/docs/1.6.2/configuration.html
+
+## Connection to Minio / AWS S3
+
+**Talend Data Preparation** requires connection to a Minio server (or AWS S3) to share semantic dictionary with **TSD**.
+If you do not have an existing Minio / AWS S3 account, then an embedded Minio server (**minio** role) can be used instead.
+
+The following variables control the connection to Minio / AWS S3 and by default they are set to use embedded **minio** role:
+
+| Parameter      | Description        | Default value                                                   |
+| -------------- | ------------------ | --------------------------------------------------------------- |
+| tdp_s3endpoint | S3 endpoint URL    | `http://localhost:9000`                                         |
+| tdp_s3bucket   | Bucket name        | `default-bucket`                                                |
+| tdp_s3region   | Used AWS S3 region | `us-east-1` (do not change it if using embedded **minio** role) |
+| tdp_s3user     | AWS S3 access key  | `usr7xJ0agsFq`                                                  |
+| tdp_s3pass     | AWS S3 secret key  | `pwd9jYF26Van`                                                  |
+| tdp_basepath   | The base path      | *(empty value)*                                                 |
 
 ## Dependencies
 

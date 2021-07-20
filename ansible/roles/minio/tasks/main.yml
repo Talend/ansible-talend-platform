@@ -1,0 +1,26 @@
+---
+# Check params to be correct
+- import_tasks: params_validation.yml
+
+# Check systemd params to be correct
+- include_tasks: ../../common/tasks/params_validation_extra.yml
+
+# Check situation with current status (e.g. installed but into different path - that would be an error)
+- include_tasks: check_status.yml
+
+# Stop systemd service (if it exists, as it might not exist on a new installation)
+#   We need this to update configuration
+- include_tasks: ../../common/tasks/stop_service.yml
+
+# We will include installation with yum or with rpm depending of prefix used
+- include_tasks: install_yum.yml
+  when: install_prefix == '/opt/talend'
+
+- include_tasks: install_rpm.yml
+  when: install_prefix != '/opt/talend'
+
+# Update configuration
+- import_tasks: update_config.yml
+
+# Starting systemd service
+- include_tasks: ../../common/tasks/start_service.yml

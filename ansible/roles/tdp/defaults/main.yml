@@ -21,8 +21,8 @@ app_install_systemd: "yes" # allowed values "yes" and "no"
 tdp_public_ip: "localhost"
 tdp_server_port: "9999"
 
-tdp_iam_ip: "localhost"  # IAM host to be used (will be used only for non-hybrid configuration, otherwise ignored)
-tdp_iam_port: "9080"     # IAM port to be used (will be used only for non-hybrid configuration, otherwise ignored)
+tdp_iam_ip: "localhost" # IAM host to be used (will be used only for non-hybrid configuration, otherwise ignored)
+tdp_iam_port: "9080" # IAM port to be used (will be used only for non-hybrid configuration, otherwise ignored)
 
 tdp_async_runtime_contextPath: "/api"
 tdp_server_compression_enabled: "true"
@@ -101,7 +101,7 @@ tdp_security_oidc_client_endSessionEndpoint: "${iam.uri}/oidc/idp/logout"
 tdp_security_oidc_client_logoutSuccessUrl: "http://${public.ip}:${server.port}"
 tdp_security_oauth2_logout_uri: "/signOut"
 tdp_security_oauth2_sso_login_path: "/signIn"
-tdp_iam_scim_url: "http://${iam.ip}:{{ tdp_iam_port }}/scim/"  # (only for non-hybrid mode) 
+tdp_iam_scim_url: "http://${iam.ip}:{{ tdp_iam_port }}/scim/" # (only for non-hybrid mode)
 tdp_security_oauth2_resource_tokenInfoUriCache_enabled: "true"
 tdp_tenant_account_cache_enabled: "true"
 tdp_gateway_api_service_url: "http://${public.ip}:${server.port}"
@@ -130,7 +130,7 @@ tdp_logging_level_org_talend_dataprep_fullrun: "INFO"
 tdp_logging_level_org_talend_dataprep_api_dataquality: "INFO"
 tdp_logging_level_org_talend_dataprep_configuration: "INFO"
 tdp_logging_level_org_talend_dataquality_semantic: "INFO"
-tdp_audit_log_enabled: "true"       # (only for non-hybrid mode, otherwise always "false")
+tdp_audit_log_enabled: "true" # (only for non-hybrid mode, otherwise always "false")
 tdp_talend_logging_audit_config: "config/audit.properties"
 tdp_default_text_enclosure: '"'
 tdp_default_text_escape: '"'
@@ -156,5 +156,15 @@ tdp_spark_executor_instances: "10"
 tdp_spark_executor_cores: "4"
 
 # Hybrid mode
-tdp_hybrid_mode:   "no"     # Can be "yes" or "no"
-tdp_hybrid_region: "us"     # Can be one of "us", "eu" or "ap"
+tdp_hybrid_mode: "no" # Can be "yes" or "no"
+tdp_hybrid_region: "us" # Can be one of "us", "eu" or "ap"
+
+#####
+# Communication with Minio / AWS S3 (defaults are set to use a local "minio" role)
+#####
+tdp_s3endpoint: "http://localhost:9000"
+tdp_s3bucket: "default-bucket"
+tdp_s3region: "us-east-1"
+tdp_s3user: "usr7xJ0agsFq"
+tdp_s3pass: "pwd9jYF26Van"
+tdp_basepath: ""

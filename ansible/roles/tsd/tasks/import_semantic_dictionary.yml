@@ -1,5 +1,5 @@
 ---
-# This script used for import semantic dictionary in mongo (first install only)
+# This script used to import the semantic dictionary into mongo (initial install only)
 # It can be run just after the installation
 
 #####

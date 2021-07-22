@@ -1,5 +1,5 @@
 ---
-# Check params to be correct
+# Validate parameters
 - import_tasks: params_validation.yml
 
 # Check Tomcat and systemd params to be correct

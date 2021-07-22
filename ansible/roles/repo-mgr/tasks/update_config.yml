@@ -1,6 +1,6 @@
 ---
 
-# This script used for updating current application parameters if the application is already installed
+# This script used to update current application parameters if the application is already installed
 # It can be run just after the installation or after some time (re-configuration)
 # Some parameters cannot be re-configured (installation path, user, group, tomcat deployment, systemd status)
 # All other parameters must be reconfigured here

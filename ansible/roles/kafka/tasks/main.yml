@@ -1,6 +1,6 @@
 ---
 
-# Check params to be correct
+# Validate parameters
 - import_tasks: params_validation.yml
 
 # Check situation with current status (e.g. installed but into different path - that would be an error)

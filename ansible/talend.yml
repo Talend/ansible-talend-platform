@@ -13,7 +13,6 @@
       - amc
       - filebeat
       - iam
-      - nexus
       - repo-mgr
       - mdm
       - mwfl

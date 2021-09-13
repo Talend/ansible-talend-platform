@@ -303,36 +303,6 @@
       regexp: "spring.cloud.stream.kafka.binder.brokers=.*"
       replace: "spring.cloud.stream.kafka.binder.brokers={{ tdp_spring_cloud_stream_kafka_binder_brokers }}"
 
-- name: Modify Data Preparation streams enable
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "streams.enable=.*"
-      replace: "streams.enable={{ tdp_streams_enable }}"
-
-- name: Modify Data Preparation streams flow runner url
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "streams.flow.runner.url=.*"
-      replace: "streams.flow.runner.url={{ tdp_streams_flow_runner_url }}"
-
-- name: Modify Data Preparation streams kerberos principal
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "streams.kerberos.principal=.*"
-      replace: "streams.kerberos.principal={{ tdp_streams_kerberos_principal }}"
-
-- name: Modify Data Preparation streams kerberos keytab path
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "streams.kerberos.keytab_path=.*"
-      replace: "streams.kerberos.keytab_path={{ tdp_streams_kerberos_keytab_path }}"
-
-- name: Modify Data Preparation streams hdfs server url
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "streams.hdfs.server.url=.*"
-      replace: "streams.hdfs.server.url={{ tdp_streams_hdfs_server_url }}"
-
 - name: Modify Data Preparation security basic enabled
   replace:
       path: "/etc/talend/tdp/application.properties"
@@ -766,24 +736,6 @@
       path: "/etc/talend/tdp/audit.properties"
       regexp: "appender.http.async=.*"
       replace: "appender.http.async={{ tdp_appender_http_async }}"
-
-- name: Modify Data Preparation spark executor memory
-  replace:
-      path: "/etc/talend/tdp/streams_tuning.properties"
-      regexp: "spark.executor.memory=.*"
-      replace: "spark.executor.memory={{ tdp_spark_executor_memory }}"
-
-- name: Modify Data Preparation spark executor instances
-  replace:
-      path: "/etc/talend/tdp/streams_tuning.properties"
-      regexp: "spark.executor.instances=.*"
-      replace: "spark.executor.instances={{ tdp_spark_executor_instances }}"
-
-- name: Modify Data Preparation spark executor cores
-  replace:
-      path: "/etc/talend/tdp/streams_tuning.properties"
-      regexp: "spark.executor.cores=.*"
-      replace: "spark.executor.cores={{ tdp_spark_executor_cores }}"
 
 #
 # Hybrid actions - activation

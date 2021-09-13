@@ -164,18 +164,6 @@ The live dataset feature allows creating a job in Talend Studio, executing it on
 | `tdp_dataquality_event_store`                  | *Do not modify*                                        | Only possible value: `mongodb`                                     |
 | `tdp_spring_cloud_stream_kafka_binder_brokers` | Host of Kafka server                                   | Default value: `localhost`                                         |
 
-### Streams Runner configuration parameters
-
-To configure Talend Data Preparation with Big Data, use the following parameters:
-
-| Parameter                          | Description                                                | Value                                        |
-| ---------------------------------- | ---------------------------------------------------------- | -------------------------------------------- |
-| `tdp_streams_enable`               | Whether to enable communication with Streams Runner server | Possible values: `true` (default) or `false` |
-| `tdp_streams_flow_runner_url`      | URL of Streams Runner server                               | Default value: `http://localhost:9060`       |
-| `tdp_streams_kerberos_principal`   | Kerberos principal                                         |                                              |
-| `tdp_streams_kerberos_keytab_path` | Path of Kerveros keytab                                    |                                              |
-| `tdp_streams_hdfs_server_url`      | URL of HDFS server                                         | Format: `hdfs://<host>:<port>/<filepath>`    |
-
 ### Single Sign-On (SSO) security configuration parameters
 
 | Parameter                    | Description           | Value                                        |
@@ -304,18 +292,6 @@ The file appender puts log entries into a JSON file. In most cases, there should
 | ------------------------- | --------------------------------------------- | -------------------------------------------- |
 | `tdp_appender_http_url`   | URL of target where logging data will be sent | Default value: `http://localhost:8057/`      |
 | `tdp_appender_http_async` | Whether to use asynchronous mode              | Possible values: `true` (default) or `false` |
-
-### Spark properties
-
-Apache Spark is a fast and general-purpose cluster computing system. It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs. The following properties can be set to be used by Spark:
-
-| Parameter                      | Description                                                                    | Value               |
-| ------------------------------ | ------------------------------------------------------------------------------ | ------------------- |
-| `tdp_spark_executor_memory`    | Memory to use per executor process                                             | Default value: `3g` |
-| `tdp_spark_executor_instances` | Number of executors requested                                                  | Default value: `10` |
-| `tdp_spark_executor_cores`     | Number of cores to use on each executor. Used in YARN and standalone mode only | Default value: `4`  |
-
-More information about Spark configuration properties can be found at https://spark.apache.org/docs/1.6.2/configuration.html
 
 ## Connection to Minio / AWS S3
 

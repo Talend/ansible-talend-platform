@@ -99,11 +99,6 @@
     msg: Wrong value for parameter "tdp_dataquality_semantic_update_enable", must be 'true' or 'false'
   when: tdp_dataquality_semantic_update_enable != "true" and tdp_dataquality_semantic_update_enable != "false"
 
-- name: Show error about wrong value for parameter tdp_streams_enable
-  fail:
-    msg: Wrong value for parameter "tdp_streams_enable", must be 'true' or 'false'
-  when: tdp_streams_enable != "true" and tdp_streams_enable != "false"
-
 - name: Show error about wrong value for parameter tdp_security_basic_enabled
   fail:
     msg: Wrong value for parameter "tdp_security_basic_enabled", must be 'true' or 'false'
@@ -168,16 +163,6 @@
   fail:
     msg: Wrong value for parameter "tdp_appender_http_async", must be 'true' or 'false'
   when: tdp_appender_http_async != "true" and tdp_appender_http_async != "false"
-
-- name: Show error about wrong value for parameter tdp_spark_executor_instances
-  fail:
-    msg: Wrong value for parameter "tdp_spark_executor_instances", must be an integer
-  when: tdp_spark_executor_instances|int < 1
-
-- name: Show error about wrong value for parameter tdp_spark_executor_cores
-  fail:
-    msg: Wrong value for parameter "tdp_spark_executor_cores", must be an integer
-  when: tdp_spark_executor_cores|int < 1
 
 - name: Show error about wrong value for parameter tdp_hybrid_mode
   fail:

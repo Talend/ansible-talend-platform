@@ -10,7 +10,6 @@
       - minio
       - jobserver
       - tac
-      - amc
       - filebeat
       - iam
       - repo-mgr

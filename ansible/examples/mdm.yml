@@ -9,7 +9,6 @@
     - talend-repo
     - tomcat
     - tac
-    - amc
     - iam
   vars:
     # TAC variables

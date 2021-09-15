@@ -117,7 +117,6 @@ The following roles install third-party components:
 | [tomcat](ansible/roles/tomcat)   | Apache Tomcat server (required by [tac](ansible/roles/tac), [iam](ansible/roles/iam), [tds](ansible/roles/tds), [tsd](ansible/roles/tsd)) |
 | [mongodb](ansible/roles/mongodb) | MongoDB server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                                   |
 | [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                              |
-| [nexus](ansible/roles/nexus)     | Nexus Repository Manager                                                                                                                    |
 | [minio](ansible/roles/minio)     | MinIO server (required by [tsd](ansible/roles/tsd), [tds](ansible/roles/tds), [tdp](ansible/roles/tdp))                                    |
 
 ## List of applications compatible with Talend Cloud Hybrid setup
@@ -128,13 +127,11 @@ Ansible roles corresponding to these applications are compatible with the Hybrid
 
 To learn more about it, refer to [Talend Help Center](https://help.talend.com/access/sources/content/map?pageid=cloud_hybrid_install&afs:lang=en&EnrichVersion=Cloud).
 
-
 ## List of ports to open
 
 Each application requires some TCP/IP ports to be open by default:
 
 * tac: 8080
-* nexus: 8081
 * iam: 9080
 * mdm: 8180
 * runtime: 1099, 8000, 8001, 8040, 8101, 8555, 8888, 9001, 44444

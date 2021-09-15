@@ -19,6 +19,4 @@
       - runtime
       - sap-rfc-server
       - tcomp
-      - sjs
-      - streamsrunner
       - tdp

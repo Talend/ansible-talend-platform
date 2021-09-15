@@ -101,9 +101,7 @@ The following applications can be installed from this repository using their ded
 | [jobserver](ansible/roles/jobserver)           | Talend Job Server                                                                                                                          |
 | [repo-mgr](ansible/roles/repo-mgr)             | Talend Repository Manager                                                                                                                  |
 | [runtime](ansible/roles/runtime)               | Talend Runtime server                                                                                                                      |
-| [tdp](ansible/roles/tdp)                       | Talend Data Preparation (requires [sjs](ansible/roles/sjs), [tcomp](ansible/roles/tcomp) and [streamsrunner](ansible/roles/streamsrunner)) |
-| [sjs](ansible/roles/sjs)                       | Spark Job Server                                                                                                                           |
-| [streamsrunner](ansible/roles/streamsrunner)   | Streams Runner                                                                                                                             |
+| [tdp](ansible/roles/tdp)                       | Talend Data Preparation (requires [tcomp](ansible/roles/tcomp)) |
 | [tcomp](ansible/roles/tcomp)                   | Talend Component Server                                                                                                                    |
 | [tds](ansible/roles/tds)                       | Talend Data Stewardship (TDS)                                                                                                              |
 | [tsd](ansible/roles/tsd)                       | Talend Dictionary Service (TSD)                                                                                                            |

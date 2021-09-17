@@ -96,7 +96,6 @@ The following applications can be installed from this repository using their ded
 | [tac](ansible/roles/tac)                       | Talend Administration Center (TAC)                                                                                                         |
 | [iam](ansible/roles/iam)                       | Talend Identity and Access Management (IAM) service                                                                                        |
 | [mdm](ansible/roles/mdm)                       | Talend Master Data Management (MDM)                                                                                                        |
-| [amc](ansible/roles/amc)                       | Talend Activity Monitoring Console (AMC)                                                                                                   |
 | [logserver](ansible/roles/logserver)           | Talend Log Server                                                                                                                          |
 | [jobserver](ansible/roles/jobserver)           | Talend Job Server                                                                                                                          |
 | [repo-mgr](ansible/roles/repo-mgr)             | Talend Repository Manager                                                                                                                  |

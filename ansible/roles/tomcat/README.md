@@ -2,7 +2,7 @@
 
 This role installs **Talend Tomcat**.
 
-> **Note**: All Tomcat-based Talend applications (TAC, MDM, AMC, TDS, etc) must have a Tomcat server available. The server can either be this Talend-provided Tomcat, or a customer-provided Tomcat.
+> **Note**: All Tomcat-based Talend applications (TAC, MDM, TDS, etc) must have a Tomcat server available. The server can either be this Talend-provided Tomcat, or a customer-provided Tomcat.
 
 Make sure you completed the requirements listed in the [Root README](../../../README.md) file.
 

@@ -71,7 +71,7 @@ tac_logserver_port: 5044
 
 # Database parameters
 # TAC_DATABASE = h2 | mysql | oracle | mssql | postgresql | mariadb
-tac_database: "h2"
+tac_database: "mysql"
 
 tac_db_host: "localhost"
 tac_db_port: 3306

@@ -70,7 +70,7 @@ mdm_tds_password: "administrator"
 
 # Database parameters
 # MDM_DATABASE = h2 | mysql8 | mysql | oracle | mssql | postgresql | db2
-mdm_database: "h2"
+mdm_database: "mysql8"
 
 mdm_db_name: "${container}" # Default: oracle/db2=TMDM_DB; others=${container}
 mdm_db_host: "localhost"

@@ -20,7 +20,7 @@ Before running the script, you can change the following variables in the *defaul
   | Parameter                 | Description                                                           | Value                                                                 |
   | ------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- |
   | `sap_install_sapjco3_jar` | Controls whether to deploy `sapjco3.jar` automatically or not         | Default value: `no`                                                   |
-  | `sap_sapjco3_jar_path`    | Sets the path to the `sapjc03.jar` on the local (Ansible master) host | For example: `/mnt/share/sapjc03.jar`<br/>Default value: empty string |
+  | `sap_sapjco3_jar_path`    | Sets the path to the `sapjc03.jar` on the local (Ansible master) host | For example: `/mnt/share/path-to-sapjco3-jar-file`<br/>Default value: empty string |
 
 ### Systemd
 

@@ -68,6 +68,12 @@ mdm_tds_root_url: "http://localhost:19999"
 mdm_tds_user: "administrator@company.com"
 mdm_tds_password: "administrator"
 
+# New parameters for Data Authoring
+mdm_host_frontend: "http://localhost:{{ app_tomcat_port }}"
+mdm_host_proxy:    "http://localhost:{{ app_tomcat_port }}"
+mdm_server_host:   "http://localhost:{{ app_tomcat_port }}"
+mdm_tdp_url:       "http://localhost:9999"
+
 # Database parameters
 # MDM_DATABASE = h2 | mysql8 | mysql | oracle | mssql | postgresql | db2
 mdm_database: "mysql8"
@@ -95,6 +101,7 @@ mdm_db_system_password: "mdm_system"
 # Internal configuration variables, do not change this block
 #####
 mdm_config_location: "{{ install_prefix + '/' + rpm_folder + '/conf' }}"
+mdm_tomcat_config_location: "{{ install_prefix + '/' + rpm_folder + '/tomcat/conf' if app_use_talend_tomcat == 'yes' or app_tomcat_mode == 'shared' else app_tomcat_home + '/conf'}}"
 #####
 # End of internal configuration variables block
 #####

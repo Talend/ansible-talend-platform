@@ -540,3 +540,52 @@
     path: "{{ mdm_config_location }}/datasources.xml"
     regexp:  '\$\$mdmschemaofsystemobjectsdb2\$\$'
     replace: "{{ mdm_db_system_schema }}"
+
+# Data Authoring
+- name: Update data-authoring-gateway - IAM URL
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-gateway.properties"
+    regexp: '^iam.url: .*'
+    replace: "iam.url: {{ mdm_iam_url }}"
+
+- name: Update data-authoring-gateway - host front-end
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-gateway.properties"
+    regexp: '\$\{tinstall\.host\.frontend\}'
+    replace: "{{ mdm_host_frontend }}"
+
+- name: Update data-authoring-gateway - host proxy
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-gateway.properties"
+    regexp: '\$\{tinstall\.host\.proxy\}'
+    replace: "{{ mdm_host_proxy }}"
+
+- name: Update data-authoring-proxy - IAM URL
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-proxy.properties"
+    regexp: '^iam.url: .*'
+    replace: "iam.url: {{ mdm_iam_url }}"
+
+- name: Update data-authoring-proxy - mdm server host
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-proxy.properties"
+    regexp: '\$\{tinstall\.mdm\.server\.host\}'
+    replace: "{{ mdm_server_host }}"
+
+- name: Update data-authoring-proxy - mdm server conf path
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-proxy.properties"
+    regexp: '\$\{tinstall\.mdm\.server\.conf\.path\}'
+    replace: "{{ mdm_config_location }}/mdm.conf"
+
+- name: Update data-authoring-proxy - tds url
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-proxy.properties"
+    regexp: '\$\{tinstall\.tds\.url\}'
+    replace: "{{ mdm_tds_root_url }}"
+
+- name: Update data-authoring-proxy - tdp url
+  replace:
+    path: "{{ mdm_tomcat_config_location }}/data-authoring-proxy.properties"
+    regexp: '\$\{tinstall\.tdp\.url\}'
+    replace: "{{ mdm_tdp_url }}"

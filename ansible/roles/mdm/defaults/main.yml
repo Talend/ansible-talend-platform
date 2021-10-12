@@ -101,7 +101,7 @@ mdm_db_system_password: "mdm_system"
 # Internal configuration variables, do not change this block
 #####
 mdm_config_location: "{{ install_prefix + '/' + rpm_folder + '/conf' }}"
-mdm_tomcat_config_location: "{{ install_prefix + '/' + rpm_folder + 'tomcat/conf' if app_use_talend_tomcat == 'yes' or app_tomcat_mode == 'shared' else app_tomcat_home + '/conf'}}"
+mdm_tomcat_config_location: "{{ install_prefix + '/' + rpm_folder + '/tomcat/conf' if app_use_talend_tomcat == 'yes' or app_tomcat_mode == 'shared' else app_tomcat_home + '/conf'}}"
 #####
 # End of internal configuration variables block
 #####

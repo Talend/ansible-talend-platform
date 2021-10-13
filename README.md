@@ -47,7 +47,7 @@ To change the RPM version to install, edit the following parameters:
     rpm_build_number: 202002191130
     ```
 
-1. Configure the playbook you want to install by specifying:
+2. Configure the playbook you want to install by specifying:
     1. the **hosts** to install the roles on. Hosts must be defined in `/etc/ansible/hosts` on the master node.
     2. the **remote_user** name. Make sure that the user has the required permissions to install applications on all hosts.
     3. the **roles** to install, by installation order.
@@ -77,11 +77,10 @@ To change the RPM version to install, edit the following parameters:
 
     Sample playbooks are available [here](ansible/examples) or [here](ansible).
 
-2. Configure the installation parameters as well as the configuration of each role using their respective *defaults/main.yml* file. <br/> Variables can be overwritten if they are set differently directly in the playbook.
-3. Run the playbook: <br/> `ansible-playbook <playbook>.yml`
+3. Configure the installation parameters as well as the configuration of each role using their respective *defaults/main.yml* file. <br/> Variables can be overwritten if they are set differently directly in the playbook.
+4. Run the playbook: <br/> `ansible-playbook <playbook>.yml`
 
 > **Important**: Always include **java** and then **talend-repo** roles in as first roles in playbooks. If Tomcat is needed for the set of roles that are installed, also include the **tomcat** role between **talend-repo** and the following roles.
-
 
 ## Uninstalling applications
 

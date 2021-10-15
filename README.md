@@ -32,7 +32,9 @@ To change the RPM version to install, edit the following parameters:
     rpm_patch_version: 1
     rpm_build_number: 201810261147
     ```
+
     * 7.2 applications:
+
     ```
     rpm_base_version: 7.2
     rpm_patch_version: 1
@@ -80,7 +82,6 @@ To change the RPM version to install, edit the following parameters:
 
 > **Important**: Always include **java** and then **talend-repo** roles in as first roles in playbooks. If Tomcat is needed for the set of roles that are installed, also include the **tomcat** role between **talend-repo** and the following roles.
 
-
 ## Uninstalling applications
 
 You can remove installed applications using `sudo yum remove <list_of_packages>` manually on every host.
@@ -98,7 +99,6 @@ The following applications can be installed from this repository using their ded
 | [mdm](ansible/roles/mdm)                       | Talend Master Data Management (MDM)                                                                                                        |
 | [logserver](ansible/roles/logserver)           | Talend Log Server                                                                                                                          |
 | [jobserver](ansible/roles/jobserver)           | Talend Job Server                                                                                                                          |
-| [repo-mgr](ansible/roles/repo-mgr)             | Talend Repository Manager                                                                                                                  |
 | [runtime](ansible/roles/runtime)               | Talend Runtime server                                                                                                                      |
 | [tdp](ansible/roles/tdp)                       | Talend Data Preparation (requires [tcomp](ansible/roles/tcomp)) |
 | [tcomp](ansible/roles/tcomp)                   | Talend Component Server                                                                                                                    |

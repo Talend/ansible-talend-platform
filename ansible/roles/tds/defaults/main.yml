@@ -54,7 +54,7 @@ tds_mongo_password: "duser"
 #####
 # Audit log settings (will be used only for non-hybrid mode)
 #####
-tds_audit_enabled: "true"
+tds_audit_log_enabled: "true"
 tds_appender_http_url: "http://localhost:8057/"
 
 #####

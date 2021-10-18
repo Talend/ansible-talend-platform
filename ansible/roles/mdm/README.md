@@ -36,7 +36,7 @@ Before running the script, you can change the following variables in the *defaul
 
 | Parameter               | Description                                          | Value                           |
 | ----------------------- | ---------------------------------------------------- | ------------------------------- |
-| `mdm_use_audit`         | Whether to use Audit enablement for Talend LogServer | Supported values: `yes` or `no` |
+| `mdm_audit_log_enabled`         | Whether to use Audit enablement for Talend LogServer | Supported values: `yes` or `no` |
 | `mdm_audit_server_host` | Host of Audit server                                 | Default value: `localhost`      |
 | `mdm_audit_server_port` | Port of Audit server                                 | Default value: `8057`           |
 

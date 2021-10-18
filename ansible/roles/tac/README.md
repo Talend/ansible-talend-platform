@@ -45,13 +45,11 @@ Before running the script, you can change the following variables in the *defaul
 | ------------- | ------------------ | ------------------------------- |
 | `tac_use_sso` | Whether to use SSO | Supported values: `yes` or `no` |
 
-### LogServer
+### Audit logging configuration parameters
 
 | Parameter            | Description              | Value                                                                 |
 | -------------------- | ------------------------ | --------------------------------------------------------------------- |
-| `tac_use_logserver`  | Whether to use LogServer | Supported values: `yes` or `no`                                       |
-| `tac_logserver_host` | Host of LogServer        | Required if `tac_use_logserver` is set to `yes`. Example: `localhost` |
-| `tac_logserver_port` | Port of LogServer        | Required if `tac_use_logserver` is set to `yes`. Example: `5044`      |
+| `tac_audit_log_enabled`  | Whether to use LogServer | Supported values: `yes` or `no`                                       |
 
 ### Database
 
@@ -83,13 +81,6 @@ If `tac_setup_jobserver` is set to `yes`, the following parameters are used:
 | `tac_jobserver_monitoring_port`    | Port used for moniforing     | Default value: `8888`      |
 | `tac_jobserver_username`           | User name of Jobserver user  | Default value: `talend`    |
 | `tac_jobserver_password`           | Password of Jobserver user   | Default value: `talend`    |
-
-### Socket appender
-
-| Parameter                  | Description             | Value                      |
-| -------------------------- | ----------------------- | -------------------------- |
-| `tac_appender_socket_host` | Host of socket appender | Default value: `localhost` |
-| `tac_appender_socket_port` | Port of socket appender | Default value: `8056`      |
 
 ### Http appender
 

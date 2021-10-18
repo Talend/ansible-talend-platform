@@ -274,7 +274,7 @@ Do not modify the default settings of the following parameters unless instructed
 | `tdp_application_name`              | Name of the application that logs audit events. This value will be put into MDC for each logged event                    | Default value: `Data Preparation`                                                                                                                                          |
 | `tdp_instance_name`                 | Name of the instance of the service. This value will be put into MDC for each logged event                               | Default value: `DefaultInstance`                                                                                                                                           |
 | `tdp_propagate_appender_exceptions` | Behaviour of API calls if one or more appenders could not process the event. *Only used in Data Preparation version 7.1* | Possible values: `all` (default), `none`                                                                                                                                   |
-| `tdp_log_appender`                  | Comma-separated list of log appender types                                                                               | Possible values: `socket`, `file`, `console`, `http`<br/>Ansible only supports `http` or `file`. To use other settings, update the file `config/audit.properties` directly |
+| `tdp_log_appender`                  | Comma-separated list of log appender types                                                                               | Possible values: `file`, `http` |
 
 ### Logging - File appender properties
 

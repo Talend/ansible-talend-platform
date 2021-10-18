@@ -6,7 +6,7 @@
 # All other parameters must be reconfigured here
 
 #
-# Work with IAM 
+# Work with IAM
 #
 - name: Update oidc.url
   replace:
@@ -27,7 +27,7 @@
     replace: "scim.url={{ mdm_scim_url }}"
 
 #
-# Work with TDS 
+# Work with TDS
 #
 - name: Update TDS URL
   replace:
@@ -51,7 +51,7 @@
 # Work with LogServer (Audit)
 #
 - name: Update audit configuration
-  when: mdm_use_audit == 'yes'
+  when: mdm_audit_log_enabled == 'yes'
   replace:
     path: "{{ mdm_config_location }}/audit.properties"
     regexp:  'appender\.http\.url=.*'
@@ -118,7 +118,7 @@
 # Update database parameters
 #
 
-# 
+#
 # For H2 database
 #
 - name: Update H2 Datasource of mdm.conf
@@ -260,7 +260,7 @@
     regexp:  '\$\$mdmsearchindexdiroracle\$\$'
     replace: "{{ mdm_search_index_dir }}"
 
-# Master    
+# Master
 - name: Update Oracle Master User
   when: mdm_database == "oracle"
   replace:
@@ -475,7 +475,7 @@
     regexp:  '\$\$mdmsearchindexdirdb2\$\$'
     replace: "{{ mdm_search_index_dir }}"
 
-# Master    
+# Master
 - name: Update DB2 Master User
   when: mdm_database == "db2"
   replace:

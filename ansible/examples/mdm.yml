@@ -31,7 +31,7 @@
     - mwfl
   vars:
     # MDM variables
-    - mdm_use_audit: "no"
+    - mdm_audit_log_enabled: "no"
     - mdm_iam_url: "http://tac-host.localnet:9080"
     - mdm_oidc_url: "http://tac-host.localnet:9080/oidc"
     - mdm_oidc_userauth_url: "http://tac-host.localnet:9080/oidc"

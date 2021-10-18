@@ -75,90 +75,90 @@
     path: "{{ tds_config_location }}"
     regexp:  '^scim\.url=.*'
     replace: 'scim.url={{ tds_security_scim_url }}'
-    
+
 - name: Update oidc url - non-hybrid
   when: tds_hybrid_mode == 'no'
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.url=.*'
     replace: 'oidc.url={{ tds_security_oidc_url }}'
-    
+
 - name: Update oidc userauth url - non-hybrid
   when: tds_hybrid_mode == 'no'
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.userauth\.url=.*'
     replace: 'oidc\.userauth.url={{ tds_security_oidc_user_auth_url }}'
-    
+
 - name: Update scim url (IAM) - hybrid
   when: tds_hybrid_mode != 'no'
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^scim\.url=.*'
     replace: 'scim.url=https://api.{{ tds_hybrid_region }}.cloud.talend.com/v1/scim/'
-    
+
 - name: Update oidc url - hybrid
   when: tds_hybrid_mode != 'no'
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.url=.*'
     replace: 'oidc.url=https://iam.{{ tds_hybrid_region }}.cloud.talend.com/oidc'
-    
+
 - name: Update oidc userauth url - hybrid
   when: tds_hybrid_mode != 'no'
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.userauth\.url=.*'
     replace: 'oidc\.userauth.url=https://iam.{{ tds_hybrid_region }}.cloud.talend.com/oidc'
-    
+
 - name: Update oidc gateway ID
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.gateway\.id=.*'
     replace: 'oidc.gateway.id={{ tds_oidc_id }}'
-    
+
 - name: Update oidc gateway secret
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.gateway\.secret=.*'
     replace: 'oidc.gateway.secret={{ tds_oidc_secret }}'
-    
+
 - name: Update oidc tds ID
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.tds\.id=.*'
     replace: 'oidc.tds.id={{ tds_oidc_id }}'
-    
+
 - name: Update oidc tds secret
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.tds\.secret=.*'
     replace: 'oidc.tds.secret={{ tds_oidc_secret }}'
-    
+
 - name: Update oidc history ID
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.history\.id=.*'
     replace: 'oidc.history.id={{ tds_oidc_id }}'
-    
+
 - name: Update oidc history secret
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.history\.secret=.*'
     replace: 'oidc.history.secret={{ tds_oidc_secret }}'
-    
+
 - name: Update oidc schema ID
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.schema\.id=.*'
     replace: 'oidc.schema.id={{ tds_oidc_id }}'
-    
+
 - name: Update oidc schema secret
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^oidc\.schema\.secret=.*'
     replace: 'oidc.schema.secret={{ tds_oidc_secret }}'
-    
+
 - name: Update oidc.monitoring.id
   replace:
     path: "{{ tds_config_location }}"
@@ -212,7 +212,7 @@
 
 # Set appender.http.url in audit.properties
 - name: Update appender.http.url
-  when: tds_hybrid_mode == "no" and tds_audit_enabled == "true"
+  when: tds_hybrid_mode == "no" and tds_audit_log_enabled == "true"
   replace:
     path: "{{ tds_config_audit_location }}"
     regexp:  'appender\.http\.url=.*'
@@ -359,7 +359,7 @@
   lineinfile:
     path: "{{ tds_config_location }}"
     regexp: 'audit\.log\.enabled='
-    line: "audit.log.enabled=true"
+    line: "audit.log.enabled={{ tds_audit_log_enabled }}"
 
 - name: Deactivate hybrid mode (9)
   when: tds_hybrid_mode != 'yes'

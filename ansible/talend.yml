@@ -12,7 +12,6 @@
       - tac
       - filebeat
       - iam
-      - repo-mgr
       - mdm
       - mwfl
       - runtime

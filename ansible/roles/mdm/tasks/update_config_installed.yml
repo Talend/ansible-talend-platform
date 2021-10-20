@@ -57,6 +57,13 @@
     regexp:  'appender\.http\.url=.*'
     replace: "appender.http.url=http://{{ mdm_audit_server_host }}:{{ mdm_audit_server_port }}/"
 
+- name: Update audit configuration (2)
+  when: mdm_use_audit != 'yes'
+  replace:
+    path: "{{ mdm_config_location }}/mdm.conf"
+    regexp:  'talend\.logging\.audit\.config='
+    replace: "#talend.logging.audit.config="
+
 #
 # Copy DB Driver
 #

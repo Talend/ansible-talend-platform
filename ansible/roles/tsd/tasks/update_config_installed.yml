@@ -141,21 +141,21 @@
   when: tsd_hybrid_mode == "no" and tsd_audit_log_enabled == "false"
   replace:
     path: "{{ tsd_config_audit_location }}"
-    regexp:  'appender\.http\.url=.*'
+    regexp:  '^appender\.http\.url=.*'
     replace: '#appender.http.url='
 
 - name: Comment appender.socket.host
   when: tsd_hybrid_mode == "no"
   replace:
     path: "{{ tsd_config_audit_location }}"
-    regexp:  'appender\.socket\.host=.*'
+    regexp:  '^appender\.socket\.host=.*'
     replace: '#appender.socket.host='
 
 - name: Comment appender.socket.port
   when: tsd_hybrid_mode == "no"
   replace:
     path: "{{ tsd_config_audit_location }}"
-    regexp:  'appender\.socket\.port=.*'
+    regexp:  '^appender\.socket\.port=.*'
     replace: '#appender.socket.port='
 
 # Hybrid mode activation

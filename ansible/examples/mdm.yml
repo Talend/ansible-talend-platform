@@ -28,7 +28,6 @@
     - talend-repo
     - tomcat
     - mdm
-    - mwfl
   vars:
     # MDM variables
     - mdm_use_audit: "no"

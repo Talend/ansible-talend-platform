@@ -13,7 +13,6 @@
       - filebeat
       - iam
       - mdm
-      - mwfl
       - runtime
       - sap-rfc-server
       - tcomp

@@ -63,6 +63,7 @@ Before running the script, you can change the following variables in the *defaul
 | `tac_db_name`     | Name of database          | Example: `talend_administrator`                                             |
 | `tac_db_user`     | User name                 | Default value: `talend`                                                     |
 | `tac_db_password` | Password of database user | Default value: `talend`                                                     |
+| `tac_db_driver`  | Database driver file (jar) | Required for non-H2 databases. Driver will be copied to a corresponding folder in tomcat |
 
 > **Note:**  If you set `tac_database` to `h2`, all the other parameters are optional.
 

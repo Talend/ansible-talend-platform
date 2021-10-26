@@ -227,6 +227,16 @@
     regexp:  '^database\.password=.*'
     replace: "database.password={{ tac_db_password }}"
 
+# Copy DB Driver
+- name: Copy DB Driver (talend tomcat)
+  when: tac_database != "h2" and app_use_talend_tomcat == "yes"
+  copy:
+    src: "{{ tac_db_driver }}"
+    dest: "{{ install_prefix + '/' + rpm_folder + '/tomcat/lib' }}"
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0644
+
 #
 # Setup JobServer
 #

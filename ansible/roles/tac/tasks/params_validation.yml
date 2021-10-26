@@ -75,6 +75,10 @@
     msg: Wrong value for parameter "tac_db_port", must be a valid TCP/IP port number
   when: tac_db_port|int  > 65535 or tac_db_port|int < 0
 
+- name: Show error about wrong value for parameter tac_db_driver
+  fail:
+    msg: Wrong value for parameter "tac_db_driver", must be valid JAR when "tac_database" is not 'h2'
+  when: tac_db_driver == "" and tac_database != "h2"
 #
 # Validation for JobServer parameters
 #

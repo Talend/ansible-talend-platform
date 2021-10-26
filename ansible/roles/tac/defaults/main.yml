@@ -76,6 +76,7 @@ tac_db_port: 3306
 tac_db_name: "talend_administrator"
 tac_db_user: "talend"
 tac_db_password: "talend"
+tac_db_driver: ""   # Required for non-H2 databases, driver jar location
 
 # Setup JobServer
 tac_setup_jobserver: "yes" # allowed values are "yes" or "no"

@@ -5,8 +5,8 @@
 # TAC-specific parameters validation
 ######################################
 
-#    
-# Validation for TAC web-application name  
+#
+# Validation for TAC web-application name
 #
 
 - name: Show error that no value is specified for tac_webapp_name
@@ -16,7 +16,7 @@
 
 #
 # Validation for admin user/password
-#  
+#
 
 - name: Show error that no value is specified for tac_admin_user
   fail:
@@ -39,31 +39,16 @@
 
 #
 # Validation for LogServer parameters
-#  
+#
 
-- name: Show error about wrong value for parameter tac_use_logserver
+- name: Show error about wrong value for parameter tac_audit_log_enabled
   fail:
-    msg: Wrong value for parameter "tac_use_logserver", must be 'yes' or 'no'
-  when: tac_use_logserver != "no" and tac_use_logserver != "yes"
-
-- name: Show error that no value is specified for tac_logserver_host
-  fail:
-    msg: No values is specified for "tac_logserver_host"
-  when: tac_use_logserver == "yes" and tac_logserver_host == ""
-
-- name: Show error about wrong value for parameter tac_logserver_port, not a number
-  fail:
-    msg: Wrong value for parameter "tac_logserver_port", must be a valid number
-  when: tac_use_logserver == "yes" and tac_logserver_port|int == 0
-
-- name: Show error about wrong value for parameter tac_logserver_port, must be a valid number
-  fail:
-    msg: Wrong value for parameter "tac_logserver_port", must be a valid TCP/IP port number
-  when: tac_use_logserver == "yes" and ( tac_logserver_port|int  > 65535 or tac_logserver_port|int < 0 )
+    msg: Wrong value for parameter "tac_audit_log_enabled", must be 'yes' or 'no'
+  when: tac_audit_log_enabled != "no" and tac_audit_log_enabled != "yes"
 
 #
 # Validation for Database parameters
-#  
+#
 
 - name: Show error about wrong value for parameter tac_database
   fail:
@@ -92,7 +77,7 @@
 
 #
 # Validation for JobServer parameters
-#  
+#
 
 - name: Show error about wrong value for parameter tac_setup_jobserver
   fail:
@@ -143,25 +128,6 @@
   fail:
     msg: No values is specified for "tac_jobserver_username"/"tac_jobserver_password"
   when: ( tac_jobserver_username != "" and tac_jobserver_password == "" ) or ( tac_jobserver_username == "" and tac_jobserver_password != "" )
-
-#
-# Validation for socket appender
-#
-
-- name: Show error that no value is specified for tac_appender_socket_host
-  fail:
-    msg: No values is specified for "tac_appender_socket_host"
-  when: tac_appender_socket_host == ""
-
-- name: Show error about wrong value for parameter tac_appender_socket_port, not a number
-  fail:
-    msg: Wrong value for parameter "tac_appender_socket_port", must be a valid number
-  when: tac_appender_socket_port|int == 0
-
-- name: Show error about wrong value for parameter tac_appender_socket_port, must be a valid number
-  fail:
-    msg: Wrong value for parameter "tac_appender_socket_port", must be a valid TCP/IP port number
-  when: tac_appender_socket_port|int  > 65535 or tac_appender_socket_port|int < 0
 
 #
 # Validation for http appender

@@ -5,10 +5,10 @@
 # MDM-specific parameter validation
 ######################################
 
-- name: Show error about wrong value for parameter mdm_use_audit
+- name: Show error about wrong value for parameter mdm_audit_log_enabled
   fail:
-    msg: Wrong value for parameter "mdm_use_audit", must be 'yes' or 'no'
-  when: mdm_use_audit != "no" and mdm_use_audit != "yes"
+    msg: Wrong value for parameter "mdm_audit_log_enabled", must be 'yes' or 'no'
+  when: mdm_audit_log_enabled != "no" and mdm_audit_log_enabled != "yes"
 
 - name: Show error about wrong value for parameter mdm_database
   fail:

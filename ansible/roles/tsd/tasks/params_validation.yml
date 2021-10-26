@@ -84,3 +84,9 @@
   fail:
     msg: Incorrect value tsd_s3endpoint, port does not match with variable minio_port
   when: minio_port is defined and tsd_s3endpoint | urlsplit('port') != minio_port | int
+
+  # Verify audit settings
+- name: Show error about wrong audit setting
+  fail:
+    msg: Wrong value for tsd_audit_log_enabled - can be only 'true' or 'false'
+  when: tsd_hybrid_mode == "no" and tsd_audit_log_enabled not in ["true", "false"]

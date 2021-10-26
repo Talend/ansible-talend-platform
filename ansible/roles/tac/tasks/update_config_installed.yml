@@ -29,7 +29,7 @@
 # Work with LogServer (Filebeat)
 #
 - name: Create logs folder for Filebeat
-  when: tac_use_logserver == 'yes'
+  when: tac_audit_log_enabled == 'yes'
   file:
     path: "{{ install_prefix }}/tac/logs"
     state: directory
@@ -243,21 +243,6 @@
     path: "{{ tac_config_location }}/install.txt"
     line: "add.remote.jobserver={{ tac_jobserver_name }},{{ tac_jobserver_host }},{{ tac_jobserver_command_port }},{{ tac_jobserver_file_transfer_port }},{{ tac_jobserver_monitoring_port }},{{ tac_jobserver_username }},{{ tac_jobserver_password }}"
     create: yes
-
-#
-# Setup socket appender
-#
-- name: Update socket appender host
-  replace:
-    path: "{{ tac_config_location }}/audit.properties"
-    regexp:  '^appender\.socket\.host=.*'
-    replace: "appender.socket.host={{ tac_appender_socket_host }}"
-
-- name: Update socket appender port
-  replace:
-    path: "{{ tac_config_location }}/audit.properties"
-    regexp:  '^appender\.socket\.port=.*'
-    replace: "appender.socket.port={{ tac_appender_socket_port }}"
 
 #
 # Setup http appender

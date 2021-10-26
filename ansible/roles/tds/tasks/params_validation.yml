@@ -96,8 +96,8 @@
 # Verify audit settings
 - name: Show error about wrong audit setting
   fail:
-    msg: Wrong value for tds_audit_enabled - can be only 'true' or 'false'
-  when: tds_hybrid_mode == "no" and tds_audit_enabled not in ["true", "false"]
+    msg: Wrong value for tds_audit_log_enabled - can be only 'true' or 'false'
+  when: tds_hybrid_mode == "no" and tds_audit_log_enabled not in ["true", "false"]
 
 - name: Check correct MinIO port (if MinIO is used)
   fail:

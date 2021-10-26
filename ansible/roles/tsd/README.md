@@ -10,7 +10,7 @@ Before running the script, you can change the following variables in the *defaul
 
 > **Note**: You can find details about each application installed using these Ansible roles in the corresponding RPM documentation on [Talend Help Center](https://help.talend.com/search/all?query=rpm&content-lang=en-US).
 
-The following table lists the configurable parameters for the TDS playbook and their default values.
+The following table lists the configurable parameters for the TSD playbook and their default values.
 The parameters with `First Install Only` as `Yes` can only be set at initial installation. Any subsequent changes to the values are not taken into account during an update.
 
 | Parameter               | First Install Only | Description                                                                                                                | Default                      |
@@ -30,6 +30,8 @@ The parameters with `First Install Only` as `Yes` can only be set at initial ins
 | `tsd_mongo_database`    | No                 | Name of the TSD MongoDB database                                                                                           | `dqdict`                     |
 | `tsd_mongo_username`    | No                 | User name of the TSD MongoDB database                                                                                      | `tsd-user`                   |
 | `tsd_mongo_password`    | No                 | Password of the TSD MongoDB database. Default values for security settings must be changed                                 | `duser`                      |
+| `tsd_audit_log_enabled`               | No                 | Enables the audit for TSD. This is taken into account only when `tsd_hybrid_mode` = `no`. Possible values are `true` and `false`.                       | `true`                       |
+| `tsd_appender_http_url`           | No                 | URL for HTTP log appender.                                                                                                                              | `http://localhost:8057/`     |
 | `tsd_security_scim_url` | No                 | URL to Talend Identity and Access Management SCIM                                                                          | `http://localhost:9080/scim` |
 | `tsd_security_oidc_url` | No                 | URL to Talend Identity and Access Management                                                                               | `http://localhost:9080/oidc` |
 | `tsd_oidc_id`           | No                 | Talend Identity and Access Management OIDC client identifier.<br>For Hybrid mode: Client ID for your account (retrieved from Talend Management Console) | `tl6K6ac7tSE-LQ`             |

@@ -10,11 +10,20 @@
   set_fact:
     tsd_config_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-quality.properties"
 
+- name: Set tsd_config_audit_location when talend tomcat is used or customer tomcat in shared mode
+  when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
+  set_fact:
+    tsd_config_audit_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/audit.properties"
+
 - name: Set tsd_config_location when customer tomcat is used in direct mode
   when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
   set_fact:
     tsd_config_location: "{{ app_tomcat_home }}/conf/data-quality.properties"
 
+- name: Set tsd_config_audit_location when customer tomcat is used in direct mode
+  when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
+  set_fact:
+    tsd_config_audit_location: "{{ app_tomcat_home }}/conf/audit.properties"
 
 #####
 # Update TSD configuration
@@ -86,40 +95,68 @@
     path: "{{ tsd_config_location }}"
     regexp:  '^scim\.url=.*'
     replace: 'scim.url={{ tsd_security_scim_url }}'
-    
+
 - name: Update oidc url (non-hybrid)
   when: tsd_hybrid_mode == 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.url=.*'
     replace: 'oidc.url={{ tsd_security_oidc_url }}'
-    
+
 - name: Update scim url (IAM) (hybrid)
   when: tsd_hybrid_mode != 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^scim\.url=.*'
     replace: 'scim.url=https://api.{{ tsd_hybrid_region }}.cloud.talend.com/v1/scim'
-    
+
 - name: Update oidc url (hybrid)
   when: tsd_hybrid_mode != 'no'
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.url=.*'
     replace: 'oidc.url=https://iam.{{ tsd_hybrid_region }}.cloud.talend.com/oidc'
-    
+
 - name: Update oidc gateway ID
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.semanticservice\.id=.*'
     replace: 'oidc.semanticservice.id={{ tsd_oidc_id }}'
-    
+
 - name: Update oidc gateway secret
   replace:
     path: "{{ tsd_config_location }}"
     regexp:  '^oidc\.semanticservice\.secret=.*'
     replace: 'oidc.semanticservice.secret={{ tsd_oidc_secret }}'
 
+# Set appender.http.url in audit.properties
+- name: Update appender.http.url
+  when: tsd_hybrid_mode == "no" and tsd_audit_log_enabled == "true"
+  replace:
+    path: "{{ tsd_config_audit_location }}"
+    regexp:  'appender\.http\.url=.*'
+    replace: 'appender.http.url={{ tsd_appender_http_url }}'
+
+- name: Comment appender.http.url (audit disabled)
+  when: tsd_hybrid_mode == "no" and tsd_audit_log_enabled == "false"
+  replace:
+    path: "{{ tsd_config_audit_location }}"
+    regexp:  '^appender\.http\.url=.*'
+    replace: '#appender.http.url='
+
+- name: Comment appender.socket.host
+  when: tsd_hybrid_mode == "no"
+  replace:
+    path: "{{ tsd_config_audit_location }}"
+    regexp:  '^appender\.socket\.host=.*'
+    replace: '#appender.socket.host='
+
+- name: Comment appender.socket.port
+  when: tsd_hybrid_mode == "no"
+  replace:
+    path: "{{ tsd_config_audit_location }}"
+    regexp:  '^appender\.socket\.port=.*'
+    replace: '#appender.socket.port='
 
 # Hybrid mode activation
 - name: Activate hybrid mode (1)
@@ -164,7 +201,7 @@
   lineinfile:
     path: "{{ tsd_config_location }}"
     regexp: 'audit\.log\.enabled='
-    line: "audit.log.enabled=true"
+    line: "audit.log.enabled={{ tsd_audit_log_enabled }}"
 
 ## AWS S3 communication
 - name: Update AWS S3 endpoint URL

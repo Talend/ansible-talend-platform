@@ -1,10 +1,10 @@
 ---
-- name: Install Java 1.8
+- name: Install Java 11
   yum:
     name: "{{ packages }}"
   vars:
     packages:
-      - java-1.8.0-openjdk
+      - java-11-openjdk
 
 - name: Save java home folder
   shell: "dirname $(dirname $(readlink -e /usr/bin/java))"

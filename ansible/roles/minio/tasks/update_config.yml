@@ -29,7 +29,7 @@
   replace:
     path: "{{ install_prefix }}/minio/start_minio.sh"
     regexp:  '^MINIO_SECRET_KEY=.*'
-    replace: 'MINIO_SECRET={{ minio_secretkey }}'
+    replace: 'MINIO_SECRET_KEY={{ minio_secretkey }}'
 
 - name: Update MinIO region
   replace:

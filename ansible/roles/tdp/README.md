@@ -49,6 +49,14 @@ For hybrid mode, it is important to set up also these 2 variables:
 | `tdp_security_oauth2_client_clientSecret` | Client Secret for your account (retrieved from Talend Management Console) |
 Note: in non-hybrid mode, these two variables should be set to Talend IAM OIDC client identifier and client secret.
 
+### Language
+
+Talend Data Preparation supports the following languages: English (en-US), French (fr-FR), Japanese (jp-JP) and Chinese (zh-CN). This setting is ignored in Hybrid configuration as in this case language setting is stored in the cloud account configuration.
+
+| Parameter           | Description                            | Value               |
+| ------------------- | -------------------------------------- | ------------------- |
+| `tdp_language`   | Language (`en-US`, `fr-FR`, `jp-JP` or `zh-CN` | Default value: `en-US` |
+
 
 ### IAM configuration
 
@@ -162,7 +170,15 @@ The live dataset feature allows creating a job in Talend Studio, executing it on
 | `tdp_dataquality_semantic_update_enable`       | Whether to receive data quality updates (for 7.1 only) | Possible values: `true` (default) or `false`                       |
 | `tdp_tsd_consumer_enabled`                     | Whether to receive data quality updates (for 7.2 only) | Possible values: `true` or `false` (default)                       |
 | `tdp_dataquality_event_store`                  | *Do not modify*                                        | Only possible value: `mongodb`                                     |
-| `tdp_spring_cloud_stream_kafka_binder_brokers` | Host of Kafka server                                   | Default value: `localhost`                                         |
+
+### Kafka connection settings
+
+| Parameter                                      | Description                                            | Value                                 |
+| ---------------------------------------------- | ------------------------------------------------------ | ------------------------------------- |
+| `tdp_spring_cloud_stream_kafka_binder_brokers` | Host of Kafka server                 | Default value: `localhost`      |
+| `tdp_spring_cloud_stream_kafka_binder_defaultbrokerport` | Port of Kafka server     | Default value: `9092`            |
+| `tdp_spring_cloud_stream_kafka_binder_zknodes`  | Host of Zookeeper server            | Default value: `localhost`      |
+| `tdp_spring_cloud_stream_kafka_binder_defaultzkport` | Port of Zookeeper server      | Default value: `2181`            |
 
 ### Single Sign-On (SSO) security configuration parameters
 

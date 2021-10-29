@@ -183,3 +183,13 @@
   fail:
     msg: Incorrect value tdp_s3endpoint, port does not match with variable minio_port
   when: minio_port is defined and tdp_s3endpoint | urlsplit('port') != minio_port | int
+
+- name: Check correct language setting
+  fail:
+    msg: tdp_language can be one of en-US, fr-FR, jp-JP or zh-CN
+  when: tdp_language != 'en-US' and tdp_language != 'fr-FR' and tdp_language != 'jp-JP' and tdp_language != 'zh-CN'
+
+- name: Check correct value for tdp_app_products
+  fail:
+    msg: tdp_app_products can be only one of "yes" or "no"
+  when: tdp_app_products != "yes" and tdp_app_products != "no"

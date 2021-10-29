@@ -24,10 +24,11 @@ tdp_server_port: "9999"
 tdp_iam_ip: "localhost" # IAM host to be used (will be used only for non-hybrid configuration, otherwise ignored)
 tdp_iam_port: "9080" # IAM port to be used (will be used only for non-hybrid configuration, otherwise ignored)
 
+tdp_language: "en-US"
 tdp_async_runtime_contextPath: "/api"
 tdp_server_compression_enabled: "true"
 tdp_server_compression_mime_types: "text/plain,text/html,text/css,application/json,application/x-javascript,text/xml,application/xml,application/xml+rss,text/javascript,application/javascript,text/x-js"
-tdp_spring_mvc_async_request_timeout: "300000"
+tdp_spring_mvc_async_request_timeout: "600000"
 tdp_lock_store: "mongodb"
 tdp_dataprep_event_listener: "spring"
 tdp_live_dataset_location: "tac"
@@ -48,7 +49,7 @@ tdp_spring_http_multipart_maxFileSize: "200000000"
 tdp_spring_http_multipart_maxRequestSize: "200000000"
 tdp_dataset_records_limit: "10000"
 tdp_dataset_local_file_size_limit: "2000000000"
-tdp_dataset_imports: "local,job,tcomp-JDBCDatastore,tcomp-SimpleFileIoDatastore,tcomp-SalesforceDatastore,tcomp-S3Datastore"
+tdp_dataset_imports: "local,tcomp-JDBCDatastore,tcomp-SimpleFileIoDatastore,tcomp-SalesforceDatastore,tcomp-S3Datastore,tcomp-AzureDlsGen2BlobDatastore"
 tdp_dataset_list_limit: "10"
 tdp_content_service_store: "local"
 tdp_content_service_store_local_path: "data/"
@@ -69,7 +70,6 @@ tdp_dataquality_semantic_list_enable: "true"
 tdp_dataquality_semantic_update_enable: "true"
 tdp_tsd_consumer_enabled: "false"
 tdp_dataquality_event_store: "mongodb"
-tdp_spring_cloud_stream_kafka_binder_brokers: "localhost"
 tdp_security_basic_enabled: "false"
 tdp_security_oidc_client_expectedIssuer: "${iam.uri}/oidc"
 tdp_iam_license_url: "${iam.uri}/oidc/api"
@@ -78,6 +78,18 @@ tdp_security_oauth2_client_clientId: "64xIVPxviKWSog"
 tdp_security_oauth2_client_clientSecret: "9C0zCjp8yS-eZBqEi-KhBQ"
 tdp_security_oidc_client_claimIssueAtTolerance: "120"
 tdp_security_oauth2_resource_tokenInfoUri: "${iam.uri}/oidc/oauth2/introspect"
+
+# Communication with TDS. Defaults assume we have TDS installer on localhost with default port (19999)
+tdp_app_products: "yes"
+tdp_app0_id: "TDS"
+tdp_app0_name: "Talend Data Stewardship"
+tdp_app0_url: "http://localhost:19999"
+
+# Communication with Kafka/Zookeeper
+tdp_spring_cloud_stream_kafka_binder_brokers: "localhost"
+tdp_spring_cloud_stream_kafka_binder_defaultbrokerport: 9092
+tdp_spring_cloud_stream_kafka_binder_zknodes: "localhost"
+tdp_spring_cloud_stream_kafka_binder_defaultzkport: 2181
 
 # Set tdp_security_oauth2_resource_uri ONLY if you are know what you are doing ! Otherwise it will use the default setting from RPM/zip
 tdp_security_oauth2_resource_uri: ""

@@ -11,6 +11,13 @@
       regexp: "server.port=.*"
       replace: "server.port={{ tdp_server_port }}"
 
+- name: Modify Data Preparation language setting
+  when: tdp_hybrid_mode == 'no'
+  replace:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: '^#?dataprep\.locale=.*'
+      replace: "dataprep.locale={{ tdp_language }}"
+
 - name: Modify Data Preparation async runtime contextPath
   replace:
       path: "/etc/talend/tdp/application.properties"
@@ -297,12 +304,6 @@
       regexp: "dataquality.event.store=.*"
       replace: "dataquality.event.store={{ tdp_dataquality_event_store }}"
 
-- name: Modify Data Preparation spring cloud stream kafka binder brokers
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "spring.cloud.stream.kafka.binder.brokers=.*"
-      replace: "spring.cloud.stream.kafka.binder.brokers={{ tdp_spring_cloud_stream_kafka_binder_brokers }}"
-
 - name: Modify Data Preparation security basic enabled
   replace:
       path: "/etc/talend/tdp/application.properties"
@@ -379,7 +380,7 @@
 - name: Modify Data Preparation security oauth2 client scope
   replace:
       path: "/etc/talend/tdp/application.properties"
-      regexp: "security.oauth2.client.scope=.*"
+      regexp: '^security\.oauth2\.client\.scope=.*'
       replace: "security.oauth2.client.scope={{ tdp_security_oauth2_client_scope }}"
 
 - name: Modify Data Preparation security oauth2 client user authorization uri
@@ -656,7 +657,7 @@
 - name: Modify Data Preparation dataset service provider
   replace:
       path: "/etc/talend/tdp/application.properties"
-      regexp: "dataset.service.provider=.*"
+      regexp: "^dataset.service.provider=.*"
       replace: "dataset.service.provider={{ tdp_dataset_service_provider }}"
 
 - name: Modify Data Preparation spring cloud stream bindings dqDictionary group
@@ -983,3 +984,50 @@
     path: "/etc/talend/tdp/application.properties"
     regexp:  '\.s3Repository\.base-path=.*'
     replace: '.s3Repository.base-path={{ tdp_basepath }}'
+
+# Commmunication with TDS
+- name: Update app.products id
+  when: tdp_app_products == "yes"
+  replace:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?app\.products\[0\]\.id=.*'
+    replace: "app.products[0].id={{ tdp_app0_id }}"
+
+- name: Update app.products name
+  when: tdp_app_products == "yes"
+  replace:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?app\.products\[0\]\.name=.*'
+    replace: "app.products[0].name={{ tdp_app0_name }}"
+
+- name: Update app.products url
+  when: tdp_app_products == "yes"
+  replace:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?app\.products\[0\]\.url=.*'
+    replace: "app.products[0].url={{ tdp_app0_url }}"
+
+# Add info about kafka.binder
+- name: Modify Data Preparation spring cloud stream kafka binder brokers
+  lineinfile:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.brokers=.*'
+    line: "spring.cloud.stream.kafka.binder.brokers={{ tdp_spring_cloud_stream_kafka_binder_brokers }}"
+
+- name: Update kafka.binder.defaultBrokerPort
+  lineinfile:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.defaultBrokerPort=.*'
+    line: "spring.cloud.stream.kafka.binder.defaultBrokerPort={{ tdp_spring_cloud_stream_kafka_binder_defaultbrokerport }}"
+
+- name: Update kafka.binder.zkNodes
+  lineinfile:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.zkNodes=.*'
+    line: "spring.cloud.stream.kafka.binder.zkNodes={{ tdp_spring_cloud_stream_kafka_binder_zknodes }}"
+
+- name: Update kafka.binder.defaultZkPort
+  lineinfile:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.defaultZkPort=.*'
+    line: "spring.cloud.stream.kafka.binder.defaultZkPort={{ tdp_spring_cloud_stream_kafka_binder_defaultzkport }}"

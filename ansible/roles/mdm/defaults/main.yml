@@ -54,7 +54,7 @@ mdm_webapp_name: talendmdm
 #########################################
 
 # Talend license file to use. Note that file must be on the controller host (local file)
-# It is a mandatory parameter and MDM installation would fail if it is left empty
+# It is a mandatory parameter and MDM installation will fail if it is left empty
 mdm_license_file: ""
 
 # Use Audit enablement for Talend LogServer

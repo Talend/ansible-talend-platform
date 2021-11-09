@@ -34,11 +34,11 @@ Before running the script, you can change the following variables in the *defaul
 
 ### License
 
-MDM requires a Talend license to work. The next parameter is mandatory, installation would fail if it is left as default.
+MDM requires a Talend license to install and run.
 
 | Parameter         | Description                     | Value                      |
 | ----------------- | ------------------------------- | -------------------------- |
-| `mdm_license_file` | Talend license file to use (must be on a controller host) | Default value: `""` |
+| `mdm_license_file` | Talend license file to use | Required. Local path to license file on controller host |
 
 ### MDM configuration updates
 

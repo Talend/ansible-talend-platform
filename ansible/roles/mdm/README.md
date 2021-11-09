@@ -32,6 +32,14 @@ Before running the script, you can change the following variables in the *defaul
 | ----------------- | ------------------------------- | -------------------------- |
 | `mdm_webapp_name` | Name of the MDM Web application | Default value: `talendmdm` |
 
+### License
+
+MDM requires a Talend license to install and run.
+
+| Parameter         | Description                     | Value                      |
+| ----------------- | ------------------------------- | -------------------------- |
+| `mdm_license_file` | Talend license file to use | Required. Local path to license file on controller host |
+
 ### MDM configuration updates
 
 | Parameter               | Description                                          | Value                           |

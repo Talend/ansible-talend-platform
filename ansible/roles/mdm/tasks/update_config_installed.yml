@@ -596,3 +596,13 @@
     path: "{{ mdm_tomcat_config_location }}/data-authoring-proxy.properties"
     regexp: '\$\{tinstall\.tdp\.url\}'
     replace: "{{ mdm_tdp_url }}"
+
+# Copy license file to MDM
+
+- name: Copy license file to MDM
+  copy:
+    src: "{{mdm_license_file}}"
+    dest: "{{ install_prefix + '/' + rpm_folder + '/license' }}"
+    owner: "{{install_user}}"
+    group: "{{install_group}}"
+    mode: '0640'

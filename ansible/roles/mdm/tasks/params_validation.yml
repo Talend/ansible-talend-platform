@@ -19,3 +19,17 @@
   fail:
     msg: Wrong value for parameter "mdm_db_driver", must be valid JAR when "mdm_database" is not 'h2'
   when: mdm_db_driver == "" and mdm_database != "h2"
+
+- name: Show error about wrong value for parameter mdm_license_file
+  fail:
+    msg: Wrong value for parameter "mdm_license_file", must be a valid Talend license file
+  when: mdm_license_file == ""
+
+- name: Get info about local license file for MDM
+  local_action: stat path="{{ mdm_license_file }}"
+  register: mdm_license_file_stat
+
+- name: Show error about inaccessible license file for MDM
+  fail:
+    msg: "Could not find MDM license file '{{ mdm_license_file }}'"
+  when: not mdm_license_file_stat.stat.exists

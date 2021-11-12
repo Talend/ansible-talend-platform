@@ -147,12 +147,12 @@
 
 - name: "Update mdm-da-client.json: post_logout_redirect_uris (if non-localhost and short host)"
   set_fact:
-    iam_mdm_da_client_json_var: "{{ iam_mdm_da_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_mdm_postlogout_url_lc + '/', 'http://localhost:' + iam_mdm_postlogon_port +'/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/') } ) | to_nice_json }}"
+    iam_mdm_da_client_json_var: "{{ iam_mdm_da_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_mdm_postlogout_url_lc, 'http://localhost:' + iam_mdm_postlogon_port +'/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/') } ) | to_nice_json }}"
   when: iam_mdm_postlogon_host != 'localhost' and iam_mdm_postlogon_host == iam_mdm_postlogon_shorthost
 
 - name: "Update mdm-da-client.json: post_logout_redirect_uris (if non-localhost and FQDN host)"
   set_fact:
-    iam_mdm_da_client_json_var: "{{ iam_mdm_da_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_mdm_postlogout_url_lc + '/', 'http://' + iam_mdm_postlogon_shorthost + ':' + iam_mdm_postlogon_port +'/', 'http://localhost:' + iam_mdm_postlogon_port +'/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/') } ) | to_nice_json }}"
+    iam_mdm_da_client_json_var: "{{ iam_mdm_da_client_json_var.content | b64decode | from_json | combine( { 'post_logout_redirect_uris': ( iam_mdm_postlogout_url_lc, 'http://' + iam_mdm_postlogon_shorthost + ':' + iam_mdm_postlogon_port +'/', 'http://localhost:' + iam_mdm_postlogon_port +'/', 'http://127.0.0.1:' + iam_mdm_postlogon_port + '/') } ) | to_nice_json }}"
   when: iam_mdm_postlogon_host != 'localhost' and iam_mdm_postlogon_host != iam_mdm_postlogon_shorthost
 
 - name: "Update mdm-da-client.json: redirect_uris (if localhost)"

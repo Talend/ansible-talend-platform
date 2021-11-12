@@ -22,14 +22,14 @@
   when: not java_dir_java.stat.exists
 
 - name: Get java_dir version
-  command: "{{ java_dir_java.stdout }} -version 2>&1 | grep version | sed s/.*version\ //"
+  shell: '{{ java_dir.stdout }}/bin/java -version 2>&1 | grep version | sed s/.*version\ //'
   args:
     warn: no
   register: java_dir_ver
   changed_when: false
 
 - name: Get Java command-line version
-  command: "java -version 2>&1 | grep version | sed s/.*version\ //"
+  shell: 'java -version 2>&1 | grep version | sed s/.*version\ //'
   args:
     warn: no
   register: java_command_ver
@@ -37,5 +37,5 @@
 
 - name: "Show error if java_dir_java and command-line versions do not match"
   fail:
-    msg: "Error: Version mismatch between {{ java_dir.stdout }} ( {{ java_dir_ver.stdout }} ) and default Java on the command-line ( {{ java_command_ver.stdout }} ).\nEither set the default Java on the command-line to {{ java_dir_java.stdout }} or modify 'roles/java/tasks/main.yml' to set variable 'java_dir' to the home directory of Java on the command-line."
+    msg: "Error: Version mismatch between {{ java_dir.stdout }} ( {{ java_dir_ver.stdout }} ) and default Java on the command-line ( {{ java_command_ver.stdout }} ).\nEither set the default Java on the command-line to {{ java_dir.stdout }}/bin/java or modify 'roles/java/tasks/main.yml' to set variable 'java_dir' to the home directory of Java on the command-line."
   when: java_dir_ver.stdout != java_command_ver.stdout

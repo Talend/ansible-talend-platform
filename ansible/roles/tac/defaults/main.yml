@@ -95,16 +95,6 @@ tac_appender_http_username: "talend" # may be empty, if not specified
 tac_appender_http_password: "talend" # may be empty, if not specified
 
 # Setup Nexus/Archiva configuration
-tac_scheduler_conf_archiva_url: "http://localhost:8082/archiva"
-tac_scheduler_conf_nexus_url: "http://localhost:8081/nexus"
-tac_scheduler_conf_archiva_username: "tadmin"
-tac_scheduler_conf_nexus_username: "admin"
-tac_scheduler_conf_archiva_password: "3IqdoqEElsy8Dzz9iP3HVQ=="
-tac_scheduler_conf_nexus_password: "3H7PqFGozhMb6mR8C1Rc/A=="
-
-tac_scheduler_conf_nexus3_url: "http://localhost:8081/"
-tac_scheduler_conf_nexus3_username: "admin"
-tac_scheduler_conf_nexus3_password: "3H7PqFGozhMb6mR8C1Rc/A=="
 
 # Setup jobExecution root path
 tac_scheduler_conf_jobExecutionLogs_rootPath: "{{ install_prefix + '/tac/executionLogs' }}"

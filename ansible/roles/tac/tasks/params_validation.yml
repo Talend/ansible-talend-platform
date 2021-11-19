@@ -165,3 +165,115 @@
   fail:
     msg: "Could not find TAC license file '{{ tac_license_file }}'"
   when: tac_install_license == "yes" and not tac_license_file_stat.stat.exists
+
+#
+# Validation for external repository connections
+#
+- name: Show error that value for tac_repo_config is not correct
+  fail:
+    msg: Value for "tac_repo_config" can be only one of "yes" or "no"
+  when: tac_repo_config != "yes" and tac_repo_config != "no"
+
+- name: Show error that value for tac_updates_repository is not correct
+  fail:
+    msg: Value for "tac_updates_repository" can be only one of "yes" or "no"
+  when: tac_updates_repository != "yes" and tac_updates_repository != "no"
+
+- name: Show error that value for tac_downloads_repository is not correct
+  fail:
+    msg: Value for "tac_downloads_repository" can be only one of "yes" or "no"
+  when: tac_downloads_repository != "yes" and tac_downloads_repository != "no"
+
+- name: Show error that value for tac_jobs_repository is not correct
+  fail:
+    msg: Value for "tac_jobs_repository" can be only one of "yes" or "no"
+  when: tac_jobs_repository != "yes" and tac_jobs_repository != "no"
+
+- name: Show error that value for tac_custom_libs_repository is not correct
+  fail:
+    msg: Value for "tac_custom_libs_repository" can be only one of "yes" or "no"
+  when: tac_custom_libs_repository != "yes" and tac_custom_libs_repository != "no"
+
+# Updates repo connection
+- name: Show error about empty URL for TAC Updates repo
+  fail:
+    msg: Value for "tac_updates_repository_url" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_updates_repository_url == ""
+
+- name: Show error about empty user for TAC Updates repo
+  fail:
+    msg: Value for "tac_updates_repository_user" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_updates_repository_user == ""
+
+- name: Show error about empty password for TAC Updates repo
+  fail:
+    msg: Value for "tac_updates_repository_password" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_updates_repository_password == ""
+
+# Downloads repo connection
+- name: Show error about wrong repo type for TAC Downloads repo
+  fail:
+    msg: Value for "tac_downloads_repository_type" can be only one from "nexus2", "nexus3" or "artifactory"
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool and (tac_downloads_repository_type != "nexus2" and tac_downloads_repository_type != "nexus3" and tac_downloads_repository_type != "artifactory")
+
+- name: Show error about empty URL for TAC Downloads repo
+  fail:
+    msg: Value for "tac_downloads_repository_url" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool and tac_downloads_repository_url == ""
+
+- name: Show error about empty user for TAC Downloads repo
+  fail:
+    msg: Value for "tac_downloads_repository_user" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool and tac_downloads_repository_user == ""
+
+- name: Show error about empty password for TAC Downloads repo
+  fail:
+    msg: Value for "tac_downloads_repository_password" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool and tac_downloads_repository_password == ""
+
+- name: Show error about empty Repository ID for TAC Downloads repo
+  fail:
+    msg: Value for "tac_downloads_repository_repository_id" is empty
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool and tac_downloads_repository_repository_id == ""
+
+# Jobs repository connection
+- name: Show error about wrong repo type for TAC Jobs repo
+  fail:
+    msg: Value for "tac_jobs_repository_type" can be only one from "nexus2", "nexus3" or "artifactory"
+  when: tac_repo_config|bool and tac_jobs_repository|bool and (tac_jobs_repository_type != "nexus2" and tac_jobs_repository_type != "nexus3" and tac_jobs_repository_type != "artifactory")
+
+- name: Show error about empty URL for TAC Jobs repo
+  fail:
+    msg: Value for "tac_jobs_repository_url" is empty
+  when: tac_repo_config|bool and tac_jobs_repository|bool and tac_jobs_repository_url == ""
+
+- name: Show error about empty user for TAC Jobs repo
+  fail:
+    msg: Value for "tac_jobs_repository_user" is empty
+  when: tac_repo_config|bool and tac_jobs_repository|bool and tac_jobs_repository_user == ""
+
+- name: Show error about empty password for TAC Jobs repo
+  fail:
+    msg: Value for "tac_jobs_repository_password" is empty
+  when: tac_repo_config|bool and tac_jobs_repository|bool and tac_jobs_repository_password == ""
+
+# Custom Libs repository connection
+- name: Show error about wrong repo type for TAC Custom Libs repo
+  fail:
+    msg: Value for "tac_custom_libs_repository_type" can be only one from "nexus2", "nexus3" or "artifactory"
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool and (tac_custom_libs_repository_type != "nexus2" and tac_custom_libs_repository_type != "nexus3" and tac_custom_libs_repository_type != "artifactory")
+
+- name: Show error about empty URL for TAC Custom Libs repo
+  fail:
+    msg: Value for "tac_custom_libs_repository_url" is empty
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool and tac_custom_libs_repository_url == ""
+
+- name: Show error about empty user for TAC Custom Libs repo
+  fail:
+    msg: Value for "tac_custom_libs_repository_user" is empty
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool and tac_custom_libs_repository_user == ""
+
+- name: Show error about empty password for TAC Custom Libs repo
+  fail:
+    msg: Value for "tac_custom_libs_repository_password" is empty
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool and tac_custom_libs_repository_password == ""

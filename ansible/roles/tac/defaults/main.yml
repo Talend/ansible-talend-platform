@@ -94,7 +94,49 @@ tac_appender_http_port: 8057
 tac_appender_http_username: "talend" # may be empty, if not specified
 tac_appender_http_password: "talend" # may be empty, if not specified
 
-# Setup Nexus/Archiva configuration
+# Setup external repositories configuration
+# There are 4 possible connections:
+# - Talend Updates repository
+# - TAC Downloads repository (caches locally artifacts from Talend Update repository)
+# - TAC Jobs repository (repository to store job artifacts)
+# - TAC Custom Libs repository
+#
+# All repositories (except of Talend Updates) can be one of three possible types:
+# - nexus2
+# - nexus3
+# - artifactory
+#
+tac_repo_config: "no"   # A "master" switch for configuring TAC repository connections
+
+tac_updates_repository: "no"   # configures Talend Updates repository connection (also "tac_repo_config" must be set to "yes" to make it active)
+tac_updates_repository_url: "https://talend-update.talend.com/nexus"
+tac_updates_repository_user: ""
+tac_updates_repository_password: ""
+
+tac_downloads_repository: "no"  # configures Downloads repo connection (also "tac_repo_config" and "tac_updates_repository" must be "yes" to make it active)
+tac_downloads_repository_type: "nexus2"   # Can be one of "nexus2", "nexus3" or "artifactory"
+tac_downloads_repository_url: ""
+tac_downloads_repository_user: ""
+tac_downloads_repository_password: ""
+tac_downloads_repository_reader_user: ""
+tac_downloads_repository_reader_password: ""
+tac_downloads_repository_repository_id: ""
+
+tac_jobs_repository: "no"  # configures Jobs repo connection (also "tac_repo_config" must be "yes" to make it active)
+tac_jobs_repository_type: "nexus2"    # Can be one of "nexus2", "nexus3" or "artifactory"
+tac_jobs_repository_url: ""
+tac_jobs_repository_user: ""
+tac_jobs_repository_password: ""
+tac_jobs_repository_releases: ""    # Default repository for releases
+tac_jobs_repository_snapshots: ""   # Default repository for snapshots
+
+tac_custom_libs_repository: "no"  # configures custom libs repo connection (also "tac_repo_config" must be "yes" to make it active)
+tac_custom_libs_repository_type: "nexus2"  # Can be one of "nexus2", "nexus3" or "artifactory"
+tac_custom_libs_repository_url: ""
+tac_custom_libs_repository_user: ""
+tac_custom_libs_repository_password: ""
+tac_custom_libs_repository_releases: ""    # Default repository for releases
+tac_custom_libs_repository_snapshots: ""   # Default repository for snapshots
 
 # Setup jobExecution root path
 tac_scheduler_conf_jobExecutionLogs_rootPath: "{{ install_prefix + '/tac/executionLogs' }}"

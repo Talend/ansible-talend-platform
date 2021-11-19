@@ -16,9 +16,13 @@
 # rpm_patch_version: 1
 # rpm_build_number: 201906201446
 
-rpm_base_version: 7.3
+#rpm_base_version: 7.3
+#rpm_patch_version: 1
+#rpm_build_number: 202002191130
+
+rpm_base_version: 8.0
 rpm_patch_version: 1
-rpm_build_number: 202002191130
+rpm_build_number: 202111091610
 
 
 rpm_version: "{{ rpm_base_version }}.{{ rpm_patch_version }}" 

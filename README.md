@@ -6,7 +6,7 @@ This repository contains [Ansible](https://www.ansible.com/) roles and playbooks
 
 Specifically, this repository, through its playblooks:
 
-* Installs Talend 7.1, 7.2 or 7.3 RPM packages.
+* Installs Talend 7.1, 7.2, 7.3 or 8.0 RPM packages.
 * Starts services using systemd scripts.
 * Provides configuration options for Talend packages.
 
@@ -26,26 +26,38 @@ Installing Talend applications using Ansible require CentOS 7.X as operating sys
 
 1. Specify your credentials and the version of Talend applications to install in the *ansible/group_vars/all* file. These parameters are used to access the RPM repository.
 To change the RPM version to install, edit the following parameters:
-    * 7.1 applications:
+   * 7.1 applications:
+    
     ```
     rpm_base_version: 7.1
     rpm_patch_version: 1
     rpm_build_number: 201810261147
     ```
 
-    * 7.2 applications:
+   * 7.2 applications:
 
     ```
     rpm_base_version: 7.2
     rpm_patch_version: 1
     rpm_build_number: 201906201446
     ```
-    * 7.3 applications:
+
+   * 7.3 applications:
+
     ```
     rpm_base_version: 7.3
     rpm_patch_version: 1
     rpm_build_number: 202002191130
     ```
+    
+   * 8.0 applications:
+    
+    ```
+    rpm_base_version: 8.0
+    rpm_patch_version: 1
+    rpm_build_number: 202111091610
+    ```
+
 
 2. Configure the playbook you want to install by specifying:
     1. the **hosts** to install the roles on. Hosts must be defined in `/etc/ansible/hosts` on the master node.

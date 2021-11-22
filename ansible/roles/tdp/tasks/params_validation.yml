@@ -176,8 +176,8 @@
 
 - name: Show error about wrong value for parameter tdp_hybrid_region
   fail:
-    msg: Wrong value for parameter "tdp_hybrid_region", must be one of "us", "eu" or "ap"
-  when: tdp_hybrid_region != "us" and tdp_hybrid_region != "eu" and tdp_hybrid_region != "ap"
+    msg: Wrong value for parameter "tdp_hybrid_region", must be one of "us", "eu", "ap", "au", "us-west" or "at"
+  when: tdp_hybrid_region != "us" and tdp_hybrid_region != "eu" and tdp_hybrid_region != "ap" and tdp_hybrid_region != "au" and tdp_hybrid_region != "at" and tdp_hybrid_region != "us-west"
 
 - name: Check correct MinIO port (if MinIO is used)
   fail:

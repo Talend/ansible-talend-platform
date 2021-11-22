@@ -40,13 +40,23 @@
 
 - name: Show error about wrong value for parameter tds_hybrid_region
   fail:
-    msg: Wrong value for parameter "tds_hybrid_region", must be one of 'us', 'eu' or 'ap'
-  when: tds_hybrid_region != "us" and tds_hybrid_region != "eu" and tds_hybrid_region != "ap"
+    msg: Wrong value for parameter "tds_hybrid_region", must be one of 'us', 'eu', 'ap', 'au', 'us-west' or 'at'
+  when: tds_hybrid_region != "us" and tds_hybrid_region != "eu" and tds_hybrid_region != "ap" and tds_hybrid_region != "au" and tds_hybrid_region != "at" and tds_hybrid_region != "us-west"
 
 - name: Show error about wrong value for parameter tds_hybrid_cloud_provider
   fail:
     msg: Wrong value for parameter "tds_hybrid_cloud_provider", must be 'AWS' or 'azure'
   when: tds_hybrid_cloud_provider != "AWS" and tds_hybrid_cloud_provider != "azure"
+
+- name: Show error about wrong value for parameter tds_hybrid_cloud_provider (2)
+  fail:
+    msg: Wrong value for parameter "tds_hybrid_cloud_provider", must be 'azure' for 'us-west' region
+  when: tds_hybrid_cloud_provider != "azure" and tds_hybrid_region == "us-west"
+
+- name: Show error about wrong value for parameter tds_hybrid_cloud_provider (3)
+  fail:
+    msg: Wrong value for parameter "tds_hybrid_cloud_provider", must be 'AWS' for anything except 'us-west' region
+  when: tds_hybrid_cloud_provider != "AWS" and tds_hybrid_region != "us-west"
 
 # specific non empty check for tds_front_tdp_url
 - name: Show error that no value is specified for tds_front_tdp_url when tds_use_tdp_switch is 'yes'

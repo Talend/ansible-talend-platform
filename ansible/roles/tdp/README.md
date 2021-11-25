@@ -39,7 +39,7 @@ Talend Cloud lets you install and host Talend Data Preparation application on pr
 | Parameter           | Description                            | Value               |
 | ------------------- | -------------------------------------- | ------------------- |
 | `tdp_hybrid_mode`   | Hybrid mode (`yes` or `no`)            | Default value: `no` |
-| `tdp_hybrid_region` | The region to use (`us`, `eu` or `ap`) | Default value: `us` |
+| `tdp_hybrid_region` | The region to use (`us`, `eu`, `ap`, `au`, `us-west` or `at`) | Default value: `us` |
 
 For hybrid mode, it is important to set up also these 2 variables:
 

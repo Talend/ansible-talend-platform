@@ -152,17 +152,33 @@
       regexp: "spring.profiles.active=.*"
       replace: "spring.profiles.active={{ tdp_spring_profiles_active }}"
 
-- name: Modify Data Preparation spring http multipart maxFileSize
+- name: Modify Data Preparation spring http multipart maxFileSize (version less than 8.0)
+  when: rpm_base_version < 8.0
   replace:
       path: "/etc/talend/tdp/application.properties"
-      regexp: "spring.http.multipart.maxFileSize=.*"
+      regexp: 'spring\.http\.multipart\.maxFileSize=.*'
       replace: "spring.http.multipart.maxFileSize={{ tdp_spring_http_multipart_maxFileSize }}"
 
-- name: Modify Data Preparation spring http multipart maxRequestSize
+- name: Modify Data Preparation spring http multipart maxFileSize (version 8.0 and above)
+  when: rpm_base_version >= 8.0
   replace:
       path: "/etc/talend/tdp/application.properties"
-      regexp: "spring.http.multipart.maxRequestSize=.*"
+      regexp: 'spring\.servlet\.multipart\.max-file-size=.*'
+      replace: "spring.servlet.multipart.max-file-size={{ tdp_spring_http_multipart_maxFileSize }}"
+
+- name: Modify Data Preparation spring http multipart maxRequestSize (version less than 8.0)
+  when: rpm_base_version < 8.0
+  replace:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'spring\.http\.multipart\.maxRequestSize=.*'
       replace: "spring.http.multipart.maxRequestSize={{ tdp_spring_http_multipart_maxRequestSize }}"
+
+- name: Modify Data Preparation spring http multipart maxRequestSize (version 8.0 and above)
+  when: rpm_base_version >= 8.0
+  replace:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: 'spring\.servlet\.multipart\.max-request-size=.*'
+      replace: "spring.servlet.multipart.max-request-size={{ tdp_spring_http_multipart_maxRequestSize }}"
 
 - name: Modify Data Preparation dataset records limit
   replace:
@@ -292,11 +308,18 @@
       replace: "dataquality.semantic.update.enable={{ tdp_dataquality_semantic_update_enable }}"
 
 - name: Modify Data Preparation dataquality semantic update enable for 7.2 / 7.3
-  when: rpm_base_version != 7.1
+  when: rpm_base_version > 7.1 and rpm_base_version < 8.0
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "tsd.consumer.enabled=.*"
       replace: "tsd.consumer.enabled={{ tdp_tsd_consumer_enabled }}"
+
+- name: Modify Data Preparation dataquality semantic update enable for 8.0
+  when: rpm_base_version == 8.0
+  replace:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: "tsd.enabled=.*"
+      replace: "tsd.enabled={{ tdp_tsd_consumer_enabled }}"
 
 - name: Modify Data Preparation dataquality event store
   replace:
@@ -377,11 +400,19 @@
       regexp: "security.oauth2.client.access-token-uri=.*"
       replace: "security.oauth2.client.access-token-uri={{ tdp_security_oauth2_client_access_token_uri }}"
 
-- name: Modify Data Preparation security oauth2 client scope
+- name: Modify Data Preparation security oauth2 client scope (non-hybrid)
+  when: tdp_hybrid_mode == "no"
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: '^security\.oauth2\.client\.scope=.*'
       replace: "security.oauth2.client.scope={{ tdp_security_oauth2_client_scope }}"
+
+- name: Modify Data Preparation security oauth2 client scope (hybrid)
+  when: tdp_hybrid_mode == "yes"
+  replace:
+      path: "/etc/talend/tdp/application.properties"
+      regexp: '^security\.oauth2\.client\.scope=.*'
+      replace: "security.oauth2.client.scope={{ tdp_security_oauth2_client_scope_hybrid }}"
 
 - name: Modify Data Preparation security oauth2 client user authorization uri
   replace:
@@ -1031,3 +1062,10 @@
     path: "/etc/talend/tdp/application.properties"
     regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.defaultZkPort=.*'
     line: "spring.cloud.stream.kafka.binder.defaultZkPort={{ tdp_spring_cloud_stream_kafka_binder_defaultzkport }}"
+
+- name: Update TSD producer url
+  when: rpm_base_version >= 8.0
+  replace:
+    path: "/etc/talend/tdp/application.properties"
+    regexp: 'tsd\.dictionary-provider-facade\.producer-url=.*'
+    replace: "tsd.dictionary-provider-facade.producer-url={{ tdp_tsd_producer_url }}"

@@ -374,14 +374,14 @@
   lineinfile:
     path: "{{ tds_config_location }}"
     regexp: 'tsd\.maven\.connector\.enabled='
-    line: "tsd.maven.connector.enabled={{ tds_use_semantic_dictionary | bool }}"
+    line: "tsd.maven.connector.enabled={{ tds_use_semantic_dictionary | bool | lower }}"
 
 - name: Update TSD connection status (2)
   when: rpm_base_version >= 8.0
   lineinfile:
     path: "{{ tds_config_location }}"
     regexp: 'tsd\.enabled='
-    line: "tsd.enabled={{ tds_use_semantic_dictionary | bool }}"
+    line: "tsd.enabled={{ tds_use_semantic_dictionary | bool | lower }}"
 
 - name: Update AWS S3 endpoint URL
   replace:

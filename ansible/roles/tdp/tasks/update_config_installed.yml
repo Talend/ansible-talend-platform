@@ -315,7 +315,7 @@
       replace: "tsd.consumer.enabled={{ tdp_tsd_consumer_enabled }}"
 
 - name: Modify Data Preparation dataquality semantic update enable for 8.0
-  when: rpm_base_version == 8.0
+  when: rpm_base_version >= 8.0
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "tsd.enabled=.*"

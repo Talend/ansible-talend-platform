@@ -1,22 +1,41 @@
 ---
-- name: Install Java 1.8
+- name: Install Java 11
   yum:
     name: "{{ packages }}"
   vars:
     packages:
-      - java-1.8.0-openjdk
+      - java-11-openjdk
 
 - name: Save java home folder
-  shell: "dirname $(dirname $(readlink -e /usr/bin/java))"
+  shell: "dirname $(dirname $(rpm -ql java-11-openjdk-headless | grep '/bin/java$'))"
   register: java_dir
   changed_when: false
 
-- name: Check JAVA_HOME on target system (1)
+- name: Check Java on target system (1)
   stat:
     path: "{{ java_dir.stdout }}/bin/java"
   register: java_dir_java
 
-- name: Check JAVA_HOME on target system (2)
+- name: Check Java on target system (2)
   fail:
-    msg: Please check link /usr/bin/java, it does not point on java executable within standard Java/Jre folders structure
+    msg: Check Java package installation. Unable to find executable at {{ java_dir.stdout }}/bin/java.
   when: not java_dir_java.stat.exists
+
+- name: Get java_dir version
+  shell: '{{ java_dir.stdout }}/bin/java -version 2>&1 | grep version | sed s/.*version\ //'
+  args:
+    warn: no
+  register: java_dir_ver
+  changed_when: false
+
+- name: Get Java command-line version
+  shell: 'java -version 2>&1 | grep version | sed s/.*version\ //'
+  args:
+    warn: no
+  register: java_command_ver
+  changed_when: false
+
+- name: "Show error if java_dir_java and command-line versions do not match"
+  fail:
+    msg: "Error: Version mismatch between {{ java_dir.stdout }} ( {{ java_dir_ver.stdout }} ) and default Java on the command-line ( {{ java_command_ver.stdout }} ).\nEither set the default Java on the command-line to {{ java_dir.stdout }}/bin/java or modify 'roles/java/tasks/main.yml' to set variable 'java_dir' to the home directory of Java on the command-line."
+  when: java_dir_ver.stdout != java_command_ver.stdout

@@ -1,6 +1,6 @@
-# Java (OpenJDK 1.8)
+# Java (OpenJDK 11)
 
-This role installs **Java (OpenJDK 1.8)**.
+This role installs **Java (OpenJDK 11)**.
 It can be modified to install Oracle Java, if needed.
 
 OpenJDK is available in standard CentOS repositories.

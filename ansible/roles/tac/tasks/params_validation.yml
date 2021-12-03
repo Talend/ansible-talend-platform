@@ -200,6 +200,16 @@
     msg: Value for "tac_updates_repository_url" is empty
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_updates_repository_url == ""
 
+- name: Show error about invalid URL for TAC Updates repo (1)
+  fail:
+    msg: Value for "tac_updates_repository_url" must not contain spaces
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_updates_repository_url is search( " " )
+
+- name: Show error about invalid URL for TAC Updates repo (2)
+  fail:
+    msg: Value for "tac_updates_repository_url" must start with http:// or https://
+  when: tac_repo_config|bool and tac_updates_repository|bool and not tac_updates_repository_url is regex( "^https?://.*" )
+
 - name: Show error about empty user for TAC Updates repo
   fail:
     msg: Value for "tac_updates_repository_user" is empty

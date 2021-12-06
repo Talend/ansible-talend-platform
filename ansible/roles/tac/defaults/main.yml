@@ -147,9 +147,9 @@ tac_scheduler_conf_archivesJobsRootPath: "{{ install_prefix + '/tac/archivesJobs
 tac_install_license: "no" # Allowed values 'yes' or 'no'
 tac_license_file: ""
 
-#################################
-# A service block, do not update
-#################################
+###################################
+# A service block, do not change
+###################################
 tac_swupd_repotype: "{{ 'Artifactory' if tac_downloads_repository_type == 'artifactory' else 'NEXUS' if tac_downloads_repository_type == 'nexus2' else 'NEXUS 3' }}"
 tac_swupd_selector: "{{ '' if tac_downloads_repository_type == 'nexus2' else 'artifactory.' if tac_downloads_repository_type == 'artifactory' else 'nexus3.' }}"
 tac_swupd_selector2: "{{ 'nexus' if tac_downloads_repository_type == 'nexus2' else tac_downloads_repository_type }}"

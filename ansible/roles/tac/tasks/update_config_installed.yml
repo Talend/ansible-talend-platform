@@ -324,18 +324,21 @@
   when: tac_repo_config|bool and tac_updates_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.talend\.url=.*'
     line: "softwareupdate.talend.url={{ tac_updates_repository_url }}"
 
 - name: Setup Talend updates repo connection (2)
   when: tac_repo_config|bool and tac_updates_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.talend\.username=.*'
     line: "softwareupdate.talend.username={{ tac_updates_repository_user }}"
 
 - name: Setup Talend updates repo connection (3)
   when: tac_repo_config|bool and tac_updates_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.talend\.password=.*'
     line: "softwareupdate.talend.password={{ tac_updates_repository_password }}"
 
 # Talend downloads repository (Talend patch repository) connection
@@ -343,41 +346,48 @@
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.conf\.repo\.type=.*'
     line: "softwareupdate.conf.repo.type={{ tac_swupd_repotype }}"
 
 - name: Setup Talend downloads repo connection (2)
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*url=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector }}url={{ tac_downloads_repository_url }}"
 
 - name: Setup Talend downloads repo connection (3)
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*username=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector }}username={{ tac_downloads_repository_user }}"
 
 - name: Setup Talend downloads repo connection (4)
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*password=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector }}password={{ tac_downloads_repository_password }}"
 
 - name: Setup Talend downloads repo connection (5)
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*username\.reader=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector }}username.reader={{ tac_downloads_repository_reader_user }}"
 
 - name: Setup Talend downloads repo connection (6)
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*password\.reader=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector }}password.reader={{ tac_downloads_repository_reader_password }}"
 
 - name: Setup Talend downloads repo connection (7)
   when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*repositoryID=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector2 }}.repositoryID={{ tac_downloads_repository_repository_id }}"
 

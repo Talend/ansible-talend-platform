@@ -498,7 +498,7 @@
     line: "scheduler.conf.{{ tac_jobs_selector }}.username={{ tac_jobs_repository_user }}"
 
 - name: Setup Talend Jobs repo connection (3a)
-  when: not ( tac_repo_config|bool and tac_jobs_repository|bool
+  when: not ( tac_repo_config|bool and tac_jobs_repository|bool )
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
     regexp: '^[^#]*scheduler\.conf\..*\.username=.*'

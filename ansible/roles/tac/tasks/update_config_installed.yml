@@ -446,27 +446,27 @@
   when: tac_repo_config|bool and tac_custom_libs_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '{{ tac_clib_selector }}\.libUsername=.*'
+    regexp: '\.libUsername=.*'
     line: "{{ tac_clib_selector }}.libUsername={{ tac_custom_libs_repository_user }}"
 
 - name: Setup Talend custom libs repo connection (3)
   when: tac_repo_config|bool and tac_custom_libs_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '{{ tac_clib_selector }}\.libPassword=.*'
+    regexp: '\.libPassword=.*'
     line: "{{ tac_clib_selector }}.libPassword={{ tac_custom_libs_repository_password }}"
 
 - name: Setup Talend custom libs repo connection (4)
   when: tac_repo_config|bool and tac_custom_libs_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '{{ tac_clib_selector }}\.repository\.releases=.*'
+    regexp: '\.repository\.releases=.*'
     line: "{{ tac_clib_selector }}.repository.releases={{ tac_custom_libs_repository_releases }}"
 
 - name: Setup Talend custom libs repo connection (5)
   when: tac_repo_config|bool and tac_custom_libs_repository|bool
   lineinfile:
     path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '{{ tac_clib_selector }}\.repository\.snapshots=.*'
+    regexp: '\.repository\.snapshots=.*'
     line: "{{ tac_clib_selector }}.repository.snapshots={{ tac_custom_libs_repository_snapshots }}"
 

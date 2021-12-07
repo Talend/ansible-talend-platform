@@ -391,3 +391,82 @@
     regexp: 'softwareupdate.localRepo\..*repositoryID=.*'
     line: "softwareupdate.localRepo.{{ tac_swupd_selector2 }}.repositoryID={{ tac_downloads_repository_repository_id }}"
 
+# Talend Jobs repository (Talend Artifacts repository) connection
+- name: Setup Talend Jobs repo connection (1)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.repo\.type=.*'
+    line: "scheduler.conf.repo.type={{ tac_jobs_repotype }}"
+
+- name: Setup Talend Jobs repo connection (2)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.url=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.url={{ tac_jobs_repository_url }}"
+
+- name: Setup Talend Jobs repo connection (3)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.username=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.username={{ tac_jobs_repository_user }}"
+
+- name: Setup Talend Jobs repo connection (4)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.password=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.password={{ tac_jobs_repository_password }}"
+
+- name: Setup Talend Jobs repo connection (5)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.defaultRepoRelease=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.defaultRepoRelease={{ tac_jobs_repository_releases }}"
+
+- name: Setup Talend Jobs repo connection (6)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.defaultRepoSnapshot=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.defaultRepoSnapshot={{ tac_jobs_repository_snapshots }}"
+
+# Talend Custom Libs repository connection
+- name: Setup Talend custom libs repo connection (1)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'libraries\.conf\.repo\.type=.*'
+    line: "libraries.conf.repo.type={{ tac_clib_repotype }}"
+
+- name: Setup Talend custom libs repo connection (2)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '{{ tac_clib_selector }}\.libUsername=.*'
+    line: "{{ tac_clib_selector }}.libUsername={{ tac_custom_libs_repository_user }}"
+
+- name: Setup Talend custom libs repo connection (3)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '{{ tac_clib_selector }}\.libPassword=.*'
+    line: "{{ tac_clib_selector }}.libPassword={{ tac_custom_libs_repository_password }}"
+
+- name: Setup Talend custom libs repo connection (4)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '{{ tac_clib_selector }}\.repository\.releases=.*'
+    line: "{{ tac_clib_selector }}.repository.releases={{ tac_custom_libs_repository_releases }}"
+
+- name: Setup Talend custom libs repo connection (5)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '{{ tac_clib_selector }}\.repository\.snapshots=.*'
+    line: "{{ tac_clib_selector }}.repository.snapshots={{ tac_custom_libs_repository_snapshots }}"
+

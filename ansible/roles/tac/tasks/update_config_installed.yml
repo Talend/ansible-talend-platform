@@ -263,157 +263,37 @@
     regexp:  '^appender\.http\.url=.*'
     replace: "appender.http.url=http://{{ tac_appender_http_host }}:{{ tac_appender_http_port }}/"
 
-- name: Update http appender username
-  when: tac_appender_http_username != ''
+- name: Update http appender username (1)
+  when: tac_appender_http_auth == 'yes'
   replace:
     path: "{{ tac_config_location }}/audit.properties"
-    regexp:  '^(#)?(\s)*appender.http.username=.*'
+    regexp:  '^(#)?(\s)*appender\.http\.username=.*'
     replace: "appender.http.username={{ tac_appender_http_username }}"
 
-- name: Update http appender password
-  when: tac_appender_http_password != ''
+- name: Update http appender username (2)
+  when: tac_appender_http_auth != 'yes'
   replace:
     path: "{{ tac_config_location }}/audit.properties"
-    regexp:  '^(#)?(\s)*appender.http.password=.*'
+    regexp:  '^(#)?(\s)*appender\.http\.username=.*'
+    replace: "#appender.http.username={{ tac_appender_http_username }}"
+
+- name: Update http appender password (1)
+  when: tac_appender_http_auth == 'yes'
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^(#)?(\s)*appender\.http\.password=.*'
     replace: "appender.http.password={{ tac_appender_http_password }}"
+
+- name: Update http appender password (2)
+  when: tac_appender_http_auth != 'yes'
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^(#)?(\s)*appender\.http\.password=.*'
+    replace: "#appender.http.password={{ tac_appender_http_password }}"
 
 #
 # Setup Nexus/Archiva configuration
 #
-- name: Update Archiva url (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.archiva\.url=.*'
-    line: "scheduler.conf.archiva.url={{ tac_scheduler_conf_archiva_url }}"
-    state: present
-  when: tac_scheduler_conf_archiva_url != 'http://localhost:8082/archiva'
-
-- name: Update Archiva url (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '^scheduler\.conf\.archiva\.url=.*'
-    state: absent
-  when: tac_scheduler_conf_archiva_url == 'http://localhost:8082/archiva'
-
-- name: Update Nexus url (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus\.url=.*'
-    line: "scheduler.conf.nexus.url={{ tac_scheduler_conf_nexus_url }}"
-    state: present
-  when: tac_scheduler_conf_nexus_url != 'http://localhost:8081/nexus'
-
-- name: Update Nexus url (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '^scheduler\.conf\.nexus\.url=.*'
-    state: absent
-  when: tac_scheduler_conf_nexus_url == 'http://localhost:8081/nexus'
-
-- name: Update Archiva username (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.archiva\.username=.*'
-    line: "scheduler.conf.archiva.username={{ tac_scheduler_conf_archiva_username }}"
-    state: present
-  when: tac_scheduler_conf_archiva_username != 'tadmin'
-
-- name: Update Archiva username (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '^scheduler\.conf\.archiva\.username=.*'
-    state: absent
-  when: tac_scheduler_conf_archiva_username == 'tadmin'
-
-- name: Update Nexus username (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus\.username=.*'
-    line: "scheduler.conf.nexus.username={{ tac_scheduler_conf_nexus_username }}"
-    state: present
-  when: tac_scheduler_conf_nexus_username != 'admin'
-
-- name: Update Nexus username (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: '^scheduler\.conf\.nexus\.username=.*'
-    state: absent
-  when: tac_scheduler_conf_nexus_username == 'admin'
-
-- name: Update Archiva password (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.archiva\.password=.*'
-    line: "scheduler.conf.archiva.password={{ tac_scheduler_conf_archiva_password }}"
-    state: present
-  when: tac_scheduler_conf_archiva_password != '3IqdoqEElsy8Dzz9iP3HVQ=='
-
-- name: Update Archiva password (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.archiva\.password=.*'
-    state: absent
-  when: tac_scheduler_conf_archiva_password == '3IqdoqEElsy8Dzz9iP3HVQ=='
-
-- name: Update Nexus password (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus\.password=.*'
-    line: "scheduler.conf.nexus.password={{ tac_scheduler_conf_nexus_password }}"
-    state: present
-  when: tac_scheduler_conf_nexus_password != '3H7PqFGozhMb6mR8C1Rc/A=='
-
-- name: Update Nexus password (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus\.password=.*'
-    state: absent
-  when: tac_scheduler_conf_nexus_password == '3H7PqFGozhMb6mR8C1Rc/A=='
-
-- name: Update Nexus3 url (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus3\.url=.*'
-    line: "scheduler.conf.nexus3.url={{ tac_scheduler_conf_nexus3_url }}"
-    state: present
-  when: tac_scheduler_conf_nexus3_url != 'http://localhost:8081/'
-
-- name: Update Nexus3 url (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus3\.url=.*'
-    state: absent
-  when: tac_scheduler_conf_nexus3_url == 'http://localhost:8081/'
-
-- name: Update Nexus3 username (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus3\.username=.*'
-    line: "scheduler.conf.nexus3.username={{ tac_scheduler_conf_nexus3_username }}"
-    state: present
-  when: tac_scheduler_conf_nexus3_username != 'admin'
-
-- name: Update Nexus3 username (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus3\.username=.*'
-    state: absent
-  when: tac_scheduler_conf_nexus3_username == 'admin'
-
-- name: Update Nexus3 password (set)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus3\.password=.*'
-    line: "scheduler.conf.nexus3.password={{ tac_scheduler_conf_nexus3_password }}"
-    state: present
-  when: tac_scheduler_conf_nexus3_password != '3H7PqFGozhMb6mR8C1Rc/A=='
-
-- name: Update Nexus3 password (unset)
-  lineinfile:
-    path: "{{ tac_config_location }}/configuration.properties"
-    regexp: 'scheduler\.conf\.nexus3\.password=.*'
-    state: absent
-  when: tac_scheduler_conf_nexus3_password == '3H7PqFGozhMb6mR8C1Rc/A=='
 
 #
 # Setup jobExecution root path
@@ -448,3 +328,319 @@
     line: "scheduler.conf.archivesJobsRootPath={{ tac_scheduler_conf_archivesJobsRootPath }}"
     state: present
 
+#
+# Setup external repositories access
+#
+
+# Talend Updates repository connection
+
+- name: Setup Talend updates repo connection (1)
+  when: tac_repo_config|bool and tac_updates_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.talend\.url=.*'
+    line: "softwareupdate.talend.url={{ tac_updates_repository_url }}"
+
+- name: Setup Talend updates repo connection (1a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate\.talend\.url=.*'
+    state: absent
+
+- name: Setup Talend updates repo connection (2)
+  when: tac_repo_config|bool and tac_updates_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.talend\.username=.*'
+    line: "softwareupdate.talend.username={{ tac_updates_repository_user }}"
+
+- name: Setup Talend updates repo connection (2a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate\.talend\.username=.*'
+    state: absent
+
+- name: Setup Talend updates repo connection (3)
+  when: tac_repo_config|bool and tac_updates_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.talend\.password=.*'
+    line: "softwareupdate.talend.password={{ tac_updates_repository_password }}"
+
+- name: Setup Talend updates repo connection (3a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate\.talend\.password=.*'
+    state: absent
+
+# Talend downloads repository (Talend patch repository) connection
+- name: Setup Talend downloads repo connection (1)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate\.conf\.repo\.type=.*'
+    line: "softwareupdate.conf.repo.type={{ tac_swupd_repotype }}"
+
+- name: Setup Talend downloads repo connection (1a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate\.conf\.repo\.type=.*'
+    state: absent
+
+- name: Setup Talend downloads repo connection (2)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*url=.*'
+    line: "softwareupdate.localRepo.{{ tac_swupd_selector }}url={{ tac_downloads_repository_url }}"
+
+- name: Setup Talend downloads repo connection (2a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate.localRepo\..*url=.*'
+    state: absent
+
+- name: Setup Talend downloads repo connection (3)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*username=.*'
+    line: "softwareupdate.localRepo.{{ tac_swupd_selector }}username={{ tac_downloads_repository_user }}"
+
+- name: Setup Talend downloads repo connection (3a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate.localRepo\..*username=.*'
+    state: absent
+
+- name: Setup Talend downloads repo connection (4)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*password=.*'
+    line: "softwareupdate.localRepo.{{ tac_swupd_selector }}password={{ tac_downloads_repository_password }}"
+
+- name: Setup Talend downloads repo connection (4a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate.localRepo\..*password=.*'
+    state: absent
+
+- name: Setup Talend downloads repo connection (5)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*username\.reader=.*'
+    line: "softwareupdate.localRepo.{{ tac_swupd_selector }}username.reader={{ tac_downloads_repository_reader_user }}"
+
+- name: Setup Talend downloads repo connection (5a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate.localRepo\..*username\.reader=.*'
+    state: absent
+
+- name: Setup Talend downloads repo connection (6)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*password\.reader=.*'
+    line: "softwareupdate.localRepo.{{ tac_swupd_selector }}password.reader={{ tac_downloads_repository_reader_password }}"
+
+- name: Setup Talend downloads repo connection (6a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate.localRepo\..*password\.reader=.*'
+    state: absent
+
+- name: Setup Talend downloads repo connection (7)
+  when: tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'softwareupdate.localRepo\..*repositoryID=.*'
+    line: "softwareupdate.localRepo.{{ tac_swupd_selector2 }}.repositoryID={{ tac_downloads_repository_repository_id }}"
+
+- name: Setup Talend downloads repo connection (7a)
+  when: not ( tac_repo_config|bool and tac_updates_repository|bool and tac_downloads_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*softwareupdate.localRepo\..*repositoryID=.*'
+    state: absent
+
+# Talend Jobs repository (Talend Artifacts repository) connection
+- name: Setup Talend Jobs repo connection (1)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\.repo\.type=.*'
+    line: "scheduler.conf.repo.type={{ tac_jobs_repotype }}"
+
+- name: Setup Talend Jobs repo connection (1a)
+  when: not ( tac_repo_config|bool and tac_jobs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*scheduler\.conf\.repo\.type=.*'
+    state: absent
+
+- name: Setup Talend Jobs repo connection (2)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.url=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.url={{ tac_jobs_repository_url }}"
+
+- name: Setup Talend Jobs repo connection (2a)
+  when: not ( tac_repo_config|bool and tac_jobs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*scheduler\.conf\..*\.url=.*'
+    state: absent
+
+- name: Setup Talend Jobs repo connection (3)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.username=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.username={{ tac_jobs_repository_user }}"
+
+- name: Setup Talend Jobs repo connection (3a)
+  when: not ( tac_repo_config|bool and tac_jobs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*scheduler\.conf\..*\.username=.*'
+    state: absent
+
+- name: Setup Talend Jobs repo connection (4)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.password=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.password={{ tac_jobs_repository_password }}"
+
+- name: Setup Talend Jobs repo connection (4a)
+  when: not (tac_repo_config|bool and tac_jobs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*scheduler\.conf\..*\.password=.*'
+    state: absent
+
+- name: Setup Talend Jobs repo connection (5)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.defaultRepoRelease=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.defaultRepoRelease={{ tac_jobs_repository_releases }}"
+
+- name: Setup Talend Jobs repo connection (5a)
+  when: not ( tac_repo_config|bool and tac_jobs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*scheduler\.conf\..*\.defaultRepoRelease=.*'
+    state: absent
+
+- name: Setup Talend Jobs repo connection (6)
+  when: tac_repo_config|bool and tac_jobs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'scheduler\.conf\..*\.defaultRepoSnapshot=.*'
+    line: "scheduler.conf.{{ tac_jobs_selector }}.defaultRepoSnapshot={{ tac_jobs_repository_snapshots }}"
+
+- name: Setup Talend Jobs repo connection (6a)
+  when: not ( tac_repo_config|bool and tac_jobs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*scheduler\.conf\..*\.defaultRepoSnapshot=.*'
+    state: absent
+
+# Talend Custom Libs repository connection
+- name: Setup Talend custom libs repo connection (1)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: 'libraries\.conf\.repo\.type=.*'
+    line: "libraries.conf.repo.type={{ tac_clib_repotype }}"
+
+- name: Setup Talend custom libs repo connection (1a)
+  when: not ( tac_repo_config|bool and tac_custom_libs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*libraries\.conf\.repo\.type=.*'
+    state: absent
+
+- name: Setup Talend custom libs repo connection (2)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '\.libLocationUrl=.*'
+    line: "{{ tac_clib_selector }}.libLocationUrl={{ tac_custom_libs_repository_url }}"
+
+- name: Setup Talend custom libs repo connection (2a)
+  when: not ( tac_repo_config|bool and tac_custom_libs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*\.libLocationUrl=.*'
+    state: absent
+
+- name: Setup Talend custom libs repo connection (3)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '\.libUsername=.*'
+    line: "{{ tac_clib_selector }}.libUsername={{ tac_custom_libs_repository_user }}"
+
+- name: Setup Talend custom libs repo connection (3a)
+  when: not ( tac_repo_config|bool and tac_custom_libs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*\.libUsername=.*'
+    state: absent
+
+- name: Setup Talend custom libs repo connection (4)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '\.libPassword=.*'
+    line: "{{ tac_clib_selector }}.libPassword={{ tac_custom_libs_repository_password }}"
+
+- name: Setup Talend custom libs repo connection (4a)
+  when: not ( tac_repo_config|bool and tac_custom_libs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*\.libPassword=.*'
+    state: absent
+
+- name: Setup Talend custom libs repo connection (5)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '\.repository\.releases=.*'
+    line: "{{ tac_clib_selector }}.repository.releases={{ tac_custom_libs_repository_releases }}"
+
+- name: Setup Talend custom libs repo connection (5a)
+  when: not ( tac_repo_config|bool and tac_custom_libs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*\.repository\.releases=.*'
+    state: absent
+
+- name: Setup Talend custom libs repo connection (6)
+  when: tac_repo_config|bool and tac_custom_libs_repository|bool
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '\.repository\.snapshots=.*'
+    line: "{{ tac_clib_selector }}.repository.snapshots={{ tac_custom_libs_repository_snapshots }}"
+
+- name: Setup Talend custom libs repo connection (6a)
+  when: not ( tac_repo_config|bool and tac_custom_libs_repository|bool )
+  lineinfile:
+    path: "{{ tac_config_location }}/configuration.properties"
+    regexp: '^[^#]*\.repository\.snapshots=.*'
+    state: absent

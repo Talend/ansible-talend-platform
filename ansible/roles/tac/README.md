@@ -103,7 +103,7 @@ Talend Administration Center can be configured to connect to repositories. Up to
 
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
-| `tac_repo_config` | A "master" switch for all repository connection configurations. If set to `no`, all configurations will be removed from TAC configuration file | `yes` (activate TAC repository configurations) or `no` (remove it from TAC configuration file) |
+| `tac_repo_config` | A "master" switch for all repository connection configurations. If set to `no`, all repository connection configurations will be removed from TAC configuration file | `yes` (activate TAC repository configurations) or `no` (remove it from TAC configuration file) |
 | `tac_updates_repository` | Whether to configure Talend update site connection (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
 | `tac_downloads_repository` | Whether to configure connection to Downloads (Path) repository (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored). Also note that this value will be used only if `tac_updates_repository` also set to `yes` (as Talend update site is a source for Downloads repository | `yes` or `no` |
 | `tac_jobs_repository`  | Whether to configure connection to Jobs repository (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
@@ -114,8 +114,8 @@ If `tac_updates_repository` and `tac_repo_config` are both set to `yes`, the fol
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
 | `tac_updates_repository_url` | Talend update site URL | Default value is `https://talend-update.talend.com/nexus` but it can be set to any local cache/proxy server |
-| `tac_updates_repository_user` | User name | Must be specified by user |
-| `tac_updates_repository_password` | Password | Must be specified by user |
+| `tac_updates_repository_user` | User name | *Must be specified by user* |
+| `tac_updates_repository_password` | Password | *Must be specified by user* |
 
 If `tac_downloads_repository`, `tac_updates_repository` and `tac_repo_config` are all set to `yes`, the following parameters are used to specify Downloads repository connection:
 

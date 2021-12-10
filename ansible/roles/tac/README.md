@@ -89,8 +89,9 @@ If `tac_setup_jobserver` is set to `yes`, the following parameters are used:
 | ---------------------------- | --------------------------------- | ------------------------------------ |
 | `tac_appender_http_host`     | Host of HTTP appender             | Required. Default value: `localhost` |
 | `tac_appender_http_port`     | Port of HTTP appender             | Required. Default value: `8057`      |
-| `tac_appender_http_username` | User name of HTTP appender user   | Default value: `talend`              |
-| `tac_appender_http_password` | Password of of HTTP appender user | Default value: `talend`              |
+| `tac_appender_http_auth`     | Whether to use HTTP authorization | Allowed values are `yes` and `no` |
+| `tac_appender_http_username` | User name of HTTP appender user   | Default value: `talendlogs`              |
+| `tac_appender_http_password` | Password of of HTTP appender user | Default value: `tpsvclogs`              |
 
 ### TAC repository connections
 

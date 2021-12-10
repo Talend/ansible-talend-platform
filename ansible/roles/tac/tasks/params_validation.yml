@@ -151,10 +151,15 @@
     msg: Wrong value for parameter "tac_appender_http_port", must be a valid TCP/IP port number
   when: tac_appender_http_port|int  > 65535 or tac_appender_http_port|int < 0
 
-- name: Check values are specified for tac_appender_http_username and tac_appender_http_password
+- name: Check value for parameter tac_appender_http_auth
+  fail:
+    msg: Wrong value for parameter "tac_appender_http_auth", can be only "yes" or "no"
+  when: tac_appender_http_auth != "yes" and tac_appender_http_auth != "no"
+
+- name: Check that values are specified for tac_appender_http_username and tac_appender_http_password
   fail:
     msg: No values is specified for "tac_appender_http_username"/"tac_appender_http_password"
-  when: ( tac_appender_http_username != "" and tac_appender_http_password == "" ) or ( tac_appender_http_username == "" and tac_appender_http_password != "" )
+  when: tac_appender_http_auth == "yes" and ( tac_appender_http_username == "" or tac_appender_http_password == "" )
 
 - name: Get info about local license file
   local_action: stat path="{{ tac_license_file }}"

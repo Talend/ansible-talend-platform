@@ -95,8 +95,9 @@ tac_scheduler_conf_archivesJobsRootPath: "{{ install_prefix + '/tac/archivesJobs
 # Setup http appender
 tac_appender_http_host: "localhost"
 tac_appender_http_port: 8057
-tac_appender_http_username: "talend" # may be empty, if not specified
-tac_appender_http_password: "talend" # may be empty, if not specified
+tac_appender_http_auth: "no"
+tac_appender_http_username: "talendlogs"
+tac_appender_http_password: "tpsvclogs"
 
 # Setup external repositories configuration
 # There are 4 possible connections:

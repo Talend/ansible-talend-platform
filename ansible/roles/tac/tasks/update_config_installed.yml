@@ -263,19 +263,33 @@
     regexp:  '^appender\.http\.url=.*'
     replace: "appender.http.url=http://{{ tac_appender_http_host }}:{{ tac_appender_http_port }}/"
 
-- name: Update http appender username
-  when: tac_appender_http_username != ''
+- name: Update http appender username (1)
+  when: tac_appender_http_auth == 'yes'
   replace:
     path: "{{ tac_config_location }}/audit.properties"
-    regexp:  '^(#)?(\s)*appender.http.username=.*'
+    regexp:  '^(#)?(\s)*appender\.http\.username=.*'
     replace: "appender.http.username={{ tac_appender_http_username }}"
 
-- name: Update http appender password
-  when: tac_appender_http_password != ''
+- name: Update http appender username (2)
+  when: tac_appender_http_auth != 'yes'
   replace:
     path: "{{ tac_config_location }}/audit.properties"
-    regexp:  '^(#)?(\s)*appender.http.password=.*'
+    regexp:  '^(#)?(\s)*appender\.http\.username=.*'
+    replace: "#appender.http.username={{ tac_appender_http_username }}"
+
+- name: Update http appender password (1)
+  when: tac_appender_http_auth == 'yes'
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^(#)?(\s)*appender\.http\.password=.*'
     replace: "appender.http.password={{ tac_appender_http_password }}"
+
+- name: Update http appender password (2)
+  when: tac_appender_http_auth != 'yes'
+  replace:
+    path: "{{ tac_config_location }}/audit.properties"
+    regexp:  '^(#)?(\s)*appender\.http\.password=.*'
+    replace: "#appender.http.password={{ tac_appender_http_password }}"
 
 #
 # Setup Nexus/Archiva configuration

@@ -88,6 +88,10 @@ tac_jobserver_monitoring_port: 8888
 tac_jobserver_username: "talend" # may be empty, if not specified
 tac_jobserver_password: "talend" # may be empty, if not specified
 
+# Setup jobExecution root path
+tac_scheduler_conf_jobExecutionLogs_rootPath: "{{ install_prefix + '/tac/executionLogs' }}"
+tac_scheduler_conf_archivesJobsRootPath: "{{ install_prefix + '/tac/archivesJobs' }}"
+
 # Setup http appender
 tac_appender_http_host: "localhost"
 tac_appender_http_port: 8057
@@ -137,10 +141,6 @@ tac_custom_libs_repository_user: ""
 tac_custom_libs_repository_password: ""
 tac_custom_libs_repository_releases: ""    # Default repository for releases
 tac_custom_libs_repository_snapshots: ""   # Default repository for snapshots
-
-# Setup jobExecution root path
-tac_scheduler_conf_jobExecutionLogs_rootPath: "{{ install_prefix + '/tac/executionLogs' }}"
-tac_scheduler_conf_archivesJobsRootPath: "{{ install_prefix + '/tac/archivesJobs' }}"
 
 # Install license automatically during installation
 # Note that file must be on the controller host (local file)

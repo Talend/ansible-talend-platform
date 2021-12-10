@@ -93,65 +93,64 @@ If `tac_setup_jobserver` is set to `yes`, the following parameters are used:
 | `tac_appender_http_username` | User name of HTTP appender user   | Default value: `talendlogs`              |
 | `tac_appender_http_password` | Password of of HTTP appender user | Default value: `tpsvclogs`              |
 
-### TAC repository connections
+### Talend Administration Center repository connections
 
 Talend Administration Center can be configured to connect to repositories. Up to 4 repositories can be configured:
 
-- TAC Update repository connection. Used to download updates from Talend update site
-- TAC Downloads (TAC Patch) repository connection. If configured, it will be used to store artifacts downloaded from Talend update site
-- TAC Jobs repository connection. Used to store job artifacts
-- TAC Custom libs repository
+- Talend Administration Center Update repository connection. Used to download updates from Talend update site
+- Talend Administration Center Downloads (Talend Administration Center Patch) repository connection. If configured, it will be used to store artifacts downloaded from Talend update site
+- Talend Administration Center Jobs repository connection. Used to store job artifacts
+- Talend Administration Center Custom Libs repository connection. Used to store user libraries
 
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
-| `tac_repo_config` | A "master" switch for all repository connection configurations. If set to `no`, all repository connection configurations will be removed from TAC configuration file | `yes` (activate TAC repository configurations) or `no` (remove it from TAC configuration file) |
-| `tac_updates_repository` | Whether to configure Talend update site connection (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
-| `tac_downloads_repository` | Whether to configure connection to Downloads (Path) repository (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored). Also note that this value will be used only if `tac_updates_repository` also set to `yes` (as Talend update site is a source for Downloads repository | `yes` or `no` |
-| `tac_jobs_repository`  | Whether to configure connection to Jobs repository (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
-| `tac_custom_libs_repository` | Whether to configure connection to Custom Libs repository (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
+| `tac_repo_config` | An overall switch for all repository connection configurations. If set to `no`, all repository connection configurations will be removed from TAC configuration file | `yes` (activate repository configurations) or `no` (remove repository configurations from configuration file) |
+| `tac_updates_repository` | Whether to configure a Talend update site connection (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
+| `tac_downloads_repository` | Whether to configure connection to a Downloads (Path) repository (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored). Note that this value will only be used if `tac_updates_repository` also set to `yes` (as the Talend update site is a source for Downloads repository | `yes` or `no` |
+| `tac_jobs_repository`  | Whether to configure a Jobs repository connection (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
+| `tac_custom_libs_repository` | Whether to configure a Custom Libs repository connection (note that `tac_repo_config` must be set to `yes`, otherwise the value will be ignored) | `yes` or `no` |
 
 If `tac_updates_repository` and `tac_repo_config` are both set to `yes`, the following parameters are used to specify update parameters:
 
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
-| `tac_updates_repository_url` | Talend update site URL | Default value is `https://talend-update.talend.com/nexus` but it can be set to any local cache/proxy server |
-| `tac_updates_repository_user` | User name | *Must be specified by user* |
-| `tac_updates_repository_password` | Password | *Must be specified by user* |
+| `tac_updates_repository_url` | Talend update site URL | Default value is `https://talend-update.talend.com/nexus`, but it can be set to any local cache/proxy server |
+| `tac_updates_repository_user` | User name | *Required* |
+| `tac_updates_repository_password` | Password | *Required* |
 
 If `tac_downloads_repository`, `tac_updates_repository` and `tac_repo_config` are all set to `yes`, the following parameters are used to specify Downloads repository connection:
 
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
 | `tac_downloads_repository_type` | Repository type. Can be one of Nexus 2, Nexus 3 or Artifactory | Allowed values are `nexus2`, `nexus3` and `artifactory` |
-| `tac_downloads_repository_url` | Access URL, a mandatory parameter | *Must be specified by user* |
-| `tac_downloads_repository_user` | User name (for read/write access), a mandatory parameter | *Must be specified by user* |
-| `tac_downloads_repository_password` | User password (for read/write access), a mandatory parameter | *Must be specified by user* |
-| `tac_downloads_repository_reader_user` | User name (for read-only access), an optional parameter | *May be specified by user* |
-| `tac_downloads_repository_reader_password` | User password (for read-only access), an optional parameter | *May be specified by user* |
-| `tac_downloads_repository_repository_id` | Repository ID, a mandatory parameter | *Must be specified by user* |
+| `tac_downloads_repository_url` | Access URL, a mandatory parameter | *Required* |
+| `tac_downloads_repository_user` | User name (for read/write access), a mandatory parameter | *Required* |
+| `tac_downloads_repository_password` | User password (for read/write access), a mandatory parameter | *Required* |
+| `tac_downloads_repository_reader_user` | User name (for read-only access) | *Optional* |
+| `tac_downloads_repository_reader_password` | User password (for read-only access) | *Optional* |
+| `tac_downloads_repository_repository_id` | Repository ID | *Required* |
 
 If `tac_jobs_repository` and `tac_repo_config` are both set to `yes`, the following parameters are used to specify Jobs repository connection:
 
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
-| `tac_jobs_repository_type` | Repository type. Can be one of Nexus 2, Nexus 3 or Artifactory | Allowed values are `nexus2`, `nexus3` and `artifactory` |
-| `tac_jobs_repository_url` | Access URL, a mandatory parameter | *Must be specified by user* |
-| `tac_jobs_repository_user` | User name, a mandatory parameter | *Must be specified by user* |
-| `tac_jobs_repository_password` | User password, a mandatory parameter | *Must be specified by user* |
-| `tac_jobs_repository_releases`  | Default repository for releases, an optional parameter | *May be specified by user* |
-| `tac_jobs_repository_snapshots` | Default repository for snapshots, an optional parameter | *May be specified by user* |
+| `tac_jobs_repository_type` | Repository type (Nexus 2, Nexus 3 or Artifactory) | Allowed values are `nexus2`, `nexus3` and `artifactory` |
+| `tac_jobs_repository_url` | Access URL | *Required* |
+| `tac_jobs_repository_user` | User name | *Required* |
+| `tac_jobs_repository_password` | User password | *Required* |
+| `tac_jobs_repository_releases`  | Default repository for releases | *Optional* |
+| `tac_jobs_repository_snapshots` | Default repository for snapshots | *Optional* |
 
 If `tac_custom_libs_repository` and `tac_repo_config` are both set to `yes`, the following parameters are used to specify Custom Libs repository connection:
 
 | Parameter                    | Description                       | Value                                |
 | ---------------------------- | --------------------------------- | ------------------------------------ |
-| `tac_custom_libs_repository_type` | Repository type. Can be one of Nexus 2, Nexus 3 or Artifactory | Allowed values are `nexus2`, `nexus3` and `artifactory` |
-| `tac_custom_libs_repository_url` | Access URL, a mandatory parameter | *Must be specified by user* |
-| `tac_custom_libs_repository_user` | User name, a mandatory parameter | *Must be specified by user* |
-| `tac_custom_libs_repository_password` | User password, a mandatory parameter | *Must be specified by user* |
-| `tac_custom_libs_repository_releases`  | Default repository for releases, an optional parameter | *May be specified by user* |
-| `tac_custom_libs_repository_snapshots` | Default repository for snapshots, an optional parameter | *May be specified by user* |
-
+| `tac_custom_libs_repository_type` | Repository type (Nexus 2, Nexus 3 or Artifactory) | Allowed values are `nexus2`, `nexus3` and `artifactory` |
+| `tac_custom_libs_repository_url` | Access URL | *Required* |
+| `tac_custom_libs_repository_user` | User name | *Required* |
+| `tac_custom_libs_repository_password` | User password | *Required* |
+| `tac_custom_libs_repository_releases`  | Default repository for releases | *Optional* |
+| `tac_custom_libs_repository_snapshots` | Default repository for snapshots | *Optional* |
 
 ### License
 

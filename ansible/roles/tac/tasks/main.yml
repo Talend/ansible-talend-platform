@@ -31,4 +31,4 @@
 
 # Install license
 - import_tasks: install_license.yml
-  when: rpm_base_version > 7.1
+  when: rpm_base_version >= 7.2

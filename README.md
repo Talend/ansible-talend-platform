@@ -6,7 +6,7 @@ This repository contains [Ansible](https://www.ansible.com/) roles and playbooks
 
 Specifically, this repository, through its playblooks:
 
-* Installs Talend 7.1, 7.2, 7.3 or 8.0 RPM packages.
+* Installs Talend 7.2, 7.3 or 8.0 RPM packages.
 * Starts services using systemd scripts.
 * Provides configuration options for Talend packages.
 
@@ -24,19 +24,13 @@ Installing Talend applications using Ansible require CentOS 7.X as operating sys
 
 ## Installing applications using Ansible
 
-1. Specify your credentials and the version of Talend applications to install in the *ansible/group_vars/all* file. These parameters are used to access the RPM repository.
+1. Perform a Git checkout the tagged release `release/X.Y.Z` of the Talend version you are installing.
+2. Specify your credentials and the version of Talend applications to install in the *ansible/group_vars/all* file. These parameters are used to access the RPM repository.
 To change the RPM version to install, edit the following parameters:
-   * 7.1 applications:
-    
-    ```
-    rpm_base_version: 7.1
-    rpm_patch_version: 1
-    rpm_build_number: 201810261147
-    ```
 
    * 7.2 applications:
 
-    ```
+    ```yaml
     rpm_base_version: 7.2
     rpm_patch_version: 1
     rpm_build_number: 201906201446
@@ -44,22 +38,21 @@ To change the RPM version to install, edit the following parameters:
 
    * 7.3 applications:
 
-    ```
+    ```yaml
     rpm_base_version: 7.3
     rpm_patch_version: 1
     rpm_build_number: 202002191130
     ```
-    
+
    * 8.0 applications:
-    
-    ```
+
+    ```yaml
     rpm_base_version: 8.0
     rpm_patch_version: 1
     rpm_build_number: 202111091610
     ```
 
-
-2. Configure the playbook you want to install by specifying:
+3. Configure the playbook you want to install by specifying:
     1. the **hosts** to install the roles on. Hosts must be defined in `/etc/ansible/hosts` on the master node.
     2. the **remote_user** name. Make sure that the user has the required permissions to install applications on all hosts.
     3. the **roles** to install, by installation order.
@@ -89,8 +82,8 @@ To change the RPM version to install, edit the following parameters:
 
     Sample playbooks are available [here](ansible/examples) or [here](ansible).
 
-3. Configure the installation parameters as well as the configuration of each role using their respective *defaults/main.yml* file. <br/> Variables can be overwritten if they are set differently directly in the playbook.
-4. Run the playbook: <br/> `ansible-playbook <playbook>.yml`
+4. Configure the installation parameters as well as the configuration of each role using their respective *defaults/main.yml* file. <br/> Variables can be overwritten if they are set differently directly in the playbook.
+5. Run the playbook: <br/> `ansible-playbook <playbook>.yml`
 
 > **Important**: Always include **java** and then **talend-repo** roles in as first roles in playbooks. If Tomcat is needed for the set of roles that are installed, also include the **tomcat** role between **talend-repo** and the following roles.
 
@@ -159,18 +152,20 @@ In addition, service components (Kafka, MongoDB and Minio) require open ports wh
 To open a port, you can use one of the methods described below:
 
 * By directly opening ports. For example:
-```bash
-sudo firewall-cmd --add-port=8080/tcp --permanent
-sudo firewall-cmd --add-port=9080/tcp --permanent
-sudo firewall-cmd --reload
-```
+
+  ```bash
+  sudo firewall-cmd --add-port=8080/tcp --permanent
+  sudo firewall-cmd --add-port=9080/tcp --permanent
+  sudo firewall-cmd --reload
+  ```
 
 * By creating Talend network service files in /etc/firewalld/services. For example:
-```bash
-sudo firewall-cmd --add-service=Talend-TAC --permanent
-sudo firewall-cmd --add-service=Talend-IAM --permanent
-sudo firewall-cmd --reload
-```
+
+  ```bash
+  sudo firewall-cmd --add-service=Talend-TAC --permanent
+  sudo firewall-cmd --add-service=Talend-IAM --permanent
+  sudo firewall-cmd --reload
+  ```
 
 ## Issues
 

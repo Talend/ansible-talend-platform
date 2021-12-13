@@ -167,7 +167,6 @@ The live dataset feature allows creating a job in Talend Studio, executing it on
 | `tdp_dataquality_server_url`                   | URL of Data Quality server                             | Default value: `http://localhost:8187/`                            |
 | `tdp_dataquality_indexes_file_location`        | Path to index storage                                  | Default value: `data/data-quality/org.talend.dataquality.semantic` |
 | `tdp_dataquality_semantic_list_enable`         | Whether to display semantic types within dataprep UI   | Possible values: `true` (default) or `false`                       |
-| `tdp_dataquality_semantic_update_enable`       | Whether to receive data quality updates (for 7.1 only) | Possible values: `true` (default) or `false`                       |
 | `tdp_tsd_consumer_enabled`                     | Whether to receive data quality updates (for 7.2 and above) | Possible values: `true` (default) or `false`                     |
 | `tdp_dataquality_event_store`                  | *Do not modify*                                        | Only possible value: `mongodb`                                     |
 | `tdp_tsd_producer_url`                          | Dictionary provider facade producer URL                 | Default value: `http://localhost:8187/`                         |
@@ -272,7 +271,7 @@ Do not modify the default settings of the following parameters unless instructed
 
 | Parameter                      | Description                                                                                                                                                                                                                                                                         | Value                         |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `tdp_dataset_service_provider` | Service provider of datasets<br/>Data Preparation versions 7.1 and 7.2 only support `legacy` (embedded dataset service provider).<br/><br/>In future versions, `catalog` will also be supported, in which case "data catalog" or "TMC" will be used as the dataset service provider | Only possible value: `legacy` |
+| `tdp_dataset_service_provider` | Service provider of datasets<br/>Data Preparation version 7.2 only supports `legacy` (embedded dataset service provider).<br/><br/>In higher versions, `catalog` is also supported, in which case "data catalog" or "TMC" is used as the dataset service provider | Only possible value: `legacy` |
 
 ### Extra variables
 
@@ -290,7 +289,6 @@ Do not modify the default settings of the following parameters unless instructed
 | `tdp_encoding`                      | Encoding to use when writing events using appenders                                                                      | Default value: `UTF-8`                                                                                                                                                     |
 | `tdp_application_name`              | Name of the application that logs audit events. This value will be put into MDC for each logged event                    | Default value: `Data Preparation`                                                                                                                                          |
 | `tdp_instance_name`                 | Name of the instance of the service. This value will be put into MDC for each logged event                               | Default value: `DefaultInstance`                                                                                                                                           |
-| `tdp_propagate_appender_exceptions` | Behaviour of API calls if one or more appenders could not process the event. *Only used in Data Preparation version 7.1* | Possible values: `all` (default), `none`                                                                                                                                   |
 | `tdp_log_appender`                  | Comma-separated list of log appender types                                                                               | Possible values: `file`, `http` |
 
 ### Logging - File appender properties

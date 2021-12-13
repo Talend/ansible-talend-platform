@@ -300,15 +300,8 @@
       regexp: "dataquality.server.url=.*"
       replace: "dataquality.server.url={{ tdp_dataquality_server_url }}"
 
-- name: Modify Data Preparation dataquality semantic update enable for 7.1
-  when: rpm_base_version == 7.1
-  replace:
-      path: "/etc/talend/tdp/application.properties"
-      regexp: "dataquality.semantic.update.enable=.*"
-      replace: "dataquality.semantic.update.enable={{ tdp_dataquality_semantic_update_enable }}"
-
 - name: Modify Data Preparation dataquality semantic update enable for 7.2 / 7.3
-  when: rpm_base_version > 7.1 and rpm_base_version < 8.0
+  when: rpm_base_version >= 7.2 and rpm_base_version < 8.0
   replace:
       path: "/etc/talend/tdp/application.properties"
       regexp: "tsd.consumer.enabled=.*"
@@ -726,12 +719,6 @@
       path: "/etc/talend/tdp/audit.properties"
       regexp: "instance.name=.*"
       replace: "instance.name={{ tdp_instance_name }}"
-
-- name: Modify Data Preparation propagate appender exceptions
-  replace:
-      path: "/etc/talend/tdp/audit.properties"
-      regexp: "propagate.appender.exceptions=.*"
-      replace: "propagate.appender.exceptions={{ tdp_propagate_appender_exceptions }}"
 
 - name: Modify Data Preparation log appender
   replace:

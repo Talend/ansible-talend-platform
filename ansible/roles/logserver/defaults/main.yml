@@ -69,7 +69,7 @@ logserv_kibana_es_password: ""
 #####
 #  Internal section - do not change - start
 #####
-logserv_base_pkg_ver: "{{ '6.1.2' if rpm_base_version == 7.1 else '6.7.1' if rpm_base_version == 7.2 else '7.3.2' }}"
+logserv_base_pkg_ver: "{{ '6.7.1' if rpm_base_version == 7.2 else '7.3.2' }}"
 logserv_es_base_folder: "elasticsearch-{{ logserv_base_pkg_ver }}"
 logserv_kibana_base_folder: "kibana-{{ logserv_base_pkg_ver }}-linux-x86_64"
 #####

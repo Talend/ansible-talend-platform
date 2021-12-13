@@ -3,14 +3,10 @@
 #
 
 #
-# rpm_base_version: 7.1, 7.2, 7.3 etc.
+# rpm_base_version: 7.2, 7.3, 8.0 etc.
 #   rpm_patch_version: 1, 2, 3 etc
 # rpm_build_number: used to identify exact build
 #
-
-# rpm_base_version: 7.1
-# rpm_patch_version: 1
-# rpm_build_number: 201810261147
 
 # rpm_base_version: 7.2
 # rpm_patch_version: 1
@@ -25,7 +21,7 @@ rpm_patch_version: 1
 rpm_build_number: 202111091610
 
 
-rpm_version: "{{ rpm_base_version }}.{{ rpm_patch_version }}" 
+rpm_version: "{{ rpm_base_version }}.{{ rpm_patch_version }}"
 
 #
 # install_user and install_group will be used for ownership of installed packages

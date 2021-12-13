@@ -94,11 +94,6 @@
     msg: Wrong value for parameter "tdp_dataquality_semantic_list_enable", must be 'true' or 'false'
   when: tdp_dataquality_semantic_list_enable != "true" and tdp_dataquality_semantic_list_enable != "false"
 
-- name: Show error about wrong value for parameter tdp_dataquality_semantic_update_enable
-  fail:
-    msg: Wrong value for parameter "tdp_dataquality_semantic_update_enable", must be 'true' or 'false'
-  when: tdp_dataquality_semantic_update_enable != "true" and tdp_dataquality_semantic_update_enable != "false"
-
 - name: Show error about wrong value for parameter tdp_security_basic_enabled
   fail:
     msg: Wrong value for parameter "tdp_security_basic_enabled", must be 'true' or 'false'

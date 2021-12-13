@@ -720,12 +720,6 @@
       regexp: "instance.name=.*"
       replace: "instance.name={{ tdp_instance_name }}"
 
-- name: Modify Data Preparation propagate appender exceptions
-  replace:
-      path: "/etc/talend/tdp/audit.properties"
-      regexp: "propagate.appender.exceptions=.*"
-      replace: "propagate.appender.exceptions={{ tdp_propagate_appender_exceptions }}"
-
 - name: Modify Data Preparation log appender
   replace:
       path: "/etc/talend/tdp/audit.properties"

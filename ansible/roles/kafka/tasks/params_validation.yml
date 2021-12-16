@@ -52,3 +52,14 @@
     - { name: "kafka_log_retention_hours",                      value: "{{ kafka_log_retention_hours }}" }
     - { name: "kafka_log_retention_check_interval_ms",          value: "{{ kafka_log_retention_check_interval_ms }}" }
     - { name: "kafka_zookeeper_connection_timeout_ms",          value: "{{ kafka_zookeeper_connection_timeout_ms }}" }
+
+# Check for ACL actions
+- name: Check ZK ACL parameter
+  fail:
+    msg: Parameter zook_setacl can be only "yes" or "no"
+  when: zook_setacl != "yes" and zook_setacl != "no"
+
+- name: Check ACL and service startup conditions
+  fail:
+    msg: Parameter zook_setacl is set to "yes", but system services are not going to be installed, cannot proceed
+  when: zook_setacl == "yes" and app_install_systemd == "no"

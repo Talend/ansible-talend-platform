@@ -1,0 +1,43 @@
+---
+
+# This script used to update Zookeeper ACL
+# It requires that Zookeeper and Kafka services are running
+#
+# This task should be used only if zook_setacl == "yes"
+# This is second part of processing. If should be executed after ZK and Kafka servers are started up
+
+# Check pre-conditions
+- name: Zookeeper ACL - check pre-conditions (1)
+  fail:
+    msg: Invalid import - task update_acl.yml must not be used if zook_setacl is not equal to "yes"
+  when: zook_setacl != "yes"
+
+- name: Zookeeper ACL - check pre-conditions (2) - wait for Zookeeper start-up
+  wait_for:
+    port: "{{ zook_clientPort }}"
+    timeout: 30
+
+- name: Zookeeper ACL - check pre-conditions (3) - wait for Kafka start-up
+  wait_for:
+    port: "{{ kafka_listeners | urlsplit('port') }}"
+    timeout: 30
+
+- name: Zookeeper - activating ACL mechanism
+  command: "{{ install_prefix }}/kafka/bin/zookeeper-security-migration.sh --zookeeper.acl=secure"
+  environment:
+    JAVA_HOME: "{{ java_dir.stdout }}"
+    KAFKA_HOME: "{{ install_prefix }}/kafka"
+    KAFKA_OPTS: "-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+
+- name: Zookeeper ACL - setting up individual nodes security
+  command: "{{ install_prefix }}/kafka/bin/zookeeper-shell.sh localhost:{{ zook_clientPort }} setAcl {{ zk_node }} sasl:admin:cdrwa,world:anyone:r"
+  environment:
+    JAVA_HOME: "{{ java_dir.stdout }}"
+    KAFKA_HOME: "{{ install_prefix }}/kafka"
+    KAFKA_OPTS: "-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+  with_items:
+    - "/zookeeper"
+    - "/zookeeper/quota"
+    - "/consumers"
+  loop_control:
+    loop_var: zk_node

@@ -26,6 +26,9 @@
 # Updating configuration for Zookeeper and Kafka
 - import_tasks: update_config.yml
 
+# Set up Zookeeper ACL - pre-start tasks
+- include_tasks: update_acl.yml
+  when: zook_setacl == 'yes' and app_install_systemd == 'yes'
 
 # Starting services (if they are exist)
 - include_tasks: ../../common/tasks/start_service.yml

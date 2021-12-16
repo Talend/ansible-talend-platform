@@ -16,6 +16,9 @@ app_install_systemd: "yes" # allowed values "yes" and "no"
 
 # Zookeeper-specific properties
 
+zook_setacl: "yes" # Whether to harden ZK security by activating ACL-based access to ZK.
+                   # Note: this also requires that system service is installed (as actions will take place while it is running)
+
 zook_datadir: "/tmp/zookeeper"
 zook_clientPort: 2181
 zook_macClientCnxns: 0

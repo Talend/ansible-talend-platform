@@ -37,3 +37,7 @@
     - "talend-kafka"
   loop_control:
     loop_var: app_service
+
+# Set up Zookeeper ACL - post-start tasks
+- include_tasks: update_acl2.yml
+  when: zook_setacl == 'yes' and app_install_systemd == 'yes'

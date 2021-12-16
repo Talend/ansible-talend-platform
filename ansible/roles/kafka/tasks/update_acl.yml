@@ -28,7 +28,7 @@
 - name: Zookeeper - create jaas config file
   template:
     src: jaas_config.conf
-    path: "{{ install_prefix }}/kafka/config/jaas_config.conf"
+    dest: "{{ install_prefix }}/kafka/config/jaas_config.conf"
     owner: "{{ install_user }}"
     group: "{{ install_group }}"
     mode: '0644'

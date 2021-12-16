@@ -48,6 +48,12 @@
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
 
+- name: Zookeeper - set up ACL - update service
+  lineinfile:
+    path: "/etc/systemd/system/talend-zookeeper.service"
+    line: "Environment KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+    insertbefore: "^ExecStart=.*"
+
 - name: Zookeeper - update start_kafka.sh (1)
   lineinfile:
     path: "{{ install_prefix }}/kafka/start_kafka.sh"
@@ -60,6 +66,12 @@
     path: "{{ install_prefix }}/kafka/start_kafka.sh"
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
+
+- name: Zookeeper - set up ACL - update Kafka service
+  lineinfile:
+    path: "/etc/systemd/system/talend-kafka.service"
+    line: "Environment KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+    insertbefore: "^ExecStart=.*"
 
 # 3. Update ZK and Kafka config files
 - name: Zookeeper - update configuration file for using ACL (1)

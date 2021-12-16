@@ -64,13 +64,13 @@
 - name: Zookeeper - set up ACL - update service
   lineinfile:
     path: "/etc/systemd/system/talend-zookeeper.service"
-    line: "Environment KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+    line: "Environment=KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
     insertbefore: "^ExecStart=.*"
 
 - name: Zookeeper - set up ACL - update Kafka service
   lineinfile:
     path: "/etc/systemd/system/talend-kafka.service"
-    line: "Environment KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+    line: "Environment=KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
     insertbefore: "^ExecStart=.*"
 
 - name: Force systemd to reload service definitions

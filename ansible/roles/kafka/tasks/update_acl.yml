@@ -37,27 +37,27 @@
 # 2. Update start_zookeeper.sh and start_kafka.sh
 - name: Zookeeper - update start_zookeeper.sh (1)
   lineinfile:
-    path: "{{ install_prefix }}/kafka/bin/start_zookeeper.sh"
+    path: "{{ install_prefix }}/kafka/start_zookeeper.sh"
     line: "KAFKA_OPTS=-Djava.security.auth.login.config=$KAFKA_HOME/config/jaas_config.conf"
     regexp: "^KAFKA_OPTS=.*"
     insertafter: "^KAFKA_HOME="
 
 - name: Zookeeper - update start_zookeeper.sh (2)
   lineinfile:
-    path: "{{ install_prefix }}/kafka/bin/start_zookeeper.sh"
+    path: "{{ install_prefix }}/kafka/start_zookeeper.sh"
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
 
 - name: Zookeeper - update start_kafka.sh (1)
   lineinfile:
-    path: "{{ install_prefix }}/kafka/bin/start_kafka.sh"
+    path: "{{ install_prefix }}/kafka/start_kafka.sh"
     line: "KAFKA_OPTS=-Djava.security.auth.login.config=$KAFKA_HOME/config/jaas_config.conf"
     regexp: "^KAFKA_OPTS=.*"
     insertafter: "^KAFKA_HOME="
 
 - name: Zookeeper - update start_kafka.sh (2)
   lineinfile:
-    path: "{{ install_prefix }}/kafka/bin/start_kafka.sh"
+    path: "{{ install_prefix }}/kafka/start_kafka.sh"
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
 

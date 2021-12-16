@@ -74,8 +74,7 @@
     insertbefore: "^ExecStart=.*"
 
 - name: Force systemd to reload service definitions
-  ansible.builtin.systemd:
-    daemon_reload: yes
+  shell: "systemctl daemon-reload"
 
 # 3. Update ZK and Kafka config files
 - name: Zookeeper - update configuration file for using ACL (1)

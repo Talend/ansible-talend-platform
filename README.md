@@ -169,7 +169,7 @@ To open a port, you can use one of the methods described below:
 
 ## Issues
 
-Issues are tracked in the [Installer (TINSTL)]((https://jira.talendforge.org/browse/TINSTL)) project on Jira.
+Issues are tracked through Talend Support.
 
 ## Licence
 

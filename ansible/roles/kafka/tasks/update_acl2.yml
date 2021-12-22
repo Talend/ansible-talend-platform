@@ -23,16 +23,18 @@
     timeout: 30
 
 - name: Zookeeper - activating ACL mechanism
-  command: "{{ install_prefix }}/kafka/bin/zookeeper-security-migration.sh --zookeeper.acl=secure"
-  creates: "{{ install_prefix }}/kafka/config/talend.acl"
+  command:
+    cmd: "{{ install_prefix }}/kafka/bin/zookeeper-security-migration.sh --zookeeper.acl=secure"
+    creates: "{{ install_prefix }}/kafka/config/talend.acl"
   environment:
     JAVA_HOME: "{{ java_dir.stdout }}"
     KAFKA_HOME: "{{ install_prefix }}/kafka"
     KAFKA_OPTS: "-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
 
 - name: Zookeeper ACL - setting up individual nodes security
-  command: "{{ install_prefix }}/kafka/bin/zookeeper-shell.sh localhost:{{ zook_clientPort }} setAcl {{ zk_node }} sasl:admin:cdrwa,world:anyone:r"
-  creates: "{{ install_prefix }}/kafka/config/talend.acl"
+  command:
+    cmd: "{{ install_prefix }}/kafka/bin/zookeeper-shell.sh localhost:{{ zook_clientPort }} setAcl {{ zk_node }} sasl:admin:cdrwa,world:anyone:r"
+    creates: "{{ install_prefix }}/kafka/config/talend.acl"
   environment:
     JAVA_HOME: "{{ java_dir.stdout }}"
     KAFKA_HOME: "{{ install_prefix }}/kafka"

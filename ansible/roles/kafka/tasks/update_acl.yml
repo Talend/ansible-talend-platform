@@ -41,12 +41,14 @@
     line: "KAFKA_OPTS=-Djava.security.auth.login.config=$KAFKA_HOME/config/jaas_config.conf"
     regexp: "^KAFKA_OPTS=.*"
     insertafter: "^KAFKA_HOME="
+    state: present
 
 - name: Zookeeper - update start_zookeeper.sh (2)
   lineinfile:
     path: "{{ install_prefix }}/kafka/start_zookeeper.sh"
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
+    state: present
 
 - name: Zookeeper - update start_kafka.sh (1)
   lineinfile:
@@ -54,66 +56,80 @@
     line: "KAFKA_OPTS=-Djava.security.auth.login.config=$KAFKA_HOME/config/jaas_config.conf"
     regexp: "^KAFKA_OPTS=.*"
     insertafter: "^KAFKA_HOME="
+    state: present
 
 - name: Zookeeper - update start_kafka.sh (2)
   lineinfile:
     path: "{{ install_prefix }}/kafka/start_kafka.sh"
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
+    state: present
 
 - name: Zookeeper - set up ACL - update service
   lineinfile:
     path: "/etc/systemd/system/talend-zookeeper.service"
     line: "Environment=KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
     insertbefore: "^ExecStart=.*"
+    state: present
 
 - name: Zookeeper - set up ACL - update Kafka service
   lineinfile:
     path: "/etc/systemd/system/talend-kafka.service"
     line: "Environment=KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
     insertbefore: "^ExecStart=.*"
+    state: present
+    register: zk_service_status
 
 - name: Force systemd to reload service definitions
   shell: "systemctl daemon-reload"
+  when: zk_service_status.changed
 
 # 3. Update ZK and Kafka config files
 - name: Zookeeper - update configuration file for using ACL (1)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
     line: "authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+    state: present
 
 - name: Zookeeper - update configuration file for using ACL (2)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
     line: "requireClientAuthScheme=sasl"
+    state: present
 
 - name: Zookeeper - update configuration file for using ACL (3)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
     regexp: "jaasLoginRenew="
     line: "jaasLoginRenew=3600000"
+    state: present
 
 - name: Kafka - update configuration file for using ACL (1)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer"
+    state: present
 
 - name: Kafka - update configuration file for using ACL (2)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "allow.everyone.if.no.acl.found=true"
+    state: present
 
 - name: Kafka - update configuration file for using ACL (3)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "zookeeper.set.acl=true"
+    state: present
 
 - name: Kafka - update configuration file for using ACL (4)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "auto.create.topics.enable=true"
+    state: present
 
 - name: Kafka - update configuration file for using ACL (5)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "super.users=User:admin"
+    state: present

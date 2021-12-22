@@ -63,3 +63,8 @@
   fail:
     msg: Parameter zook_setacl is set to "yes", but system services are not going to be installed, cannot proceed
   when: zook_setacl == "yes" and app_install_systemd == "no"
+
+- name: Check ZK ACL compatibility
+  fail:
+    msg: Zookeeper ACL is supported only for Talend version 8.0 or above
+  when: rpm_base_version < 8.0

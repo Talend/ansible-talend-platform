@@ -24,6 +24,7 @@
 
 - name: Zookeeper - activating ACL mechanism
   command: "{{ install_prefix }}/kafka/bin/zookeeper-security-migration.sh --zookeeper.acl=secure"
+  creates: "{{ install_prefix }}/kafka/config/talend.acl"
   environment:
     JAVA_HOME: "{{ java_dir.stdout }}"
     KAFKA_HOME: "{{ install_prefix }}/kafka"
@@ -31,6 +32,7 @@
 
 - name: Zookeeper ACL - setting up individual nodes security
   command: "{{ install_prefix }}/kafka/bin/zookeeper-shell.sh localhost:{{ zook_clientPort }} setAcl {{ zk_node }} sasl:admin:cdrwa,world:anyone:r"
+  creates: "{{ install_prefix }}/kafka/config/talend.acl"
   environment:
     JAVA_HOME: "{{ java_dir.stdout }}"
     KAFKA_HOME: "{{ install_prefix }}/kafka"
@@ -41,3 +43,10 @@
     - "/consumers"
   loop_control:
     loop_var: zk_node
+
+- name: Update config/talend.acl file
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/talend.acl"
+    line: "This file is used by Talend Ansible scripts. Do not remove!"
+    state: present
+    create: yes

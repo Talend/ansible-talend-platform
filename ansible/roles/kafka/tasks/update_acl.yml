@@ -78,7 +78,7 @@
     line: "Environment=KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
     insertbefore: "^ExecStart=.*"
     state: present
-    register: zk_service_status
+  register: zk_service_status
 
 - name: Force systemd to reload service definitions
   shell: "systemctl daemon-reload"

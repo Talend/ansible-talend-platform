@@ -31,7 +31,7 @@
 
 # Set up Zookeeper ACL - pre-start tasks
 - include_tasks: update_acl.yml
-  when: zook_setacl == 'yes' and app_install_systemd == 'yes'
+  when: app_install_systemd == 'yes'
 
 # Starting services (if they are exist)
 - include_tasks: ../../common/tasks/start_service.yml
@@ -42,5 +42,5 @@
     loop_var: app_service
 
 # Set up Zookeeper ACL - post-start tasks
-- include_tasks: update_acl2.yml
+- include_tasks: update_acl_post.yml
   when: zook_setacl == 'yes' and app_install_systemd == 'yes'

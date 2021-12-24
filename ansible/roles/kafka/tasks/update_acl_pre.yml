@@ -1,0 +1,41 @@
+---
+
+# This script used to update Zookeeper ACL in transition from ACL-enabled to ACL-disabled system
+# It requires that Zookeeper and Kafka services are running
+#
+# This task should be used only if zook_setacl == "no" and file kafka/config/talend.acl exists
+
+# Pre-conditions
+- name: Check update_acl_pre - initial pre-conditions
+  fail:
+    msg: Invalid invokation for update_acl_pre.yml
+  when: not ( zook_setacl == 'no' and app_install_systemd == 'yes' and var_jaas_file_stat.stat.exists )
+
+# Check that Zookeeper server is running in background
+
+- name: Zookeeper ACL - check pre-conditions for de-activation - ensure that Zookeeper is running
+  wait_for:
+    port: "{{ zook_clientPort }}"
+    timeout: 30
+
+- name: Zookeeper ACL - un-setting up individual nodes security
+  command:
+    cmd: "{{ install_prefix }}/kafka/bin/zookeeper-shell.sh localhost:{{ zook_clientPort }} setAcl {{ zk_node }} world:anyone:cdrwa"
+  environment:
+    JAVA_HOME: "{{ java_dir.stdout }}"
+    KAFKA_HOME: "{{ install_prefix }}/kafka"
+    KAFKA_OPTS: "-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+  with_items:
+    - "/zookeeper"
+    - "/zookeeper/quota"
+    - "/consumers"
+  loop_control:
+    loop_var: zk_node
+
+- name: Zookeeper - de-activating ACL mechanism
+  command:
+    cmd: "{{ install_prefix }}/kafka/bin/zookeeper-security-migration.sh --zookeeper.acl=unsecure"
+  environment:
+    JAVA_HOME: "{{ java_dir.stdout }}"
+    KAFKA_HOME: "{{ install_prefix }}/kafka"
+    KAFKA_OPTS: "-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"

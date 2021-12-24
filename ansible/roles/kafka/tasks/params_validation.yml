@@ -68,3 +68,18 @@
   fail:
     msg: Zookeeper ACL is supported only for Talend version 8.0 or above
   when: rpm_base_version < 8.0
+
+- name: Zookeeper - get jaas file status for validation
+  stat:
+    path: "{{ install_prefix }}/kafka/config/jaas_config.conf"
+  register: var_jaas_file_stat
+
+- name: Zookeeper - print info about ACL-enabled
+  debug:
+    msg: Zookeeper RPM has ACL-based security activated
+  when: var_jaas_file_stat.stat.exists
+
+- name: Zookeeper - check transition from ACL to noACL
+  fail:
+    msg: Zookeeper - Cannot perform transition from ACL-enabled to ACL-disabled system when system services are set to 'no'
+  when: var_jaas_file_stat.stat.exists and zook_setacl == "no" and app_install_systemd == "no"

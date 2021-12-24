@@ -9,9 +9,12 @@
 # Check pre-conditions
 - name: Zookeeper ACL - check pre-conditions
   fail:
-    msg: Invalid import - task update_acl.yml must not be used if zook_setacl is not equal to "yes"
-  when: zook_setacl != "yes"
+    msg: Invalid import - task update_acl.yml must not be used only when app_install_systemd is equal to "yes"
+  when: app_install_systemd != "yes"
 
+#
+## Part I. Processing for activating ACL-based access
+#
 # Create jaas config file if missing
 
 # 1. Create jaas config file if missing
@@ -19,11 +22,12 @@
   stat:
     path: "{{ install_prefix }}/kafka/config/jaas_config.conf"
   register: var_jaas_file_stat
+  when: zook_setacl == 'yes' 
 
 - name: Zookeeper - generate a random password for jaas authentication
   set_fact:
     jaas_password_var: "{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
-  when: not var_jaas_file_stat.stat.exists
+  when: zook_setacl == 'yes' and not var_jaas_file_stat.stat.exists
 
 - name: Zookeeper - create jaas config file
   template:
@@ -32,7 +36,7 @@
     owner: "{{ install_user }}"
     group: "{{ install_group }}"
     mode: '0644'
-  when: not var_jaas_file_stat.stat.exists
+  when: zook_setacl == 'yes' and not var_jaas_file_stat.stat.exists
 
 # 2. Update start_zookeeper.sh and start_kafka.sh
 - name: Zookeeper - update start_zookeeper.sh (1)
@@ -42,6 +46,7 @@
     regexp: "^KAFKA_OPTS=.*"
     insertafter: "^KAFKA_HOME="
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - update start_zookeeper.sh (2)
   lineinfile:
@@ -49,6 +54,7 @@
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - update start_kafka.sh (1)
   lineinfile:
@@ -57,6 +63,7 @@
     regexp: "^KAFKA_OPTS=.*"
     insertafter: "^KAFKA_HOME="
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - update start_kafka.sh (2)
   lineinfile:
@@ -64,6 +71,7 @@
     line: "export KAFKA_OPTS"
     insertafter: "^KAFKA_OPTS=.*"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - set up ACL - update service
   lineinfile:
@@ -71,6 +79,7 @@
     line: "Environment=KAFKA_OPTS=-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
     insertbefore: "^ExecStart=.*"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - set up ACL - update Kafka service
   lineinfile:
@@ -79,10 +88,11 @@
     insertbefore: "^ExecStart=.*"
     state: present
   register: zk_service_status
+  when: zook_setacl == 'yes' 
 
 - name: Force systemd to reload service definitions
   shell: "systemctl daemon-reload"
-  when: zk_service_status.changed
+  when: zook_setacl == 'yes' and zk_service_status.changed
 
 # 3. Update ZK and Kafka config files
 - name: Zookeeper - update configuration file for using ACL (1)
@@ -90,12 +100,14 @@
     path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
     line: "authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - update configuration file for using ACL (2)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
     line: "requireClientAuthScheme=sasl"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Zookeeper - update configuration file for using ACL (3)
   lineinfile:
@@ -103,33 +115,151 @@
     regexp: "jaasLoginRenew="
     line: "jaasLoginRenew=3600000"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Kafka - update configuration file for using ACL (1)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Kafka - update configuration file for using ACL (2)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "allow.everyone.if.no.acl.found=true"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Kafka - update configuration file for using ACL (3)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "zookeeper.set.acl=true"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Kafka - update configuration file for using ACL (4)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "auto.create.topics.enable=true"
     state: present
+  when: zook_setacl == 'yes'
 
 - name: Kafka - update configuration file for using ACL (5)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
     line: "super.users=User:admin"
     state: present
+  when: zook_setacl == 'yes'
+
+#
+## Part II. Processing for de-activating ACL-based access
+#
+- name: Kafka - update configuration file for de-activating ACL (1)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    line: "authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Kafka - update configuration file for de-activating ACL (2)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    line: "allow.everyone.if.no.acl.found=true"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Kafka - update configuration file for de-activating ACL (3)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    line: "zookeeper.set.acl=true"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Kafka - update configuration file for de-activating ACL (4)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    line: "auto.create.topics.enable=true"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Kafka - update configuration file for de-activating ACL (5)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/server.properties"
+    line: "super.users=User:admin"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - update configuration file for de-activating ACL (1)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
+    line: "authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - update configuration file for de-activating ACL (2)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
+    line: "requireClientAuthScheme=sasl"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - update configuration file for de-activating ACL (3)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/config/zookeeper.properties"
+    regexp: "^jaasLoginRenew="
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - set up ACL - update Zookeeper service for de-activating ACL
+  lineinfile:
+    path: "/etc/systemd/system/talend-zookeeper.service"
+    regexp: "Environment=KAFKA_OPTS="
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - set up ACL - update Kafka service for de-activating ACL
+  lineinfile:
+    path: "/etc/systemd/system/talend-kafka.service"
+    regexp: "Environment=KAFKA_OPTS="
+    state: absent
+  register: zk_service_status
+  when: zook_setacl != 'yes' 
+
+- name: Force systemd to reload service definitions
+  shell: "systemctl daemon-reload"
+  when: zook_setacl != 'yes' and zk_service_status.changed
+
+- name: Zookeeper - update start_zookeeper.sh for de-activating ACL (1)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/start_zookeeper.sh"
+    regexp: "^KAFKA_OPTS=.*"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - update start_zookeeper.sh for de-activating ACL (2)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/start_zookeeper.sh"
+    line: "export KAFKA_OPTS"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - update start_kafka.sh for de-activating ACL (1)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/start_kafka.sh"
+    regexp: "^KAFKA_OPTS=.*"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: Zookeeper - update start_kafka.sh for de-activating ACL (2)
+  lineinfile:
+    path: "{{ install_prefix }}/kafka/start_kafka.sh"
+    line: "export KAFKA_OPTS"
+    state: absent
+  when: zook_setacl != 'yes'
+
+- name: remove jaas config file
+  file:
+    path: "{{ install_prefix }}/kafka/config/jaas_config.conf"
+    state: absent
+  when: zook_setacl != 'yes'

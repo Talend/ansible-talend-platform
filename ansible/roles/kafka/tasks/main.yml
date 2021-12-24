@@ -6,6 +6,9 @@
 # Check situation with current status (e.g. installed but into different path - that would be an error)
 - include_tasks: check_status.yml
 
+- include_tasks: update_acl_pre.yml
+  when: zook_setacl == 'no' and app_install_systemd == 'yes' and var_jaas_file_stat.stat.exists
+
 # Stopping services (if they exist) before making any changes in the configuration
 - include_tasks: ../../common/tasks/stop_service.yml
   with_items:

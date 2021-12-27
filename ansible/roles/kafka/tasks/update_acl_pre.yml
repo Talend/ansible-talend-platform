@@ -39,3 +39,8 @@
     JAVA_HOME: "{{ java_dir.stdout }}"
     KAFKA_HOME: "{{ install_prefix }}/kafka"
     KAFKA_OPTS: "-Djava.security.auth.login.config={{ install_prefix }}/kafka/config/jaas_config.conf"
+
+- name: Zookeeper - remove config/talend.acl file
+  file:
+    path: "{{ install_prefix }}/kafka/config/talend.acl"
+    state: absent

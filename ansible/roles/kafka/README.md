@@ -16,6 +16,18 @@ Before running the script, you can change the following variables in the *defaul
 | --------------------- | --------------------------------------- | ------------------------------- |
 | `app_install_systemd` | Whether to install as a systemd service | Supported values: `yes` or `no` |
 
+### Zookeeper Access Control List (ACL) support
+
+This implementation supports Access Control List feature for Zookeeper (see [Zookeeper ACL](https://zookeeper.apache.org/doc/r3.1.2/zookeeperProgrammers.html#sc_ZooKeeperAccessControl for more details)). When enables, it will create JAAS configuration file (`jaas_config.conf`) in `kafka/config` folder. The access passwords will be generated on the fly during JAAS configuration file creation.
+
+The implementation supports both activation and de-activation of ACL-based Zookeeper access. The change the status, update the parameter below and re-run ansible playbook.
+
+| Parameter         | Description                                  | Value                      |
+| ----------------- | -------------------------------------------- | -------------------------- |
+| `zook_setacl`  | Whether to set ACL-based access to Zookeeper | `yes` (default) or `no`  |
+
+Because of security reasons, it is recommended to keep `yes` value for parameter `zook_setacl`.
+
 ### Zookeeper variables
 
 | Parameter             | Description                            | Value                                                                    |

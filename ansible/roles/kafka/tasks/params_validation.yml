@@ -54,7 +54,7 @@
     - { name: "kafka_zookeeper_connection_timeout_ms",          value: "{{ kafka_zookeeper_connection_timeout_ms }}" }
 
 # Check for ACL actions
-- name: Check ZK ACL parameter
+- name: Check ZooKeeper ACL parameter
   fail:
     msg: Parameter zook_setacl can be only "yes" or "no"
   when: zook_setacl != "yes" and zook_setacl != "no"
@@ -64,12 +64,12 @@
     msg: Parameter zook_setacl is set to "yes", but system services are not going to be installed, cannot proceed
   when: zook_setacl == "yes" and app_install_systemd == "no"
 
-- name: Check ZK ACL compatibility
+- name: Check ZooKeeper ACL compatibility
   fail:
-    msg: Zookeeper ACL is supported only for Talend version 8.0 or above
+    msg: ZooKeeper ACL is supported only for Talend version 8.0 and above
   when: rpm_base_version < 8.0
 
-- name: Zookeeper - get jaas file status for validation
+- name: ZooKeeper - get jaas file status for validation
   stat:
     path: "{{ install_prefix }}/kafka/config/jaas_config.conf"
   register: var_jaas_file_stat
@@ -81,5 +81,5 @@
 
 - name: Zookeeper - check transition from ACL to noACL
   fail:
-    msg: Zookeeper - Cannot perform transition from ACL-enabled to ACL-disabled system when system services are set to 'no'
+    msg: Zookeeper - Cannot perform transition from ACL-enabled to ACL-disabled system while system services are set to 'no'
   when: var_jaas_file_stat.stat.exists and zook_setacl == "no" and app_install_systemd == "no"

@@ -6,6 +6,9 @@
 # Check situation with current status (e.g. installed but into different path - that would be an error)
 - include_tasks: check_status.yml
 
+- include_tasks: update_acl_pre.yml
+  when: zook_setacl == 'no' and app_install_systemd == 'yes' and var_jaas_file_stat.stat.exists
+
 # Stopping services (if they exist) before making any changes in the configuration
 - include_tasks: ../../common/tasks/stop_service.yml
   with_items:
@@ -26,6 +29,9 @@
 # Updating configuration for Zookeeper and Kafka
 - import_tasks: update_config.yml
 
+# Set up Zookeeper ACL - pre-start tasks
+- include_tasks: update_acl.yml
+  when: app_install_systemd == 'yes'
 
 # Starting services (if they are exist)
 - include_tasks: ../../common/tasks/start_service.yml
@@ -34,3 +40,7 @@
     - "talend-kafka"
   loop_control:
     loop_var: app_service
+
+# Set up Zookeeper ACL - post-start tasks
+- include_tasks: update_acl_post.yml
+  when: zook_setacl == 'yes' and app_install_systemd == 'yes'

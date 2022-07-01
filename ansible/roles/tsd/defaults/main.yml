@@ -95,8 +95,8 @@ tsd_basepath: ""
 #####
 # Internal configuration variables, do not modify this block
 #####
-rpm_name_mod: "{{ rpm_name if tsd_hybrid_mode == 'no' else 'talend-dictionary-service-hybrid' }}"
-rpm_name_mod2: "{{ rpm_name if tsd_hybrid_mode == 'yes' else 'talend-dictionary-service-hybrid' }}"
-rpm_folder_mod: "{{ rpm_folder if tsd_hybrid_mode == 'no' else 'dictionary-service-hybrid' }}"
-app_service_mod: "{{ app_service if tsd_hybrid_mode == 'no' else 'talend-dictionary-service-hybrid' }}"
+rpm_name_mod: "{{ 'talend-dictionary-service' if tsd_hybrid_mode == 'no' else 'talend-dictionary-service-hybrid' }}"
+rpm_name_mod2: "{{ 'talend-dictionary-service' if tsd_hybrid_mode == 'yes' else 'talend-dictionary-service-hybrid' }}"
+rpm_folder_mod: "{{ 'dictionary-service' if tsd_hybrid_mode == 'no' else 'dictionary-service-hybrid' }}"
+app_service_mod: "{{ 'talend-dictionary-service' if tsd_hybrid_mode == 'no' else 'talend-dictionary-service-hybrid' }}"
 ### End of Internal configuration variables block

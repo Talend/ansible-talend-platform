@@ -1,0 +1,17 @@
+---
+# This script is specially for 'tsd' role which can use 2 RPMs depending on 'tsd_hybrid_mode' value
+# It will checks that a complimentary RPM is not installed
+# For example, if tsd_hybrid_mode == 'no', then talend-dictionary-service-hybrid must not be installed
+# If it is already installed, we should throw error
+
+- name: "Check whether a complementary {{ app_name }} RPM is installed"
+  command: "rpm -qa {{ rpm_name_mod2 }}"
+  args:
+    warn: no
+  register: rpm_mod2_is_installed
+  changed_when: false
+
+- name: "Show error if {{ app_name }} is already installed as it conflicts with hybrid mode for tsd role"
+  fail:
+    msg: "Error: RPM module {{ rpm_name_mod2 }} is already installed. This conflicts with tsd_hybrid_mode value. Remove that RPM before processing"
+  when: rpm_mod2_is_installed.stdout != ''

@@ -39,7 +39,7 @@
 - import_tasks: update_config_installed.yml
 
 # Import semantic dictionary
-- import_tasks: import_semantic_dictionary.yml
+- include_tasks: import_semantic_dictionary.yml
   when: tsd_hybrid_mode == 'no'
 
 # Starting systemd service

@@ -174,14 +174,14 @@
 
 # Activate Talend Dictionary Service or not
 - name: Activate Dictionary Service
-  when: tds_use_semantic_dictionary == "yes"
+  when: tds_hybrid_mode == 'no' and tds_use_semantic_dictionary == "yes"
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^semanticservice\.url=.*'
     replace: 'semanticservice.url={{ tds_semantic_dictionary_url }}'
 
 - name: Deactivate Dictionary Service
-  when: tds_use_semantic_dictionary == "no"
+  when: tds_hybrid_mode == 'no' and tds_use_semantic_dictionary == "no"
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^semanticservice\.url=.*'
@@ -316,6 +316,20 @@
     path: "{{ tds_config_location }}"
     regexp: 'tds\.front\.tmcUrl='
     line: "tds.front.tmcUrl=https://tmc.{{ tds_hybrid_region }}.cloud.talend.com"
+
+- name: Activate hybrid mode (12)
+  when: tds_hybrid_mode == 'yes'
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  'semanticservice\.url=.*'
+    replace: 'semanticservice.url=https://tds.{{ tds_hybrid_region }}.cloud.talend.com/semanticservice/'
+
+- name: Activate hybrid mode (13)
+  when: tds_hybrid_mode == 'yes'
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  'tsd\.dictionary-provider-facade\.producer-url=.*'
+    replace: 'tsd.dictionary-provider-facade.producer-url={{ tds_semantic_dictionary_url }}'
 
 
 # Hybrid stuff - Deactivation

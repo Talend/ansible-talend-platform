@@ -75,7 +75,7 @@ tds_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 #####
 # If you have a Talend Dictionary Service licence, set to "yes" and tds_semantic_dictionary_url will be used
 tds_use_semantic_dictionary: "yes"
-# Url of Talend Dictionary Service
+# Url of Talend Dictionary Service, keep in sync with tsd role tomcat port
 tds_semantic_dictionary_url: "http://localhost:8187/"
 
 #####

@@ -303,6 +303,20 @@
     regexp: 'tds\.front\.cloudDeployment='
     line: "tds.front.cloudDeployment=false"
 
+- name: Activate hybrid mode (10)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'dataquality\.rules\.baseUri='
+    line: "dataquality.rules.baseUri=https://tds.{{ tds_hybrid_region }}.cloud.talend.com/rulerepository"
+
+- name: Activate hybrid mode (11)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.tmcUrl='
+    line: "tds.front.tmcUrl=https://tmc.{{ tds_hybrid_region }}.cloud.talend.com"
+
 
 # Hybrid stuff - Deactivation
 - name: Deactivate hybrid mode (1)
@@ -367,6 +381,21 @@
     path: "{{ tds_config_location }}"
     regexp: 'tds\.front\.cloudDeployment='
     state: absent
+
+- name: Deactivate hybrid mode (10)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'dataquality\.rules\.baseUri='
+    state: absent
+
+- name: Deactivate hybrid mode (11)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.tmcUrl='
+    line: "#tds.front.tmcUrl="
+
 
 ## AWS S3 communication (TSD)
 - name: Update TSD connection status (1)

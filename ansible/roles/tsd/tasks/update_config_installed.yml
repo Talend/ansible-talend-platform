@@ -180,6 +180,69 @@
     regexp: 'audit\.log\.enabled='
     line: "audit.log.enabled=false"
 
+- name: Activate hybrid mode (4)
+  when: tsd_hybrid_mode == 'yes'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.pat=.*'
+    replace: '.connector.pat={{ tsd_hybrid_pat }}'
+
+- name: Activate hybrid mode (5)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'tds'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.producer-url=.*'
+    replace: '.connector.producer-url=https://tds.{{ tsd_hybrid_region }}.cloud.talend.com/semanticservice/'
+
+- name: Activate hybrid mode (6)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'tdp'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.producer-url=.*'
+    replace: '.connector.producer-url=https://tdp.{{ tsd_hybrid_region }}.cloud.talend.com/dq/semanticservice/'
+
+- name: Activate hybrid mode (7)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto' and tds_hybrid_installed_flag.stat.exists
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.producer-url=.*'
+    replace: '.connector.producer-url=https://tds.{{ tsd_hybrid_region }}.cloud.talend.com/semanticservice/'
+
+- name: Activate hybrid mode (7)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto' and not tds_hybrid_installed_flag.stat.exists
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.producer-url=.*'
+    replace: '.connector.producer-url=https://tdp.{{ tsd_hybrid_region }}.cloud.talend.com/dq/semanticservice/'
+
+- name: Activate hybrid mode (8)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'tds'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.dq-rules-url=.*'
+    replace: '.connector.dq-rules-url=https://tds.{{ tsd_hybrid_region }}.cloud.talend.com/rulerepository/'
+
+- name: Activate hybrid mode (9)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'tdp'
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.dq-rules-url=.*'
+    replace: '.connector.dq-rules-url=https://tdp.{{ tsd_hybrid_region }}.cloud.talend.com/rulerepository/'
+
+- name: Activate hybrid mode (10)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto' and tds_hybrid_installed_flag.stat.exists
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.dq-rules-url=.*'
+    replace: '.connector.dq-rules-url=https://tds.{{ tsd_hybrid_region }}.cloud.talend.com/rulerepository/'
+
+- name: Activate hybrid mode (11)
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto' and not tds_hybrid_installed_flag.stat.exists
+  replace:
+    path: "{{ tsd_config_location }}"
+    regexp:  '\.connector\.dq-rules-url=.*'
+    replace: '.connector.dq-rules-url=https://tdp.{{ tsd_hybrid_region }}.cloud.talend.com/rulerepository/'
+
 
 # Hybrid mode de-activation
 - name: Deactivate hybrid mode (1)

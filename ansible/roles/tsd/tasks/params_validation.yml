@@ -85,6 +85,34 @@
     msg: Incorrect value tsd_s3endpoint, port does not match with variable minio_port
   when: minio_port is defined and tsd_s3endpoint | urlsplit('port') != minio_port | int
 
+- name: Check PAT value
+  fail:
+    msg: Cannot use empty value for Personal Access Token (tsd_hybrid_pat) in hybrid mode
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_pat == ''
+
+- name: Check tsd_hybrid_service value
+  fail:
+    msg: Wrong value for tsd_hybrid_service, can only be one of 'tds', 'tdp' or 'auto'
+  when: tsd_hybrid_mode == 'yes' and not (tsd_hybrid_service == 'tds' or tsd_hybrid_service == 'tdp' or tsd_hybrid_service == 'auto')
+
+  # Extra test for tsd_hybrid_service == 'auto', in this case 'tdp-hybrid' or 'tds-hybrid' folder must already exist
+- name: Get flag of tdp-hybrid folder
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto'
+  stat:
+    path: "{{ install_prefix }}/tdp-hybrid/install.params"
+  register: tdp_hybrid_installed_flag
+
+- name: Get flag of tds-hybrid folder
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto'
+  stat:
+    path: "{{ install_prefix }}/tds-hybrid/install.params"
+  register: tds_hybrid_installed_flag
+
+- name: Show error about wrong 'auto' value for tsd_hybrid_service variable
+  when: tsd_hybrid_mode == 'yes' and tsd_hybrid_service == 'auto' and not tdp_hybrid_installed_flag.stat.exists and not tds_hybrid_installed_flag.stat.exists
+  fail:
+    msg: Wrong value 'auto' for variable 'tsd_hybrid_service' - cannot determine as neither tdp nor tds is installed. Try to put 'tsd' role in the end of playbook?
+
   # Verify audit settings
 - name: Show error about wrong audit setting
   fail:

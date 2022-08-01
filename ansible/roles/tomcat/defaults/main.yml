@@ -8,4 +8,4 @@ rpm_name: "talend-tomcat"
 # The talend-tomcat package does not use the same versioning as other
 # Talend packages, thus must be specified
 
-tomcat_rpm_pkg_version: "{{ '9.0.10-1' if rpm_base_version == 7.2 else '9.0.41-1' if rpm_base_version == 7.3 else '9.0.46-1' }}"
+tomcat_rpm_pkg_version: "{{ '9.0.10-1' if rpm_base_version == 7.2 else '9.0.41-1' if rpm_base_version == 7.3 else '9.0.62-1' }}"

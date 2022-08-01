@@ -295,6 +295,7 @@
       replace: "dataquality.semantic.list.enable={{ tdp_dataquality_semantic_list_enable }}"
 
 - name: Modify Data Preparation dataquality server url
+  when: tdp_hybrid_mode == 'no'
   replace:
       path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataquality.server.url=.*"
@@ -863,6 +864,20 @@
       path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "iam.scim.url=.*"
       replace: "iam.scim.url=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1/scim/"
+
+- name: Activate Hybrid mode (16)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
+      regexp: 'dataquality\.server\.url='
+      line: "dataquality.server.url=https://tdp.{{ tdp_hybrid_region }}.cloud.talend.com/dq/semanticservice/"
+
+- name: Activate Hybrid mode (17)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
+      regexp: 'tsd\.dictionary-provider-facade\.producer-url='
+      line: "tsd.dictionary-provider-facade.producer-url={{ tdp_tsd_producer_url }}"
 
 
 #

@@ -8,12 +8,12 @@
 - name: Set tds_config_location when talend tomcat is used or customer tomcat in shared mode
   when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
   set_fact:
-    tds_config_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship.properties"
+    tds_config_location: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/data-stewardship.properties"
 
 - name: Set tds_config_audit_location when talend tomcat is used or customer tomcat in shared mode
   when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
   set_fact:
-    tds_config_audit_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/audit.properties"
+    tds_config_audit_location: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/audit.properties"
 
 - name: Set tds_config_location when customer tomcat is used in direct mode
   when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
@@ -221,8 +221,8 @@
 # Copy missing 'data-stewardship-monitoring-service-logback.xml' file
 - name: Copy data-stewardship-monitoring-service-logback.xml
   copy:
-    src: "{{ install_prefix }}/{{ rpm_folder }}/config/data-stewardship-monitoring-service-logback.xml"
-    dest: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship-monitoring-service-logback.xml"
+    src: "{{ install_prefix }}/{{ rpm_folder_mod }}/config/data-stewardship-monitoring-service-logback.xml"
+    dest: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/data-stewardship-monitoring-service-logback.xml"
     mode: 0644
     owner: "{{install_user}}"
     group: "{{install_group}}"
@@ -231,8 +231,8 @@
 # Copy missing 'internal#data-stewardship-monitoring-service.xml' file
 - name: "Copy internal#data-stewardship-monitoring-service.xml"
   copy:
-    src: "{{ install_prefix }}/{{ rpm_folder }}/context/internal#data-stewardship-monitoring-service.xml"
-    dest: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/Catalina/localhost/internal#data-stewardship-monitoring-service.xml"
+    src: "{{ install_prefix }}/{{ rpm_folder_mod }}/context/internal#data-stewardship-monitoring-service.xml"
+    dest: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/Catalina/localhost/internal#data-stewardship-monitoring-service.xml"
     mode: 0644
     owner: "{{install_user}}"
     group: "{{install_group}}"

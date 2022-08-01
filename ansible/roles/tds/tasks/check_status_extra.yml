@@ -1,7 +1,7 @@
 ---
 # This script is specially for 'tds' role which can use 2 RPMs depending on 'tds_hybrid_mode' value
 # It will checks that a complimentary RPM is not installed
-# For example, if tds_hybrid_mode == 'no', then talend-tdp-hybrid must not be installed
+# For example, if tds_hybrid_mode == 'no', then talend-tds-hybrid must not be installed
 # If it is already installed, we should throw error
 
 - name: "Check whether a complementary {{ app_name }} RPM is installed"

@@ -172,3 +172,12 @@ tdp_s3region: "us-east-1"
 tdp_s3user: "usr7xJ0agsFq"
 tdp_s3pass: "pwd9jYF26Van"
 tdp_basepath: ""
+
+#####
+# Internal configuration variables, do not modify this block
+#####
+rpm_name_mod: "{{ 'talend-tdp' if tdp_hybrid_mode == 'no' else 'talend-tdp-hybrid' }}"
+rpm_name_mod2: "{{ 'talend-tdp' if tdp_hybrid_mode == 'yes' else 'talend-tdp-hybrid' }}"
+rpm_folder_mod: "{{ 'tdp' if tdp_hybrid_mode == 'no' else 'tdp-hybrid' }}"
+app_service_mod: "{{ 'talend-tdp' if tdp_hybrid_mode == 'no' else 'talend-tdp-hybrid' }}"
+### End of Internal configuration variables block

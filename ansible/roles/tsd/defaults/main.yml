@@ -71,7 +71,7 @@ tsd_security_oidc_url: "http://localhost:9080/oidc"
 
 #
 # OIDC_ID and Secret, used in both Hybrid and non-hybrid modes
-# Normally they must match with TDS OIDC vars
+# Normally they must match with TDS or TDP OIDC vars
 #
 tsd_oidc_id: "tl6K6ac7tSE-LQ"
 tsd_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
@@ -82,6 +82,13 @@ tsd_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 tsd_hybrid_mode: "no" # Can be "yes" or "no"
 tsd_hybrid_region: "us" # Can be one of "us", "eu", "ap", "au", "us-west" or "at"
 
+# Personal Access Token: used for synchronization of semantic types across hybrid and cloud products
+tsd_hybrid_pat: ""
+
+# We need to specify which service (TDP or TDS) must be used for synchronization
+# Allowed values are "tds", "tdp" and "auto". In last case Ansible will try to determine (in this case `tsd` role must be in the end of the playbook)
+tsd_hybrid_service: "auto"
+
 #####
 # Communication with Minio / AWS S3 (defaults are set to use a local "minio" role)
 #####
@@ -91,3 +98,12 @@ tsd_s3region: "us-east-1"
 tsd_s3user: "usr7xJ0agsFq"
 tsd_s3pass: "pwd9jYF26Van"
 tsd_basepath: ""
+
+#####
+# Internal configuration variables, do not modify this block
+#####
+rpm_name_mod: "{{ 'talend-dictionary-service' if tsd_hybrid_mode == 'no' else 'talend-dictionary-service-hybrid' }}"
+rpm_name_mod2: "{{ 'talend-dictionary-service' if tsd_hybrid_mode == 'yes' else 'talend-dictionary-service-hybrid' }}"
+rpm_folder_mod: "{{ 'dictionary-service' if tsd_hybrid_mode == 'no' else 'dictionary-service-hybrid' }}"
+app_service_mod: "{{ 'talend-dictionary-service' if tsd_hybrid_mode == 'no' else 'talend-dictionary-service-hybrid' }}"
+### End of Internal configuration variables block

@@ -8,12 +8,12 @@
 - name: Set tds_config_location when talend tomcat is used or customer tomcat in shared mode
   when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
   set_fact:
-    tds_config_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship.properties"
+    tds_config_location: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/data-stewardship.properties"
 
 - name: Set tds_config_audit_location when talend tomcat is used or customer tomcat in shared mode
   when: app_use_talend_tomcat == 'yes' or (app_use_talend_tomcat == 'no' and app_tomcat_mode == 'shared')
   set_fact:
-    tds_config_audit_location: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/audit.properties"
+    tds_config_audit_location: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/audit.properties"
 
 - name: Set tds_config_location when customer tomcat is used in direct mode
   when: app_use_talend_tomcat == 'no' and app_tomcat_mode == 'direct'
@@ -174,14 +174,14 @@
 
 # Activate Talend Dictionary Service or not
 - name: Activate Dictionary Service
-  when: tds_use_semantic_dictionary == "yes"
+  when: tds_hybrid_mode == 'no' and tds_use_semantic_dictionary == "yes"
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^semanticservice\.url=.*'
     replace: 'semanticservice.url={{ tds_semantic_dictionary_url }}'
 
 - name: Deactivate Dictionary Service
-  when: tds_use_semantic_dictionary == "no"
+  when: tds_hybrid_mode == 'no' and tds_use_semantic_dictionary == "no"
   replace:
     path: "{{ tds_config_location }}"
     regexp:  '^semanticservice\.url=.*'
@@ -221,8 +221,8 @@
 # Copy missing 'data-stewardship-monitoring-service-logback.xml' file
 - name: Copy data-stewardship-monitoring-service-logback.xml
   copy:
-    src: "{{ install_prefix }}/{{ rpm_folder }}/config/data-stewardship-monitoring-service-logback.xml"
-    dest: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/data-stewardship-monitoring-service-logback.xml"
+    src: "{{ install_prefix }}/{{ rpm_folder_mod }}/config/data-stewardship-monitoring-service-logback.xml"
+    dest: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/data-stewardship-monitoring-service-logback.xml"
     mode: 0644
     owner: "{{install_user}}"
     group: "{{install_group}}"
@@ -231,8 +231,8 @@
 # Copy missing 'internal#data-stewardship-monitoring-service.xml' file
 - name: "Copy internal#data-stewardship-monitoring-service.xml"
   copy:
-    src: "{{ install_prefix }}/{{ rpm_folder }}/context/internal#data-stewardship-monitoring-service.xml"
-    dest: "{{ install_prefix }}/{{ rpm_folder }}/tomcat/conf/Catalina/localhost/internal#data-stewardship-monitoring-service.xml"
+    src: "{{ install_prefix }}/{{ rpm_folder_mod }}/context/internal#data-stewardship-monitoring-service.xml"
+    dest: "{{ install_prefix }}/{{ rpm_folder_mod }}/tomcat/conf/Catalina/localhost/internal#data-stewardship-monitoring-service.xml"
     mode: 0644
     owner: "{{install_user}}"
     group: "{{install_group}}"
@@ -303,6 +303,34 @@
     regexp: 'tds\.front\.cloudDeployment='
     line: "tds.front.cloudDeployment=false"
 
+- name: Activate hybrid mode (10)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'dataquality\.rules\.baseUri='
+    line: "dataquality.rules.baseUri=https://tds.{{ tds_hybrid_region }}.cloud.talend.com/rulerepository"
+
+- name: Activate hybrid mode (11)
+  when: tds_hybrid_mode == 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.tmcUrl='
+    line: "tds.front.tmcUrl=https://tmc.{{ tds_hybrid_region }}.cloud.talend.com"
+
+- name: Activate hybrid mode (12)
+  when: tds_hybrid_mode == 'yes'
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  'semanticservice\.url=.*'
+    replace: 'semanticservice.url=https://tds.{{ tds_hybrid_region }}.cloud.talend.com/semanticservice/'
+
+- name: Activate hybrid mode (13)
+  when: tds_hybrid_mode == 'yes'
+  replace:
+    path: "{{ tds_config_location }}"
+    regexp:  'tsd\.dictionary-provider-facade\.producer-url=.*'
+    replace: 'tsd.dictionary-provider-facade.producer-url={{ tds_semantic_dictionary_url }}'
+
 
 # Hybrid stuff - Deactivation
 - name: Deactivate hybrid mode (1)
@@ -367,6 +395,21 @@
     path: "{{ tds_config_location }}"
     regexp: 'tds\.front\.cloudDeployment='
     state: absent
+
+- name: Deactivate hybrid mode (10)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'dataquality\.rules\.baseUri='
+    state: absent
+
+- name: Deactivate hybrid mode (11)
+  when: tds_hybrid_mode != 'yes'
+  lineinfile:
+    path: "{{ tds_config_location }}"
+    regexp: 'tds\.front\.tmcUrl='
+    line: "#tds.front.tmcUrl="
+
 
 ## AWS S3 communication (TSD)
 - name: Update TSD connection status (1)

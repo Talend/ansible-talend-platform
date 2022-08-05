@@ -7,25 +7,38 @@
 
 # Check situation with current status (e.g. installed but into different path - that would be an error)
 - include_tasks: ../../common/tasks/check_status.yml
+  vars:
+    rpm_name: "{{ rpm_name_mod }}"
+    rpm_folder: "{{ rpm_folder_mod }}"
+
+# Check that a conflicting RPM is not installed
+- include_tasks: check_status_extra.yml
 
 # Stop systemd service (if it exists, as it might not exist on a new installation)
 #   We need this to update configuration
 - include_tasks: ../../common/tasks/stop_service.yml
+  vars:
+    app_service: "{{ app_service_mod }}"
 
 # We will include installation with yum or with rpm depending of prefix used
 - include_tasks: ../../common/tasks/install_yum.yml
   when: install_prefix == '/opt/talend'
+  vars:
+    rpm_name: "{{ rpm_name_mod }}"
 
 - include_tasks: ../../common/tasks/install_rpm.yml
   when: install_prefix != '/opt/talend'
+  vars:
+    rpm_name: "{{ rpm_name_mod }}"
 
 # Patch installation if installing into non-default folder
 - include_tasks: patch.yml
-  when: install_prefix != '/opt/talend'
+  when: install_prefix != '/opt/talend' and rpm_base_version < 7.3
 
 # Update configuration
 - import_tasks: update_config_installed.yml
 
 # Starting systemd service
 - include_tasks: ../../common/tasks/start_service.yml
-
+  vars:
+    app_service: "{{ app_service_mod }}"

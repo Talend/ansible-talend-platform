@@ -1,758 +1,759 @@
 ---
 - name: Modify Data Preparation public ip
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "public.ip=.*"
       replace: "public.ip={{ tdp_public_ip }}"
 
 - name: Modify Data Preparation server port
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "server.port=.*"
       replace: "server.port={{ tdp_server_port }}"
 
 - name: Modify Data Preparation language setting
   when: tdp_hybrid_mode == 'no'
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: '^#?dataprep\.locale=.*'
       replace: "dataprep.locale={{ tdp_language }}"
 
 - name: Modify Data Preparation async runtime contextPath
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "async-runtime.contextPath=.*"
       replace: "async-runtime.contextPath={{ tdp_async_runtime_contextPath }}"
 
 - name: Modify Data Preparation server compression enabled
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "server.compression.enabled=.*"
       replace: "server.compression.enabled={{ tdp_server_compression_enabled }}"
 
 - name: Modify Data Preparation server compression mime types
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "server.compression.mime-types=.*"
       replace: "server.compression.mime-types={{ tdp_server_compression_mime_types }}"
 
 - name: Modify Data Preparation iam ip (non-hybrid)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.ip='
       line: "iam.ip={{ tdp_iam_ip }}"
 
 - name: Modify Data Preparation iam ip (hybrid)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.ip='
       line: "#iam.ip={{ tdp_iam_ip }}"
 
 - name: Modify Data Preparation spring mvc async request timeout
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "spring.mvc.async.request-timeout=.*"
       replace: "spring.mvc.async.request-timeout={{ tdp_spring_mvc_async_request_timeout }}"
 
 - name: Modify Data Preparation lock store
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "lock.store=.*"
       replace: "lock.store={{ tdp_lock_store }}"
 
 - name: Modify Data Preparation dataprep event listener
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataprep.event.listener=.*"
       replace: "dataprep.event.listener={{ tdp_dataprep_event_listener }}"
 
 - name: Modify Data Preparation live dataset location
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "live.dataset.location=.*"
       replace: "live.dataset.location={{ tdp_live_dataset_location }}"
 
 - name: Modify Data Preparation live dataset url
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "live.dataset.url=.*"
       replace: "live.dataset.url={{ tdp_live_dataset_url }}"
 
 - name: Modify Data Preparation live dataset task prefix
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "live.dataset.task-prefix=.*"
       replace: "live.dataset.task-prefix={{ tdp_live_dataset_task_prefix }}"
 
 - name: Modify Data Preparation mongodb host
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "mongodb.host=.*"
       replace: "mongodb.host={{ tdp_mongodb_host }}"
 
 - name: Modify Data Preparation mongodb port
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "mongodb.port=.*"
       replace: "mongodb.port={{ tdp_mongodb_port }}"
 
 - name: Modify Data Preparation mongodb database
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "mongodb.database=.*"
       replace: "mongodb.database={{ tdp_mongodb_database }}"
 
 - name: Modify Data Preparation mongodb user
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "mongodb.user=.*"
       replace: "mongodb.user={{ tdp_mongodb_user }}"
 
 - name: Modify Data Preparation mongodb password
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "mongodb.password=.*"
       replace: "mongodb.password={{ tdp_mongodb_password }}"
 
 - name: Modify Data Preparation multi tenancy mongodb active
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "multi-tenancy.mongodb.active=.*"
       replace: "multi-tenancy.mongodb.active={{ tdp_multi_tenancy_mongodb_active }}"
 
 - name: Modify Data Preparation security provider
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.provider=.*"
       replace: "security.provider={{ tdp_security_provider }}"
 
 - name: Modify Data Preparation security token secret
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.token.secret=.*"
       replace: "security.token.secret={{ tdp_security_token_secret }}"
 
 - name: Modify Data Preparation security token renew after
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.token.renew-after=.*"
       replace: "security.token.renew-after={{ tdp_security_token_renew_after }}"
 
 - name: Modify Data Preparation security token invalid after
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.token.invalid-after=.*"
       replace: "security.token.invalid-after={{ tdp_security_token_invalid_after }}"
 
 - name: Modify Data Preparation spring profiles active
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "spring.profiles.active=.*"
       replace: "spring.profiles.active={{ tdp_spring_profiles_active }}"
 
 - name: Modify Data Preparation spring http multipart maxFileSize (version less than 8.0)
   when: rpm_base_version < 8.0
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'spring\.http\.multipart\.maxFileSize=.*'
       replace: "spring.http.multipart.maxFileSize={{ tdp_spring_http_multipart_maxFileSize }}"
 
 - name: Modify Data Preparation spring http multipart maxFileSize (version 8.0 and above)
   when: rpm_base_version >= 8.0
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'spring\.servlet\.multipart\.max-file-size=.*'
       replace: "spring.servlet.multipart.max-file-size={{ tdp_spring_http_multipart_maxFileSize }}"
 
 - name: Modify Data Preparation spring http multipart maxRequestSize (version less than 8.0)
   when: rpm_base_version < 8.0
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'spring\.http\.multipart\.maxRequestSize=.*'
       replace: "spring.http.multipart.maxRequestSize={{ tdp_spring_http_multipart_maxRequestSize }}"
 
 - name: Modify Data Preparation spring http multipart maxRequestSize (version 8.0 and above)
   when: rpm_base_version >= 8.0
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'spring\.servlet\.multipart\.max-request-size=.*'
       replace: "spring.servlet.multipart.max-request-size={{ tdp_spring_http_multipart_maxRequestSize }}"
 
 - name: Modify Data Preparation dataset records limit
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataset.records.limit=.*"
       replace: "dataset.records.limit={{ tdp_dataset_records_limit }}"
 
 - name: Modify Data Preparation dataset local file size limit
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataset.local.file.size.limit=.*"
       replace: "dataset.local.file.size.limit={{ tdp_dataset_local_file_size_limit }}"
 
 - name: Modify Data Preparation dataset imports
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataset.imports=.*"
       replace: "dataset.imports={{ tdp_dataset_imports }}"
 
 - name: Modify Data Preparation dataset list limit
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataset.list.limit=.*"
       replace: "dataset.list.limit={{ tdp_dataset_list_limit }}"
 
 - name: Modify Data Preparation content service store
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "content-service.store=.*"
       replace: "content-service.store={{ tdp_content_service_store }}"
 
 - name: Modify Data Preparation content service store local path
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "content-service.store.local.path=.*"
       replace: "content-service.store.local.path={{ tdp_content_service_store_local_path }}"
 
 - name: Modify Data Preparation preparation store remove hours
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "preparation.store.remove.hours=.*"
       replace: "preparation.store.remove.hours={{ tdp_preparation_store_remove_hours }}"
 
 - name: Modify Data Preparation lock preparation store
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "lock.preparation.store=.*"
       replace: "lock.preparation.store={{ tdp_lock_preparation_store }}"
 
 - name: Modify Data Preparation lock preparation delay
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "lock.preparation.delay=.*"
       replace: "lock.preparation.delay={{ tdp_lock_preparation_delay }}"
 
 - name: Modify Data Preparation luceneIndexStrategy
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "luceneIndexStrategy=.*"
       replace: "luceneIndexStrategy={{ tdp_luceneIndexStrategy }}"
 
 - name: Modify Data Preparation execution store
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "execution.store=.*"
       replace: "execution.store={{ tdp_execution_store }}"
 
 - name: Modify Data Preparation async operation concurrent run
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "async.operation.concurrent.run=.*"
       replace: "async.operation.concurrent.run={{ tdp_async_operation_concurrent_run }}"
 
 - name: Modify Data Preparation tcomp server url
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tcomp.server.url=.*"
       replace: "tcomp.server.url={{ tdp_tcomp_server_url }}"
 
 - name: Modify Data Preparation tcomp SimpleFileIoDatastore kerberosPrincipal default
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tcomp-SimpleFileIoDatastore.kerberosPrincipal.default=.*"
       replace: "tcomp-SimpleFileIoDatastore.kerberosPrincipal.default={{ tdp_tcomp_SimpleFileIoDatastore_kerberosPrincipal_default }}"
 
 - name: Modify Data Preparation tcomp SimpleFileIoDatastore kerberosKeytab default
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tcomp-SimpleFileIoDatastore.kerberosKeytab.default=.*"
       replace: "tcomp-SimpleFileIoDatastore.kerberosKeytab.default={{ tdp_tcomp_SimpleFileIoDatastore_kerberosKeytab_default }}"
 
 - name: Modify Data Preparation tcomp SimpleFileIoDataset path default
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tcomp-SimpleFileIoDataset.path.default=.*"
       replace: "tcomp-SimpleFileIoDataset.path.default={{ tdp_tcomp_SimpleFileIoDataset_path_default }}"
 
 - name: Modify Data Preparation tcomp SimpleFileIoDatastore test connection visible
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tcomp-SimpleFileIoDatastore.test_connection.visible=.*"
       replace: "tcomp-SimpleFileIoDatastore.test_connection.visible={{ tdp_tcomp_SimpleFileIoDatastore_test_connection_visible }}"
 
 - name: Modify Data Preparation dataquality indexes file location
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataquality.indexes.file.location=.*"
       replace: "dataquality.indexes.file.location={{ tdp_dataquality_indexes_file_location }}"
 
 - name: Modify Data Preparation dataquality semantic list enable
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataquality.semantic.list.enable=.*"
       replace: "dataquality.semantic.list.enable={{ tdp_dataquality_semantic_list_enable }}"
 
 - name: Modify Data Preparation dataquality server url
+  when: tdp_hybrid_mode == 'no'
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataquality.server.url=.*"
       replace: "dataquality.server.url={{ tdp_dataquality_server_url }}"
 
 - name: Modify Data Preparation dataquality semantic update enable for 7.2 / 7.3
   when: rpm_base_version >= 7.2 and rpm_base_version < 8.0
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tsd.consumer.enabled=.*"
       replace: "tsd.consumer.enabled={{ tdp_tsd_consumer_enabled }}"
 
 - name: Modify Data Preparation dataquality semantic update enable for 8.0
   when: rpm_base_version >= 8.0
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tsd.enabled=.*"
       replace: "tsd.enabled={{ tdp_tsd_consumer_enabled }}"
 
 - name: Modify Data Preparation dataquality event store
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "dataquality.event.store=.*"
       replace: "dataquality.event.store={{ tdp_dataquality_event_store }}"
 
 - name: Modify Data Preparation security basic enabled
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.basic.enabled=.*"
       replace: "security.basic.enabled={{ tdp_security_basic_enabled }}"
 
 - name: Modify Data Preparation security oidc client expectedIssuer
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oidc.client.expectedIssuer=.*"
       replace: "security.oidc.client.expectedIssuer={{ tdp_security_oidc_client_expectedIssuer }}"
 
 - name: Modify Data Preparation iam license url
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "iam.license.url=.*"
       replace: "iam.license.url={{ tdp_iam_license_url }}"
 
 - name: Modify Data Preparation security oidc client keyUri
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oidc.client.keyUri=.*"
       replace: "security.oidc.client.keyUri={{ tdp_security_oidc_client_keyUri }}"
 
 - name: Modify Data Preparation security oauth2 client clientId
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.client.clientId=.*"
       replace: "security.oauth2.client.clientId={{ tdp_security_oauth2_client_clientId }}"
 
 - name: Modify Data Preparation security oauth2 client clientSecret
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.client.clientSecret=.*"
       replace: "security.oauth2.client.clientSecret={{ tdp_security_oauth2_client_clientSecret }}"
 
 - name: Modify Data Preparation security oidc client claimIssueAtTolerance
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oidc.client.claimIssueAtTolerance=.*"
       replace: "security.oidc.client.claimIssueAtTolerance={{ tdp_security_oidc_client_claimIssueAtTolerance }}"
 
 - name: Modify Data Preparation security oauth2 resource tokenInfoUri
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.resource.tokenInfoUri=.*"
       replace: "security.oauth2.resource.tokenInfoUri={{ tdp_security_oauth2_resource_tokenInfoUri }}"
 
 - name: Modify Data Preparation security oauth2 resource uri
   when: tdp_security_oauth2_resource_uri
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.resource.uri=.*"
       replace: "security.oauth2.resource.uri={{ tdp_security_oauth2_resource_uri }}"
 
 - name: Modify Data Preparation security oauth2 resource filter order
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.resource.filter-order=.*"
       replace: "security.oauth2.resource.filter-order={{ tdp_security_oauth2_resource_filter_order }}"
 
 - name: Modify Data Preparation security scim enabled
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.scim.enabled=.*"
       replace: "security.scim.enabled={{ tdp_security_scim_enabled }}"
 
 - name: Modify Data Preparation security oauth2 client access token uri
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.client.access-token-uri=.*"
       replace: "security.oauth2.client.access-token-uri={{ tdp_security_oauth2_client_access_token_uri }}"
 
 - name: Modify Data Preparation security oauth2 client scope (non-hybrid)
   when: tdp_hybrid_mode == "no"
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: '^security\.oauth2\.client\.scope=.*'
       replace: "security.oauth2.client.scope={{ tdp_security_oauth2_client_scope }}"
 
 - name: Modify Data Preparation security oauth2 client scope (hybrid)
   when: tdp_hybrid_mode == "yes"
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: '^security\.oauth2\.client\.scope=.*'
       replace: "security.oauth2.client.scope={{ tdp_security_oauth2_client_scope_hybrid }}"
 
 - name: Modify Data Preparation security oauth2 client user authorization uri
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.client.user-authorization-uri=.*"
       replace: "security.oauth2.client.user-authorization-uri={{ tdp_security_oauth2_client_user_authorization_uri }}"
 
 - name: Modify Data Preparation security oauth2 sso login use forward
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.sso.login-use-forward=.*"
       replace: "security.oauth2.sso.login-use-forward={{ tdp_security_oauth2_sso_login_use_forward }}"
 
 - name: Modify Data Preparation server session cookie name
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "server.session.cookie.name=.*"
       replace: "server.session.cookie.name={{ tdp_server_session_cookie_name }}"
 
 - name: Modify Data Preparation spring session store type
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "spring.session.store-type=.*"
       replace: "spring.session.store-type={{ tdp_spring_session_store_type }}"
 
 - name: Modify Data Preparation security sessions
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.sessions=.*"
       replace: "security.sessions={{ tdp_security_sessions }}"
 
 - name: Modify Data Preparation security user password
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.user.password=.*"
       replace: "security.user.password={{ tdp_security_user_password }}"
 
 - name: Modify Data Preparation security oidc client endSessionEndpoint
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oidc.client.endSessionEndpoint=.*"
       replace: "security.oidc.client.endSessionEndpoint={{ tdp_security_oidc_client_endSessionEndpoint }}"
 
 - name: Modify Data Preparation security oidc client logoutSuccessUrl
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oidc.client.logoutSuccessUrl=.*"
       replace: "security.oidc.client.logoutSuccessUrl={{ tdp_security_oidc_client_logoutSuccessUrl }}"
 
 - name: Modify Data Preparation security oauth2 logout uri
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.logout.uri=.*"
       replace: "security.oauth2.logout.uri={{ tdp_security_oauth2_logout_uri }}"
 
 - name: Modify Data Preparation security oauth2 sso login path
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.sso.login-path=.*"
       replace: "security.oauth2.sso.login-path={{ tdp_security_oauth2_sso_login_path }}"
 
 - name: Modify Data Preparation iam scim url
   when: tdp_hybrid_mode == 'no'
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "iam.scim.url=.*"
       replace: "iam.scim.url={{ tdp_iam_scim_url }}"
 
 - name: Modify Data Preparation security oauth2 resource tokenInfoUriCache enabled
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "security.oauth2.resource.tokenInfoUriCache.enabled=.*"
       replace: "security.oauth2.resource.tokenInfoUriCache.enabled={{ tdp_security_oauth2_resource_tokenInfoUriCache_enabled }}"
 
 - name: Modify Data Preparation tenant account cache enabled
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "tenant.account.cache.enabled=.*"
       replace: "tenant.account.cache.enabled={{ tdp_tenant_account_cache_enabled }}"
 
 - name: Modify Data Preparation gateway api service url
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "gateway-api.service.url=.*"
       replace: "gateway-api.service.url={{ tdp_gateway_api_service_url }}"
 
 - name: Modify Data Preparation gateway api service path
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "gateway-api.service.path=.*"
       replace: "gateway-api.service.path={{ tdp_gateway_api_service_path }}"
 
 - name: Modify Data Preparation zuul servletPath
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.servletPath=.*"
       replace: "zuul.servletPath={{ tdp_zuul_servletPath }}"
 
 - name: Modify Data Preparation zuul routes dq path
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.routes.dq.path=.*"
       replace: "zuul.routes.dq.path={{ tdp_zuul_routes_dq_path }}"
 
 - name: Modify Data Preparation zuul routes dq sensitiveHeaders
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.routes.dq.sensitiveHeaders=.*"
       replace: "zuul.routes.dq.sensitiveHeaders={{ tdp_zuul_routes_dq_sensitiveHeaders }}"
 
 - name: Modify Data Preparation zuul routes dq url
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.routes.dq.url=.*"
       replace: "zuul.routes.dq.url={{ tdp_zuul_routes_dq_url }}"
 
 - name: Modify Data Preparation proxy auth routes dq
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "proxy.auth.routes.dq=.*"
       replace: "proxy.auth.routes.dq={{ tdp_proxy_auth_routes_dq }}"
 
 - name: Modify Data Preparation zuul routes api path
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.routes.api.path=.*"
       replace: "zuul.routes.api.path={{ tdp_zuul_routes_api_path }}"
 
 - name: Modify Data Preparation zuul routes api sensitiveHeaders
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.routes.api.sensitiveHeaders=.*"
       replace: "zuul.routes.api.sensitiveHeaders={{ tdp_zuul_routes_api_sensitiveHeaders }}"
 
 - name: Modify Data Preparation zuul routes api url
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.routes.api.url=.*"
       replace: "zuul.routes.api.url={{ tdp_zuul_routes_api_url }}"
 
 - name: Modify Data Preparation proxy auth routes api
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "proxy.auth.routes.api=.*"
       replace: "proxy.auth.routes.api={{ tdp_proxy_auth_routes_api }}"
 
 - name: Modify Data Preparation zuul sensitiveHeaders
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.sensitiveHeaders=.*"
       replace: "zuul.sensitiveHeaders={{ tdp_zuul_sensitiveHeaders }}"
 
 - name: Modify Data Preparation zuul host socket timeout millis
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.host.socket-timeout-millis=.*"
       replace: "zuul.host.socket-timeout-millis={{ tdp_zuul_host_socket_timeout_millis }}"
 
 - name: Modify Data Preparation zuul host connect timeout millis
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "zuul.host.connect-timeout-millis=.*"
       replace: "zuul.host.connect-timeout-millis={{ tdp_zuul_host_connect_timeout_millis }}"
 
 - name: Modify Data Preparation logging file
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.file=.*"
       replace: "logging.file={{ tdp_logging_file }}"
 
 - name: Modify Data Preparation logging pattern level
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.pattern.level=.*"
       replace: "logging.pattern.level={{ tdp_logging_pattern_level }}"
 
 - name: Modify Data Preparation logging level
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.=.*"
       replace: "logging.level.={{ tdp_logging_level_ }}"
 
 - name: Modify Data Preparation logging level org talend dataprep
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep=.*"
       replace: "logging.level.org.talend.dataprep={{ tdp_logging_level_org_talend_dataprep }}"
 
 - name: Modify Data Preparation logging level org talend dataprep api
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.api=.*"
       replace: "logging.level.org.talend.dataprep.api={{ tdp_logging_level_org_talend_dataprep_api }}"
 
 - name: Modify Data Preparation logging level org talend dataprep dataset
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.dataset=.*"
       replace: "logging.level.org.talend.dataprep.dataset={{ tdp_logging_level_org_talend_dataprep_dataset }}"
 
 - name: Modify Data Preparation logging level org talend dataprep preparation
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.preparation=.*"
       replace: "logging.level.org.talend.dataprep.preparation={{ tdp_logging_level_org_talend_dataprep_preparation }}"
 
 - name: Modify Data Preparation logging level org talend dataprep transformation
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.transformation=.*"
       replace: "logging.level.org.talend.dataprep.transformation={{ tdp_logging_level_org_talend_dataprep_transformation }}"
 
 - name: Modify Data Preparation logging level org talend dataprep fullrun
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.fullrun=.*"
       replace: "logging.level.org.talend.dataprep.fullrun={{ tdp_logging_level_org_talend_dataprep_fullrun }}"
 
 - name: Modify Data Preparation logging level org talend dataprep api dataquality
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.api.dataquality=.*"
       replace: "logging.level.org.talend.dataprep.api.dataquality={{ tdp_logging_level_org_talend_dataprep_api_dataquality }}"
 
 - name: Modify Data Preparation logging level org talend dataprep configuration
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataprep.configuration=.*"
       replace: "logging.level.org.talend.dataprep.configuration={{ tdp_logging_level_org_talend_dataprep_configuration }}"
 
 - name: Modify Data Preparation logging level org talend dataquality semantic
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "logging.level.org.talend.dataquality.semantic=.*"
       replace: "logging.level.org.talend.dataquality.semantic={{ tdp_logging_level_org_talend_dataquality_semantic }}"
 
 - name: Modify Data Preparation talend logging audit config
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "talend.logging.audit.config=.*"
       replace: "talend.logging.audit.config={{ tdp_talend_logging_audit_config }}"
 
 - name: Modify Data Preparation default text enclosure
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "default.text.enclosure=.*"
       replace: "default.text.enclosure={{ tdp_default_text_enclosure }}"
 
 - name: Modify Data Preparation default text escape
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "default.text.escape=.*"
       replace: "default.text.escape={{ tdp_default_text_escape }}"
 
 - name: Modify Data Preparation default text encoding
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "default.text.encoding=.*"
       replace: "default.text.encoding={{ tdp_default_text_encoding }}"
 
 - name: Modify Data Preparation default import text enclosure
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "default.import.text.enclosure=.*"
       replace: "default.import.text.enclosure={{ tdp_default_import_text_enclosure }}"
 
 - name: Modify Data Preparation default import text escape
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "default.import.text.escape=.*"
       replace: "default.import.text.escape={{ tdp_default_import_text_escape }}"
 
 - name: Modify Data Preparation dataset service provider
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "^dataset.service.provider=.*"
       replace: "dataset.service.provider={{ tdp_dataset_service_provider }}"
 
 - name: Modify Data Preparation spring cloud stream bindings dqDictionary group
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "spring.cloud.stream.bindings.dqDictionary.group=.*"
       replace: "spring.cloud.stream.bindings.dqDictionary.group={{ tdp_spring_cloud_stream_bindings_dqDictionary_group }}"
 
 - name: Modify Data Preparation root logger
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "root.logger=.*"
       replace: "root.logger={{ tdp_root_logger }}"
 
 - name: Modify Data Preparation backend
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "backend=.*"
       replace: "backend={{ tdp_backend }}"
 
 - name: Modify Data Preparation encoding
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "encoding=.*"
       replace: "encoding={{ tdp_encoding }}"
 
 - name: Modify Data Preparation application name
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "application.name=.*"
       replace: "application.name={{ tdp_application_name }}"
 
 - name: Modify Data Preparation instance name
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "instance.name=.*"
       replace: "instance.name={{ tdp_instance_name }}"
 
 - name: Modify Data Preparation log appender
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "log.appender=.*"
       replace: "log.appender={{ tdp_log_appender }}"
 
 - name: Modify Data Preparation appender file path
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "appender.file.path=.*"
       replace: "appender.file.path={{ tdp_appender_file_path }}"
 
 - name: Modify Data Preparation appender file maxsize
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "appender.file.maxsize=.*"
       replace: "appender.file.maxsize={{ tdp_appender_file_maxsize }}"
 
 - name: Modify Data Preparation appender file maxbackup
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "appender.file.maxbackup=.*"
       replace: "appender.file.maxbackup={{ tdp_appender_file_maxbackup }}"
 
 - name: Modify Data Preparation appender http url
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "appender.http.url=.*"
       replace: "appender.http.url={{ tdp_appender_http_url }}"
 
 - name: Modify Data Preparation appender http async
   replace:
-      path: "/etc/talend/tdp/audit.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/audit.properties"
       regexp: "appender.http.async=.*"
       replace: "appender.http.async={{ tdp_appender_http_async }}"
 
@@ -762,107 +763,121 @@
 - name: Activate Hybrid mode (2)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.uri=http://'
       line: "#iam.uri=http://${iam.ip}:9080"
 
 - name: Activate Hybrid mode (3)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.api\.uri=\$'
       line: "#iam.api.uri=${iam.uri}"
 
 - name: Activate Hybrid mode (4)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.license\.url='
       line: "#iam.license.url=${iam.uri}/oidc/api"
 
 - name: Activate Hybrid mode (5)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'security\.oidc\.client\.keyUri='
       line: "#security.oidc.client.keyUri=${iam.uri}/oidc/jwk/keys"
 
 - name: Activate Hybrid mode (6)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'audit\.log\.enabled='
       line: "audit.log.enabled=false"
 
 - name: Activate Hybrid mode (7)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'dataprep\.hybrid\.enabled='
       line: "dataprep.hybrid.enabled=true"
 
 - name: Activate Hybrid mode (8)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'client\.session-management\.enabled='
       line: "client.session-management.enabled=${dataprep.hybrid.enabled}"
 
 - name: Activate Hybrid mode (9)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.uri=https://'
       line: "iam.uri=https://iam.{{ tdp_hybrid_region }}.cloud.talend.com"
 
 - name: Activate Hybrid mode (10)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.api\.uri=https://'
       line: "iam.api.uri=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1"
 
 - name: Activate Hybrid mode (11)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iamproxy\.service\.url='
       line: "iamproxy.service.url=${iam.api.uri}/iam"
 
 - name: Activate Hybrid mode (12)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'server\.portal\.url='
       line: "server.portal.url=https://portal.{{ tdp_hybrid_region }}.cloud.talend.com"
 
 - name: Activate Hybrid mode (13)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'external\.user\.preferences\.url='
       line: "external.user.preferences.url=${server.portal.url}/user/aboutme"
 
 - name: Activate Hybrid mode (14)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'security\.oauth2\.resource\.jwt\.key-uri='
       line: "security.oauth2.resource.jwt.key-uri=${iam.uri}/oidc/jwk/keys"
 
 - name: Activate Hybrid mode (15)
   when: tdp_hybrid_mode == 'yes'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'security\.oidc\.client\.sessionManagementUri='
       line: "security.oidc.client.sessionManagementUri=${iam.uri}/oidc/session-management"
 
 - name: Modify Data Preparation iam scim url (2)
   when: tdp_hybrid_mode == 'yes'
   replace:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: "iam.scim.url=.*"
       replace: "iam.scim.url=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1/scim/"
+
+- name: Activate Hybrid mode (16)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
+      regexp: 'dataquality\.server\.url='
+      line: "dataquality.server.url=https://tdp.{{ tdp_hybrid_region }}.cloud.talend.com/dq/semanticservice/"
+
+- name: Activate Hybrid mode (17)
+  when: tdp_hybrid_mode == 'yes'
+  lineinfile:
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
+      regexp: 'tsd\.dictionary-provider-facade\.producer-url='
+      line: "tsd.dictionary-provider-facade.producer-url={{ tdp_tsd_producer_url }}"
 
 
 #
@@ -871,135 +886,135 @@
 - name: Deactivate Hybrid mode (2)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.uri=http://'
       line: "iam.uri=http://${iam.ip}:9080"
 
 - name: Deactivate Hybrid mode (3)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.api\.uri=\$'
       line: "iam.api.uri=${iam.uri}"
 
 - name: Deactivate Hybrid mode (4)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.license\.url='
       line: "iam.license.url=${iam.uri}/oidc/api"
 
 - name: Deactivate Hybrid mode (5)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'security\.oidc\.client\.keyUri='
       line: "security.oidc.client.keyUri=${iam.uri}/oidc/jwk/keys"
 
 - name: Deactivate Hybrid mode (6)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'audit\.log\.enabled='
       line: "audit.log.enabled={{ tdp_audit_log_enabled }}"
 
 - name: Deactivate Hybrid mode (7)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'dataprep\.hybrid\.enabled='
       line: "#dataprep.hybrid.enabled=true"
 
 - name: Deactivate Hybrid mode (8)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'client\.session-management\.enabled='
       line: "#client.session-management.enabled=${dataprep.hybrid.enabled}"
 
 - name: Deactivate Hybrid mode (9)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.uri=https://'
       line: "#iam.uri=https://iam.{{ tdp_hybrid_region }}.cloud.talend.com"
 
 - name: Deactivate Hybrid mode (10)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iam\.api\.uri=https://'
       line: "#iam.api.uri=https://api.{{ tdp_hybrid_region }}.cloud.talend.com/v1"
 
 - name: Deactivate Hybrid mode (11)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'iamproxy\.service\.url='
       line: "#iamproxy.service.url=${iam.api.uri}/iam"
 
 - name: Deactivate Hybrid mode (12)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'server\.portal\.url='
       line: "#server.portal.url=https://portal.{{ tdp_hybrid_region }}.cloud.talend.com"
 
 - name: Deactivate Hybrid mode (13)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'external\.user\.preferences\.url='
       line: "#external.user.preferences.url=${server.portal.url}/user/aboutme"
 
 - name: Deactivate Hybrid mode (14)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'security\.oauth2\.resource\.jwt\.key-uri='
       line: "#security.oauth2.resource.jwt.key-uri=${iam.uri}/oidc/jwk/keys"
 
 - name: Deactivate Hybrid mode (15)
   when: tdp_hybrid_mode == 'no'
   lineinfile:
-      path: "/etc/talend/tdp/application.properties"
+      path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
       regexp: 'security\.oidc\.client\.sessionManagementUri='
       line: "#security.oidc.client.sessionManagementUri=${iam.uri}/oidc/session-management"
 
 ## AWS S3 communication
 - name: Update AWS S3 endpoint URL
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp:  '\.s3Repository\.s3\.endpoint=.*'
     replace: '.s3Repository.s3.endpoint={{ tdp_s3endpoint }}'
 
 - name: Update AWS S3 bucket URL
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp:  '\.s3Repository\.bucket-url=.*'
     replace: '.s3Repository.bucket-url=s3://{{ tdp_s3bucket }}'
 
 - name: Update AWS S3 username
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp:  '\.s3Repository\.username=.*'
     replace: '.s3Repository.username={{ tdp_s3user }}'
 
 - name: Update AWS S3 password
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp:  '\.s3Repository\.password=.*'
     replace: '.s3Repository.password={{ tdp_s3pass }}'
 
 - name: Update AWS S3 region
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp:  '\.s3Repository\.s3\.region=.*'
     replace: '.s3Repository.s3.region={{ tdp_s3region }}'
 
 - name: Update AWS S3 base path
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp:  '\.s3Repository\.base-path=.*'
     replace: '.s3Repository.base-path={{ tdp_basepath }}'
 
@@ -1007,52 +1022,52 @@
 - name: Update app.products id
   when: tdp_app_products == "yes"
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?app\.products\[0\]\.id=.*'
     replace: "app.products[0].id={{ tdp_app0_id }}"
 
 - name: Update app.products name
   when: tdp_app_products == "yes"
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?app\.products\[0\]\.name=.*'
     replace: "app.products[0].name={{ tdp_app0_name }}"
 
 - name: Update app.products url
   when: tdp_app_products == "yes"
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?app\.products\[0\]\.url=.*'
     replace: "app.products[0].url={{ tdp_app0_url }}"
 
 # Add info about kafka.binder
 - name: Modify Data Preparation spring cloud stream kafka binder brokers
   lineinfile:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.brokers=.*'
     line: "spring.cloud.stream.kafka.binder.brokers={{ tdp_spring_cloud_stream_kafka_binder_brokers }}"
 
 - name: Update kafka.binder.defaultBrokerPort
   lineinfile:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.defaultBrokerPort=.*'
     line: "spring.cloud.stream.kafka.binder.defaultBrokerPort={{ tdp_spring_cloud_stream_kafka_binder_defaultbrokerport }}"
 
 - name: Update kafka.binder.zkNodes
   lineinfile:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.zkNodes=.*'
     line: "spring.cloud.stream.kafka.binder.zkNodes={{ tdp_spring_cloud_stream_kafka_binder_zknodes }}"
 
 - name: Update kafka.binder.defaultZkPort
   lineinfile:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: '^#?spring\.cloud\.stream\.kafka\.binder\.defaultZkPort=.*'
     line: "spring.cloud.stream.kafka.binder.defaultZkPort={{ tdp_spring_cloud_stream_kafka_binder_defaultzkport }}"
 
 - name: Update TSD producer url
   when: rpm_base_version >= 8.0
   replace:
-    path: "/etc/talend/tdp/application.properties"
+    path: "/etc/talend/{{ rpm_folder_mod }}/application.properties"
     regexp: 'tsd\.dictionary-provider-facade\.producer-url=.*'
     replace: "tsd.dictionary-provider-facade.producer-url={{ tdp_tsd_producer_url }}"

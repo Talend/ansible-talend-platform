@@ -127,7 +127,7 @@ Talend Cloud lets you install and host Talend Data Preparation ([tdp](ansible/ro
 
 Ansible roles corresponding to these applications are compatible with the Hybrid setup for Talend Cloud. See dedicated hybrid parameters in the details of each role.
 
-To learn more about it, refer to [Talend Help Center](https://help.talend.com/access/sources/content/map?pageid=cloud_hybrid_install&afs:lang=en&EnrichVersion=Cloud).
+To learn more about it, refer to [Talend Help Center](https://help.talend.com/r/en-US/Cloud/hybrid-installation-guide-linux/what-is-hybrid-for-talend-cloud).
 
 ## List of ports to open
 

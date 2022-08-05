@@ -75,7 +75,7 @@ tds_oidc_secret: "sLbyFKTzM8F0dTL10mHd3A"
 #####
 # If you have a Talend Dictionary Service licence, set to "yes" and tds_semantic_dictionary_url will be used
 tds_use_semantic_dictionary: "yes"
-# Url of Talend Dictionary Service
+# Url of Talend Dictionary Service, keep in sync with tsd role tomcat port
 tds_semantic_dictionary_url: "http://localhost:8187/"
 
 #####
@@ -109,3 +109,12 @@ tds_s3region: "us-east-1"
 tds_s3user: "usr7xJ0agsFq"
 tds_s3pass: "pwd9jYF26Van"
 tds_basepath: ""
+
+#####
+# Internal configuration variables, do not modify this block
+#####
+rpm_name_mod: "{{ 'talend-tds' if tds_hybrid_mode == 'no' else 'talend-tds-hybrid' }}"
+rpm_name_mod2: "{{ 'talend-tds' if tds_hybrid_mode == 'yes' else 'talend-tds-hybrid' }}"
+rpm_folder_mod: "{{ 'tds' if tds_hybrid_mode == 'no' else 'tds-hybrid' }}"
+app_service_mod: "{{ 'talend-tds' if tds_hybrid_mode == 'no' else 'talend-tds-hybrid' }}"
+### End of Internal configuration variables block

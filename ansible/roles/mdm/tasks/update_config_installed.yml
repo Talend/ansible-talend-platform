@@ -139,15 +139,15 @@
   when: mdm_database == "h2"
   replace:
     path: "{{ mdm_config_location }}/datasources.xml"
-    regexp:  'jdbc:h2:///opt/talend/mdm/data/h2-Default/\${container}'
-    replace: "jdbc:h2://{{ install_prefix }}/{{ rpm_folder }}/data/h2-default/{{ mdm_db_name }}"
+    regexp:  'jdbc:h2:/opt/talend/mdm/data/h2-Default/\${container}'
+    replace: "jdbc:h2:{{ install_prefix }}/{{ rpm_folder }}/data/h2-default/{{ mdm_db_name }}"
 
 - name: Update H2 System URL
   when: mdm_database == "h2"
   replace:
     path: "{{ mdm_config_location }}/datasources.xml"
-    regexp:  'jdbc:h2:///opt/talend/mdm/data/h2-Default/TMDM_DB_SYSTEM'
-    replace: "jdbc:h2://{{ install_prefix }}/{{ rpm_folder }}/data/h2-default/TMDM_DB_SYSTEM"
+    regexp:  'jdbc:h2:/opt/talend/mdm/data/h2-Default/TMDM_DB_SYSTEM'
+    replace: "jdbc:h2:{{ install_prefix }}/{{ rpm_folder }}/data/h2-default/TMDM_DB_SYSTEM"
 
 - name: Update H2 DB User
   when: mdm_database == "h2"

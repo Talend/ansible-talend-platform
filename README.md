@@ -2,7 +2,7 @@
 
 This repository contains [Ansible](https://www.ansible.com/) roles and playbooks to deploy, manage, and configure the [Talend](https://www.talend.com) Platform services.
 
-> **Note**: These playbooks are provided without support and are intended to be a guideline. Any issue encountered can be reported via GitHub and will be addressed on a best effort basis. Pull requests are also encouraged.
+> **Note**: These playbooks are provided without support and are intended to be a guideline. Any issue encountered can be reported via Talend Support and will be addressed on a best effort basis. Pull requests are also encouraged.
 
 Specifically, this repository, through its playblooks:
 
@@ -18,9 +18,12 @@ To be able to install applications using Ansible, you need to setup your environ
 
 1. Install Extra Packages for Enterprise Linux: <br/> `sudo yum install epel-release`
 2. Install [Ansible](https://www.ansible.com/) on the master host used for the deployment: <br/> `sudo yum install ansible`
-3. All hosts need to be reachable via SSH from the master node. Hosts must be defined in `/etc/ansible/hosts` on the master node.
+3. All hosts need to be reachable via SSH from the master node. Hosts must be defined in `/etc/ansible/hosts` on the master node. Note that provided default playbook `talend.yml` uses host group `tac-group`
+4. Install `git` utility if needed. How to check: execute `git --help` and it said "git: command not found" then install git utility with `sudo yum install git`
+5. Make sure you have enough free disk space. `/var` filesystem is used as a temporary storage for RPM downloading in progress, so it should have free space at least 1.5 times of the largest RPM package to download. The largest RPM is Runtime (1.4 GB) so typically `/var` should have at least 2 GB of free space.
+6. Ansible typically requires a password-less SSH access from master to a target host and a password-less "sudo" on a target host.
 
-Installing Talend applications using Ansible require CentOS 7.X as operating system.
+Installing Talend applications using RPM/Ansible require RHEL/CentOS 7.X or 8.X as operating system.
 
 ## Installing applications using Ansible
 
@@ -49,7 +52,7 @@ To change the RPM version to install, edit the following parameters:
     ```yaml
     rpm_base_version: 8.0
     rpm_patch_version: 1
-    rpm_build_number: 202111091610
+    rpm_build_number: 202211231200
     ```
 
 3. Configure the playbook you want to install by specifying:
@@ -80,7 +83,7 @@ To change the RPM version to install, edit the following parameters:
         rt_master_password: 'password'
     ```
 
-    Sample playbooks are available [here](ansible/examples) or [here](ansible).
+    Sample playbooks are available [here](ansible/examples) or [here](ansible/talend.yml).
 
 4. Configure the installation parameters as well as the configuration of each role using their respective *defaults/main.yml* file. <br/> Variables can be overwritten if they are set differently directly in the playbook.
 5. Run the playbook: <br/> `ansible-playbook <playbook>.yml`
@@ -116,14 +119,14 @@ The following roles install third-party components:
 
 | Role                             | Application                                                                                                                                 |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [tomcat](ansible/roles/tomcat)   | Apache Tomcat server (required by [tac](ansible/roles/tac), [iam](ansible/roles/iam), [tds](ansible/roles/tds), [tsd](ansible/roles/tsd)) |
-| [mongodb](ansible/roles/mongodb) | MongoDB server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                                   |
-| [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp), [tsd](ansible/roles/tsd))                              |
-| [minio](ansible/roles/minio)     | MinIO server (required by [tsd](ansible/roles/tsd), [tds](ansible/roles/tds), [tdp](ansible/roles/tdp))                                    |
+| [tomcat](ansible/roles/tomcat)   | Apache Tomcat server (required by [tac](ansible/roles/tac), [iam](ansible/roles/iam), [tds](ansible/roles/tds), [tsd](ansible/roles/tsd) and [mdm](ansible/roles/mdm)) |
+| [mongodb](ansible/roles/mongodb) | MongoDB server (required by [tds](ansible/roles/tds), [tdp](ansible/roles/tdp) and [tsd](ansible/roles/tsd))                                   |
+| [kafka](ansible/roles/kafka)     | Apache Kafka server (required by [tds](ansible/roles/tds) and [tdp](ansible/roles/tdp))                              |
+| [minio](ansible/roles/minio)     | MinIO server (required by [tsd](ansible/roles/tsd))                                    |
 
 ## List of applications compatible with Talend Cloud Hybrid setup
 
-Talend Cloud lets you install and host Talend Data Preparation ([tdp](ansible/roles/tdp)), Talend Data Stewardship ([tds](ansible/roles/tds)) and Talend Dictionary Service [tsd](ansible/roles/tsd) on premises. This setup allows you to store sensitive data behind your firewall, while still managing your users and the rest of your platform from Talend Cloud.
+Talend Cloud lets you install and host Talend Data Preparation ([tdp](ansible/roles/tdp)), Talend Data Stewardship ([tds](ansible/roles/tds)) and Talend Dictionary Service ([tsd](ansible/roles/tsd)) on premises. This setup allows you to store sensitive data behind your firewall, while still managing your users and the rest of your platform from Talend Cloud.
 
 Ansible roles corresponding to these applications are compatible with the Hybrid setup for Talend Cloud. See dedicated hybrid parameters in the details of each role.
 
@@ -133,21 +136,22 @@ To learn more about it, refer to [Talend Help Center](https://help.talend.com/r/
 
 Each application requires some TCP/IP ports to be open by default:
 
-* tac: 8080
-* iam: 9080
-* mdm: 8180
-* runtime: 1099, 8000, 8001, 8040, 8101, 8555, 8888, 9001, 44444
-* jobserver: 8000, 8001, 8555, 8888
-* tdp: 9999
-* tds: 19999
-* tdq: 8187
-* logserver: 9200 and 9300 for Elastic Search; 5601 for Kibana; 5044, 8057 and 9600 for LogStash.
+* tac: 8080 (parameter `app_tomcat_port` in [tac defaults](ansible/roles/tac/defaults/main.yml) )
+* iam: 9080 (parameter `app_tomcat_port` in [iam defaults](ansible/roles/iam/defaults/main.yml) )
+* mdm: 8180 (parameter `app_tomcat_port` in [mdm defaults](ansible/roles/mdm/defaults/main.yml) )
+* runtime: 1099, 8000, 8001, 8040, 8101, 8555, 8888, 9001, 44444 (look for parameters in [runtime defaults](ansible/roles/runtime/defaults/main.yml) )
+* jobserver: 8000, 8001, 8555, 8888 (look for parameters in [jobserver defaults](ansible/roles/jobserver/defaults/main.yml) )
+* tdp: 9999 (parameter `tdp_server_port` in [tdp defaults](ansible/roles/tdp/defaults/main.yml) )
+* tcomp: 8989 (parameter `tcomp_server_port` in [tcomp defaults](ansible/roles/tcomp/defaults/main.yml) )
+* tds: 19999 (parameter `app_tomcat_port` in [tds defaults](ansible/roles/tds/defaults/main.yml) )
+* tdq: 8187 (parameter `app_tomcat_port` in [tsd defaults](ansible/roles/tsd/defaults/main.yml) )
+* logserver: 9200 and 9300 for Elastic Search; 5601 for Kibana; 5044, 8057 and 9600 for LogStash (some ports can be configured in [logserver defaults](ansible/roles/logserver/defaults/main.yml), others are hard-coded)
 
 In addition, service components (Kafka, MongoDB and Minio) require open ports when accessed from other hosts:
 
-* kafka: 2181, 9092
-* mongodb: 27017
-* minio: 9000
+* kafka: 2181, 9092 (parameters `zook_clientPort` and `kafka_listeners` in [kafka defaults](ansible/roles/kafka/defaults/main.yml) )
+* mongodb: 27017 (parameter `mongodb_port` in [mongodb defaults](ansible/roles/mongodb/defaults/main.yml) )
+* minio: 9000 (parameter `minio_port` in [minio defaults](ansible/roles/minio/defaults/main.yml) )
 
 To open a port, you can use one of the methods described below:
 
@@ -161,9 +165,19 @@ To open a port, you can use one of the methods described below:
 
 * By creating Talend network service files in /etc/firewalld/services. For example:
 
+  Create the following xml file in the folder `/etc/firewalld/services` with file name `Talend-TAC.xml`:
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <service>
+    <short>Talend Administration Center</short>
+    <description>Talend Administration Center is a web-based application allowing data integration project managers to administrate users and projects. It also controls and monitors the execution of Jobs.</description>
+    <port protocol="tcp" port="8080"/>
+  </service>
+  ```
+
+  After that you can activate Talend-TAC service with commands:
   ```bash
   sudo firewall-cmd --add-service=Talend-TAC --permanent
-  sudo firewall-cmd --add-service=Talend-IAM --permanent
   sudo firewall-cmd --reload
   ```
 

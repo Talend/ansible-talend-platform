@@ -19,8 +19,8 @@ To be able to install applications using Ansible, you need to setup your environ
 1. Install Extra Packages for Enterprise Linux: <br/> `sudo yum install epel-release`
 2. Install [Ansible](https://www.ansible.com/) on the master host used for the deployment: <br/> `sudo yum install ansible`
 3. All hosts need to be reachable via SSH from the master node. Hosts must be defined in `/etc/ansible/hosts` on the master node. Note that provided default playbook `talend.yml` uses host group `tac-group`
-4. Install `git` utility if needed. How to check: execute `git --help` and it said "git: command not found" then install git utility with `sudo yum install git`
-5. Make sure you have enough free disk space. `/var` filesystem is used as a temporary storage for RPM downloading in progress, so it should have free space at least 1.5 times of the largest RPM package to download. The largest RPM is Runtime (1.4 GB) so typically `/var` should have at least 2 GB of free space.
+4. Install git: `sudo yum install git`
+5. Make sure you have at least 2GB free disk space in `/var`.
 6. Ansible typically requires a password-less SSH access from master to a target host and a password-less "sudo" on a target host.
 
 Installing Talend applications using RPM/Ansible require RHEL/CentOS 7.X or 8.X as operating system.

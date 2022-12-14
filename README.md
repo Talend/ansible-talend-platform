@@ -23,7 +23,7 @@ To be able to install applications using Ansible, you need to setup your environ
 5. Make sure you have at least 2GB free disk space in `/var`.
 6. Ansible typically requires a password-less SSH access from master to a target host and a password-less "sudo" on a target host.
 
-Installing Talend applications using RPM/Ansible require RHEL/CentOS 7.X or 8.X as operating system.
+Installing Talend applications using RPM/Ansible require RHEL/CentOS 7.X or 8.X or Rocky 8.X as operating system.
 
 ## Installing applications using Ansible
 

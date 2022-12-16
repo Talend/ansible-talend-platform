@@ -120,7 +120,7 @@
 - name: Kafka - update configuration file for using ACL (1)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
-    line: "authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer"
+    line: "authorizer.class.name=kafka.security.authorizer.AclAuthorizer"
     state: present
   when: zook_setacl == 'yes'
 
@@ -158,7 +158,7 @@
 - name: Kafka - update configuration file for de-activating ACL (1)
   lineinfile:
     path: "{{ install_prefix }}/kafka/config/server.properties"
-    line: "authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer"
+    line: "authorizer.class.name=kafka.security.authorizer.AclAuthorizer"
     state: absent
   when: zook_setacl != 'yes'
 

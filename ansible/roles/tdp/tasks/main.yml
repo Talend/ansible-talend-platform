@@ -21,12 +21,12 @@
     app_service: "{{ app_service_mod }}"
 
 # We will include installation with yum or with rpm depending of prefix used
-- include_tasks: ../../common/tasks/install_yum.yml
+- include_tasks: install_yum.yml
   when: install_prefix == '/opt/talend'
   vars:
     rpm_name: "{{ rpm_name_mod }}"
 
-- include_tasks: ../../common/tasks/install_rpm.yml
+- include_tasks: install_rpm.yml
   when: install_prefix != '/opt/talend'
   vars:
     rpm_name: "{{ rpm_name_mod }}"

@@ -1,6 +1,6 @@
 # Ansible framework for Talend Platform (deprecated)
 
-*Deprecation: Installing Talend products using RPM is deprecated from the R2023-03 release. Use Talend Installer instead. For more information, see [Installing your Talend products using Talend Installers](https://help.talend.com/r/en-US/8.0/installation-guide-windows/installing-talend-installers).*
+*Deprecation: Installing Talend products using RPM is deprecated from the R2023-03 release. Use Talend Installer instead. For more information, see [Installing your Talend products using Talend Installers](https://document-link.us.cloud.talend.com/ig_installing_talend_installers?lang=en&env=prd&version=80).*
 
 This repository contains [Ansible](https://www.ansible.com/) roles and playbooks to deploy, manage, and configure the [Talend](https://www.talend.com) Platform services.
 
